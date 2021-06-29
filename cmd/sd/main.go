@@ -17,13 +17,14 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/iris-connect/eps"
 	"github.com/iris-connect/eps/sd"
 	"github.com/iris-connect/eps/sd/helpers"
 	"github.com/urfave/cli"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type decorator func(f func(c *cli.Context) error) func(c *cli.Context) error
@@ -118,6 +119,9 @@ func CLI(settings *sd.Settings) {
 }
 
 func main() {
+
+	eps.Log.Info("starting sd version ", eps.Version)
+
 	if settings, err := helpers.Settings(helpers.SettingsPaths()); err != nil {
 		eps.Log.Error(err)
 		return

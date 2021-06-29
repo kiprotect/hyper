@@ -17,13 +17,14 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/iris-connect/eps"
 	"github.com/iris-connect/eps/proxy"
 	"github.com/iris-connect/eps/proxy/helpers"
 	"github.com/urfave/cli"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type decorator func(f func(c *cli.Context) error) func(c *cli.Context) error
@@ -167,6 +168,9 @@ func CLI(settings *proxy.Settings) {
 }
 
 func main() {
+
+	eps.Log.Info("starting proxy version ", eps.Version)
+
 	if settings, err := helpers.Settings(helpers.SettingsPaths()); err != nil {
 		eps.Log.Error(err)
 		return

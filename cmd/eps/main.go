@@ -23,6 +23,9 @@ import (
 )
 
 func main() {
+
+	eps.Log.Info("starting eps version ", eps.Version)
+
 	if settings, err := helpers.Settings(&definitions.Default); err != nil {
 		eps.Log.Error(err)
 		return
