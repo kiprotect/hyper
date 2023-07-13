@@ -178,12 +178,12 @@ Proxy</a></li>
 <div class="content">
 <div class="content markdown">
 <h1>Getting Started</h1>
-<p>Integrating with the IRIS infrastructure using the Hyper server
-is easy (we hope). First, you need to deploy the <code>hyper</code>
-server together with the settings and certificates we've provided
-to you. This is as easy as downloading the latest
-<code>hyper</code> version from our server, unpacking the settings
-archive we've provided you with and running</p>
+<p>Integrating with the Hyper server is easy (we hope). First, you
+need to deploy the <code>hyper</code> server together with the
+settings and certificates we've provided to you. This is as easy as
+downloading the latest <code>hyper</code> version from our server,
+unpacking the settings archive we've provided you with and
+running</p>
 <div class="codehilite">
 <pre><code><span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>path/to/settings<span class=
@@ -193,7 +193,7 @@ archive we've provided you with and running</p>
 <p>This should open a local JSON-RPC server on port
 <code>5555</code> that you can connect to via TLS (you'll need to
 add the root CA certificate to your certificate chain for this).
-This server is your gateway to all IRIS services. Simply look up
+This server is your gateway to all Hyper services. Simply look up
 the services that a specific operator provides and send a request
 that contains the name of the operator and the service method you
 want to call. For example, to interact with a "locations" service
@@ -225,7 +225,7 @@ like this:</p>
 </code></pre></div>
 <p>The gateway will take care of routing this message to the
 correct service and returning a response to you.</p>
-<p>If you want to accept requests from other services in the IRIS
+<p>If you want to accept requests from other services in the Hyper
 ecosystem you can use the <code>jsonrpc_client</code>, simply
 specifying an API endpoint that incoming requests will be delivered
 to using the same syntax as above.</p>
@@ -246,7 +246,7 @@ service name). Do not forget to include the same <code>id</code>
 that you received with the original request, as this will contain
 the "return address" of the request.</p>
 <h2>Integration Example</h2>
-<p>To get a concrete idea of how to integrate with the IRIS
+<p>To get a concrete idea of how to integrate with the Hyper
 infrastructure using the Hyper server we have created a simple demo
 setup that illustrates all components. The demo consists of three
 components:</p>

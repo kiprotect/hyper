@@ -188,14 +188,13 @@ Proxy</a></li>
 <div class="content">
 <div class="content markdown">
 <h1>Erste Schritte</h1>
-<p>Die Integration in die IRIS-Infrastruktur mit Hilfe des
-Hyper-Servers ist einfach (hoffen wir). Zunächst müssen Sie den
-<code>hyper</code> Server zusammen mit den Einstellungen und
-Zertifikaten, die wir Ihnen zur Verfügung gestellt haben,
-einrichten. Dazu laden Sie einfach die neueste Version von
-<code>hyper</code> von unserem Server herunter, entpacken das
-Archiv mit den Einstellungen, das wir Ihnen zur Verfügung gestellt
-haben, und führen Folgendes aus</p>
+<p>Die Integration mit dem Hyper-Server ist einfach (hoffen wir).
+Zunächst müssen Sie den <code>hyper</code> Server zusammen mit den
+Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung
+gestellt haben, einrichten. Dazu laden Sie einfach die neueste
+Version von <code>hyper</code> von unserem Server herunter,
+entpacken das Archiv mit den Einstellungen, das wir Ihnen zur
+Verfügung gestellt haben, und führen Folgendes aus</p>
 <div class="codehilite">
 <pre><code><span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>path/to/settings<span class=
@@ -205,13 +204,13 @@ haben, und führen Folgendes aus</p>
 <p>Dies sollte einen lokalen JSON-RPC-Server auf Port
 <code>5555</code> öffnen, mit dem Sie sich über TLS verbinden
 können (dazu müssen Sie das Root-CA-Zertifikat zu Ihrer
-Zertifikatskette hinzufügen). Dieser Server ist Ihr Gateway zu
-allen IRIS-Diensten. Schauen Sie einfach nach den Diensten, die ein
+Zertifikatskette hinzufügen). Dieser Server ist Ihr Tor zu allen
+Hyper-Diensten. Suchen Sie einfach nach den Diensten, die ein
 bestimmter Betreiber anbietet, und senden Sie eine Anfrage, die den
 Namen des Betreibers und die Dienstmethode enthält, die Sie
-aufrufen möchten. Um z. B. mit dem Dienst "locations" zu
-interagieren, der vom Betreiber "ls-1" bereitgestellt wird, würden
-Sie einfach eine JSON-RPC-Nachricht wie diese senden:</p>
+aufrufen möchten. Um zum Beispiel mit dem Dienst "Standorte" des
+Betreibers "ls-1" zu interagieren, senden Sie einfach eine JSON
+RPC-Nachricht wie diese:</p>
 <div class="codehilite">
 <pre><code><span class="p">{</span>
 <span class="w">    </span><span class=
@@ -238,8 +237,8 @@ Sie einfach eine JSON-RPC-Nachricht wie diese senden:</p>
 </code></pre></div>
 <p>Das Gateway kümmert sich darum, diese Nachricht an den richtigen
 Dienst weiterzuleiten und eine Antwort an Sie zurückzuschicken.</p>
-<p>Wenn Sie Anfragen von anderen Diensten im IRIS-Ökosystem
-akzeptieren möchten, können Sie die <code>jsonrpc_client</code>
+<p>Wenn Sie Anfragen von anderen Diensten im Hyper-Ökosystem
+akzeptieren möchten, können Sie <code>jsonrpc_client</code>
 verwenden. Dabei geben Sie einfach einen API-Endpunkt an, an den
 eingehende Anfragen mit der gleichen Syntax wie oben zugestellt
 werden sollen.</p>
@@ -263,7 +262,7 @@ mit der ursprünglichen Anfrage erhalten haben, da diese die
 "Rücksendeadresse" der Anfrage enthält.</p>
 <h2>Integration Beispiel</h2>
 <p>Um eine konkrete Vorstellung von der Integration mit der
-IRIS-Infrastruktur unter Verwendung des Hyper-Servers zu erhalten,
+Hyper-Infrastruktur unter Verwendung des Hyper-Servers zu erhalten,
 haben wir ein einfaches Demo-Setup erstellt, das alle Komponenten
 veranschaulicht. Die Demo besteht aus drei Komponenten:</p>
 <ul>
@@ -323,10 +322,7 @@ Beispiel, um dem Dienst einen Ort hinzuzufügen:</p>
 "w"> </span><span class="s2">"2.0"</span><span class="p">,</span>
 <span class="w">  </span><span class=
 "nt">"result"</span><span class="p">:</span><span class=
-"w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"_"</span><span class=
-"p">:</span><span class="w"> </span><span class="s2">"ok"</span>
-<span class="w">  </span><span class="p">},</span>
+"w"> </span><span class="s2">"ok"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"id"</span><span class=
 "p">:</span><span class="w"> </span><span class="s2">"1"</span>
 <span class="p">}</span>
