@@ -15,7 +15,7 @@ jobs:
     env:
       GOPATH: /tmp/go
       GOARCH: 
-    sthyper:
+    steps:
       - name: create Go path
         run: |
           mkdir -p /tmp/go
