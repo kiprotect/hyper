@@ -64,9 +64,7 @@ This should return a simple JSON response:
 ```json
 {
   "jsonrpc": "2.0",
-  "result": {
-    "_": "ok"
-  },
+  "result": "ok",
   "id": "1"
 }
 ```
