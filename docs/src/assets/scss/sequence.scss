@@ -3,7 +3,7 @@ div.sequence-container {
 	margin-bottom: 20px;
 
 	@for $i from 1 through 4 {
-		div.sequence.#{$i}-columns {
+		div.sequence.s-#{$i}-columns {
 			grid-template-columns: repeat(#{$i}, 1fr);
 			min-width: #{$i*300}px;
 		}

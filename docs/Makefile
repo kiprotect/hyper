@@ -16,10 +16,7 @@ requirements:
 	npm ci
 
 sass:
-	node_modules/.bin/node-sass src/assets/scss/main.scss src/static/css/main.css
-
-babel:
-	node_modules/.bin/babel src/**/*.es6 --out-dir "." || true
+	node_modules/.bin/sass src/assets/scss/main.scss src/static/css/main.css
 
 translate:
 	@if [ -n "$(TOKEN)" ]; then venv/bin/beam i18n translate $(TOKEN) src $(TA); fi;
@@ -36,7 +33,7 @@ optimize-images:
 optimize-html:
 	find build -name "*.html" -exec tidy -m {} \;
 
-site: translate sass babel
+site: translate sass
 	venv/bin/beam -vv up --site $(SITE)
 
 clean:
