@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,8 +20,8 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
 	"sync"
 	"time"
 )
@@ -31,24 +31,24 @@ const (
 )
 
 type RecordDirectorySettings struct {
-	Datastore                      *eps.DatastoreSettings `json:"datastore"`
-	CACertificateFiles             []string               `json:"ca_certificate_files"`
-	CAIntermediateCertificateFiles []string               `json:"ca_intermediate_certificate_files"`
+	Datastore                      *hyper.DatastoreSettings `json:"datastore"`
+	CACertificateFiles             []string                 `json:"ca_certificate_files"`
+	CAIntermediateCertificateFiles []string                 `json:"ca_intermediate_certificate_files"`
 }
 
 type RecordDirectory struct {
 	rootCerts         []*x509.Certificate
 	intermediateCerts []*x509.Certificate
-	dataStore         eps.Datastore
+	dataStore         hyper.Datastore
 	settings          *RecordDirectorySettings
-	entries           map[string]*eps.DirectoryEntry
-	recordsByHash     map[string]*eps.SignedChangeRecord
-	recordChildren    map[string][]*eps.SignedChangeRecord
-	orderedRecords    []*eps.SignedChangeRecord
+	entries           map[string]*hyper.DirectoryEntry
+	recordsByHash     map[string]*hyper.SignedChangeRecord
+	recordChildren    map[string][]*hyper.SignedChangeRecord
+	orderedRecords    []*hyper.SignedChangeRecord
 	mutex             sync.Mutex
 }
 
-func MakeRecordDirectory(settings *RecordDirectorySettings, definitions *eps.Definitions) (*RecordDirectory, error) {
+func MakeRecordDirectory(settings *RecordDirectorySettings, definitions *hyper.Definitions) (*RecordDirectory, error) {
 
 	rootCerts := make([]*x509.Certificate, 0)
 
@@ -87,9 +87,9 @@ func MakeRecordDirectory(settings *RecordDirectorySettings, definitions *eps.Def
 	f := &RecordDirectory{
 		rootCerts:         rootCerts,
 		intermediateCerts: intermediateCerts,
-		orderedRecords:    make([]*eps.SignedChangeRecord, 0),
-		recordsByHash:     make(map[string]*eps.SignedChangeRecord),
-		recordChildren:    make(map[string][]*eps.SignedChangeRecord),
+		orderedRecords:    make([]*hyper.SignedChangeRecord, 0),
+		recordsByHash:     make(map[string]*hyper.SignedChangeRecord),
+		recordChildren:    make(map[string][]*hyper.SignedChangeRecord),
 		settings:          settings,
 		dataStore:         dataStore,
 	}
@@ -103,7 +103,7 @@ func MakeRecordDirectory(settings *RecordDirectorySettings, definitions *eps.Def
 	return f, err
 }
 
-func (f *RecordDirectory) Entry(name string) (*eps.DirectoryEntry, error) {
+func (f *RecordDirectory) Entry(name string) (*hyper.DirectoryEntry, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 	if entry, ok := f.entries[name]; !ok {
@@ -113,10 +113,10 @@ func (f *RecordDirectory) Entry(name string) (*eps.DirectoryEntry, error) {
 	}
 }
 
-func (f *RecordDirectory) AllEntries() ([]*eps.DirectoryEntry, error) {
+func (f *RecordDirectory) AllEntries() ([]*hyper.DirectoryEntry, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
-	entries := make([]*eps.DirectoryEntry, len(f.entries))
+	entries := make([]*hyper.DirectoryEntry, len(f.entries))
 	i := 0
 	for _, entry := range f.entries {
 		entries[i] = entry
@@ -125,19 +125,19 @@ func (f *RecordDirectory) AllEntries() ([]*eps.DirectoryEntry, error) {
 	return entries, nil
 }
 
-func (f *RecordDirectory) Entries(*eps.DirectoryQuery) ([]*eps.DirectoryEntry, error) {
+func (f *RecordDirectory) Entries(*hyper.DirectoryQuery) ([]*hyper.DirectoryEntry, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 	return nil, nil
 }
 
 // determines whether a subject can append to the service directory
-func (f *RecordDirectory) canAppend(record *eps.SignedChangeRecord, records []*eps.SignedChangeRecord) (bool, error) {
+func (f *RecordDirectory) canAppend(record *hyper.SignedChangeRecord, records []*hyper.SignedChangeRecord) (bool, error) {
 	return helpers.VerifyRecord(record, records, f.rootCerts, f.intermediateCerts)
 }
 
 // Appends a series of records
-func (f *RecordDirectory) Append(records []*eps.SignedChangeRecord) error {
+func (f *RecordDirectory) Append(records []*hyper.SignedChangeRecord) error {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 
@@ -180,7 +180,7 @@ func (f *RecordDirectory) Append(records []*eps.SignedChangeRecord) error {
 			return err
 		}
 
-		dataEntry := &eps.DataEntry{
+		dataEntry := &hyper.DataEntry{
 			Type: SignedChangeRecordEntry,
 			ID:   id,
 			Data: rawData,
@@ -217,13 +217,13 @@ func (f *RecordDirectory) Update() error {
 }
 
 // Returns the latest record
-func (f *RecordDirectory) Tip() (*eps.SignedChangeRecord, error) {
+func (f *RecordDirectory) Tip() (*hyper.SignedChangeRecord, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 	return f.tip()
 }
 
-func (f *RecordDirectory) tip() (*eps.SignedChangeRecord, error) {
+func (f *RecordDirectory) tip() (*hyper.SignedChangeRecord, error) {
 	if len(f.orderedRecords) == 0 {
 		return nil, nil
 	}
@@ -231,10 +231,10 @@ func (f *RecordDirectory) tip() (*eps.SignedChangeRecord, error) {
 }
 
 // Returns all records after a given hash
-func (f *RecordDirectory) Records(after string) ([]*eps.SignedChangeRecord, error) {
+func (f *RecordDirectory) Records(after string) ([]*hyper.SignedChangeRecord, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
-	relevantRecords := make([]*eps.SignedChangeRecord, 0)
+	relevantRecords := make([]*hyper.SignedChangeRecord, 0)
 	found := false
 	if after == "" {
 		found = true
@@ -256,10 +256,10 @@ func (f *RecordDirectory) Records(after string) ([]*eps.SignedChangeRecord, erro
 }
 
 // Integrates a record into the directory
-func (f *RecordDirectory) integrate(record *eps.SignedChangeRecord) error {
+func (f *RecordDirectory) integrate(record *hyper.SignedChangeRecord) error {
 	entry, ok := f.entries[record.Record.Name]
 	if !ok {
-		entry = eps.MakeDirectoryEntry()
+		entry = hyper.MakeDirectoryEntry()
 		entry.Name = record.Record.Name
 	}
 	if err := helpers.IntegrateChangeRecord(record, entry); err != nil {
@@ -270,9 +270,9 @@ func (f *RecordDirectory) integrate(record *eps.SignedChangeRecord) error {
 }
 
 // picks the best record from a series of alternatives (based on chain length)
-func (f *RecordDirectory) buildChains(records []*eps.SignedChangeRecord, visited map[string]bool) ([][]*eps.SignedChangeRecord, error) {
+func (f *RecordDirectory) buildChains(records []*hyper.SignedChangeRecord, visited map[string]bool) ([][]*hyper.SignedChangeRecord, error) {
 
-	chains := make([][]*eps.SignedChangeRecord, 0)
+	chains := make([][]*hyper.SignedChangeRecord, 0)
 
 	for _, record := range records {
 		if _, ok := visited[record.Hash]; ok {
@@ -280,7 +280,7 @@ func (f *RecordDirectory) buildChains(records []*eps.SignedChangeRecord, visited
 		} else {
 			visited[record.Hash] = true
 		}
-		chain := make([]*eps.SignedChangeRecord, 1)
+		chain := make([]*hyper.SignedChangeRecord, 1)
 		chain[0] = record
 		children, ok := f.recordChildren[record.Hash]
 		if ok {
@@ -301,15 +301,15 @@ func (f *RecordDirectory) buildChains(records []*eps.SignedChangeRecord, visited
 
 }
 
-func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
+func (f *RecordDirectory) update() ([]*hyper.SignedChangeRecord, error) {
 	if entries, err := f.dataStore.Read(); err != nil {
 		return nil, err
 	} else {
-		changeRecords := make([]*eps.SignedChangeRecord, 0, len(entries))
+		changeRecords := make([]*hyper.SignedChangeRecord, 0, len(entries))
 		for _, entry := range entries {
 			switch entry.Type {
 			case SignedChangeRecordEntry:
-				record := &eps.SignedChangeRecord{}
+				record := &hyper.SignedChangeRecord{}
 				if err := json.Unmarshal(entry.Data, &record); err != nil {
 					return nil, fmt.Errorf("invalid record format!")
 				}
@@ -332,7 +332,7 @@ func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
 			}
 			children, ok := f.recordChildren[parentHash]
 			if !ok {
-				children = make([]*eps.SignedChangeRecord, 0)
+				children = make([]*hyper.SignedChangeRecord, 0)
 			}
 			children = append(children, record)
 			f.recordChildren[parentHash] = children
@@ -347,23 +347,23 @@ func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
 
 		chains, err := f.buildChains(rootRecords, map[string]bool{})
 
-		eps.Log.Infof("Found %d chains, %d root records", len(chains), len(rootRecords))
+		hyper.Log.Infof("Found %d chains, %d root records", len(chains), len(rootRecords))
 
 		if err != nil {
 			return nil, err
 		}
 
-		verifiedChains := make([][]*eps.SignedChangeRecord, 0)
+		verifiedChains := make([][]*hyper.SignedChangeRecord, 0)
 		for i, chain := range chains {
-			validRecords := make([]*eps.SignedChangeRecord, 0)
+			validRecords := make([]*hyper.SignedChangeRecord, 0)
 			for j, record := range chain {
-				eps.Log.Infof("Chain %d, record %d: %s", i, j, record.Hash)
+				hyper.Log.Infof("Chain %d, record %d: %s", i, j, record.Hash)
 				// we verify the signature of the record
 				if ok, err := helpers.VerifyRecord(record, chain[:j], f.rootCerts, f.intermediateCerts); err != nil {
-					eps.Log.Errorf("Warning, error verifying record: %v", err)
+					hyper.Log.Errorf("Warning, error verifying record: %v", err)
 					continue
 				} else if !ok {
-					eps.Log.Warning("signature does not match, ignoring this chain...")
+					hyper.Log.Warning("signature does not match, ignoring this chain...")
 					continue
 				} else {
 					validRecords = append(validRecords, record)
@@ -374,10 +374,10 @@ func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
 			}
 		}
 
-		eps.Log.Infof("%d verified chains", len(verifiedChains))
+		hyper.Log.Infof("%d verified chains", len(verifiedChains))
 
 		// the most recently created chain always wins
-		var bestChain []*eps.SignedChangeRecord
+		var bestChain []*hyper.SignedChangeRecord
 		var maxCreatedAt time.Time
 		for _, chain := range verifiedChains {
 			if bestChain == nil || (len(chain) > 0 && chain[0].Record.CreatedAt.Time.After(maxCreatedAt)) {
@@ -386,7 +386,7 @@ func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
 			}
 		}
 
-		eps.Log.Infof("Best chain created at %v with length %d", maxCreatedAt, len(bestChain))
+		hyper.Log.Infof("Best chain created at %v with length %d", maxCreatedAt, len(bestChain))
 
 		if bestChain == nil {
 			return nil, nil
@@ -396,7 +396,7 @@ func (f *RecordDirectory) update() ([]*eps.SignedChangeRecord, error) {
 		f.orderedRecords = bestChain
 
 		// we regenerate the entries based on the new set of records
-		f.entries = make(map[string]*eps.DirectoryEntry)
+		f.entries = make(map[string]*hyper.DirectoryEntry)
 		for _, record := range bestChain {
 			f.integrate(record)
 		}

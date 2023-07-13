@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,7 @@
 package jsonrpc
 
 import (
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 )
 
 // we always convert incoming IDs to strings
@@ -38,7 +38,7 @@ func MakeRequest(method, id string, params map[string]interface{}) *Request {
 	}
 }
 
-func (r *Request) FromEPSRequest(request *eps.Request) {
+func (r *Request) FromHyperRequest(request *hyper.Request) {
 	r.JSONRPC = "2.0"
 	r.Method = request.Method
 	r.ID = request.ID
@@ -60,7 +60,7 @@ func MakeError(code int64, message string, data interface{}) *Error {
 	}
 }
 
-func fromEPSStruct(value map[string]interface{}) interface{} {
+func fromHyperStruct(value map[string]interface{}) interface{} {
 	if len(value) == 1 {
 		var key string
 		// get the first key
@@ -74,7 +74,7 @@ func fromEPSStruct(value map[string]interface{}) interface{} {
 	return value
 }
 
-func toEPSStruct(value interface{}) map[string]interface{} {
+func toHyperStruct(value interface{}) map[string]interface{} {
 	mapResult, ok := value.(map[string]interface{})
 	if !ok {
 		mapResult = map[string]interface{}{"_": value}
@@ -82,7 +82,7 @@ func toEPSStruct(value interface{}) map[string]interface{} {
 	return mapResult
 }
 
-func FromEPSResponse(response *eps.Response) *Response {
+func FromHyperResponse(response *hyper.Response) *Response {
 
 	var error *Error
 
@@ -90,41 +90,41 @@ func FromEPSResponse(response *eps.Response) *Response {
 		error = &Error{
 			Code:    int64(response.Error.Code),
 			Message: response.Error.Message,
-			Data:    fromEPSStruct(response.Error.Data),
+			Data:    fromHyperStruct(response.Error.Data),
 		}
 	}
 
 	return &Response{
 		JSONRPC: "2.0",
-		Result:  fromEPSStruct(response.Result),
+		Result:  fromHyperStruct(response.Result),
 		Error:   error,
 		ID:      response.ID,
 	}
 }
 
-func (r *Response) ToEPSResponse() *eps.Response {
+func (r *Response) ToHyperResponse() *hyper.Response {
 
 	strId, ok := r.ID.(string)
 
 	if !ok {
-		eps.Log.Warningf("Warning, non-string response ID found: %v", r.ID)
+		hyper.Log.Warningf("Warning, non-string response ID found: %v", r.ID)
 	}
 
-	response := &eps.Response{
+	response := &hyper.Response{
 		ID: &strId,
 	}
 
 	if r.Result != nil {
-		response.Result = toEPSStruct(r.Result)
+		response.Result = toHyperStruct(r.Result)
 	}
 
 	if r.Error != nil {
-		error := &eps.Error{
+		error := &hyper.Error{
 			Code:    int(r.Error.Code),
 			Message: r.Error.Message,
 		}
 		if r.Error.Data != nil {
-			error.Data = toEPSStruct(r.Error.Data)
+			error.Data = toHyperStruct(r.Error.Data)
 		}
 		response.Error = error
 	}

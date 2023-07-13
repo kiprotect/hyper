@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@ package net
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 	"net"
 	"sync"
 	"time"
@@ -38,7 +38,7 @@ type RateLimitedListener struct {
 }
 
 func MakeRateLimitedListener(listener net.Listener, rateLimits []*RateLimit) *RateLimitedListener {
-	eps.Log.Tracef("Creating rate-limited network listener...")
+	hyper.Log.Tracef("Creating rate-limited network listener...")
 	rates := make([]map[string]int64, len(rateLimits))
 	for i, _ := range rateLimits {
 		rates[i] = make(map[string]int64)
@@ -69,9 +69,9 @@ acceptLoop:
 				ip = v.IP
 			}
 			key := ip.String()
-			eps.Log.Tracef("Got a connection from '%s'", key)
+			hyper.Log.Tracef("Got a connection from '%s'", key)
 			for i, rateLimit := range l.rateLimits {
-				eps.Log.Tracef("Checking rate limit of type '%s' with limit %d", rateLimit.Type, rateLimit.Limit)
+				hyper.Log.Tracef("Checking rate limit of type '%s' with limit %d", rateLimit.Type, rateLimit.Limit)
 				tw := MakeTimeWindow(t, rateLimit.Type)
 				if tw.Type == "" {
 					l.mutex.Unlock()
@@ -86,9 +86,9 @@ acceptLoop:
 				}
 				rate, _ := l.rates[i][key]
 				if rate >= rateLimit.Limit {
-					eps.Log.Tracef("Rate limit exceeded, closing connection...")
+					hyper.Log.Tracef("Rate limit exceeded, closing connection...")
 					if err := conn.Close(); err != nil {
-						eps.Log.Error(err)
+						hyper.Log.Error(err)
 					}
 					l.mutex.Unlock()
 					continue acceptLoop

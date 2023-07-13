@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,23 +17,23 @@
 package main
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/cmd/helpers"
-	"github.com/iris-connect/eps/definitions"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/cmd/helpers"
+	"github.com/kiprotect/hyper/definitions"
 	"github.com/urfave/cli"
 	"os"
 )
 
 func main() {
 	if settings, err := helpers.Settings(&definitions.Default); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return
 	} else {
 		CLI(settings)
 	}
 }
 
-func CLI(settings *eps.Settings) {
+func CLI(settings *hyper.Settings) {
 
 	var err error
 
@@ -47,18 +47,18 @@ func CLI(settings *eps.Settings) {
 	// we add commands from the definitions
 	for _, commandsDefinition := range settings.Definitions.CommandsDefinitions {
 		if commands, err := commandsDefinition.Maker(settings); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		} else {
 			bareCommands = append(bareCommands, commands...)
 		}
 	}
 
-	app.Commands = helpers.Decorate(bareCommands, helpers.InitCLI, "EPS")
+	app.Commands = helpers.Decorate(bareCommands, helpers.InitCLI, "Hyper")
 
 	err = app.Run(os.Args)
 
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 }

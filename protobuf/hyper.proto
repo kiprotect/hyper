@@ -24,7 +24,7 @@ message Response {
 	google.protobuf.Struct result = 2;
 }
 
-service EPS {
+service Hyper {
 	// client sends a request to the server and receives a response
 	rpc Call(Request) returns (Response) {}
 	// client sends a response to the server and receives an acknowledgment 

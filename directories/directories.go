@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,17 +17,17 @@
 package directories
 
 import (
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 )
 
-var Directories = eps.DirectoryDefinitions{
-	"api": eps.DirectoryDefinition{
+var Directories = hyper.DirectoryDefinitions{
+	"api": hyper.DirectoryDefinition{
 		Name:              "API-Based Service Directory",
 		Description:       "Loads the service directory via a JSON-RPC API",
 		Maker:             MakeAPIDirectory,
 		SettingsValidator: APIDirectorySettingsValidator,
 	},
-	"json": eps.DirectoryDefinition{
+	"json": hyper.DirectoryDefinition{
 		Name:              "JSON-Based Service Directory",
 		Description:       "Loads the service directory from a JSON file",
 		Maker:             MakeJSONDirectory,

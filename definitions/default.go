@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,14 +17,14 @@
 package definitions
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/channels"
-	"github.com/iris-connect/eps/cmd"
-	"github.com/iris-connect/eps/datastores"
-	"github.com/iris-connect/eps/directories"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/channels"
+	"github.com/kiprotect/hyper/cmd"
+	"github.com/kiprotect/hyper/datastores"
+	"github.com/kiprotect/hyper/directories"
 )
 
-var Default = eps.Definitions{
+var Default = hyper.Definitions{
 	DatastoreDefinitions: datastores.Definitions,
 	DirectoryDefinitions: directories.Directories,
 	CommandsDefinitions:  cmd.Commands,

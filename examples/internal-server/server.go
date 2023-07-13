@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,9 +20,9 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/http"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/http"
+	"github.com/kiprotect/hyper/tls"
 	"io/ioutil"
 	"os"
 	"os/signal"
@@ -35,7 +35,7 @@ func handler(context *http.Context) {
 		context.JSON(500, map[string]interface{}{"message": "internal server error"})
 	}
 
-	eps.Log.Debugf("Received request with path '%s' and query' %s'", context.Request.URL.Path, context.Request.URL.RawQuery)
+	hyper.Log.Debugf("Received request with path '%s' and query' %s'", context.Request.URL.Path, context.Request.URL.RawQuery)
 
 	if context.Request.Method == "POST" {
 
@@ -101,7 +101,7 @@ func main() {
 	}
 
 	if server, err := http.MakeHTTPServer(settings, routeGroups); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	} else {
 		server.Start()
 
@@ -109,11 +109,11 @@ func main() {
 		sigchan := make(chan os.Signal, 1)
 		signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-		eps.Log.Info("Waiting for CTRL-C...")
+		hyper.Log.Info("Waiting for CTRL-C...")
 
 		<-sigchan
 
-		eps.Log.Info("Stopping server...")
+		hyper.Log.Info("Stopping server...")
 
 		server.Stop()
 

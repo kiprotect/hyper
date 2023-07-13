@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,10 +23,10 @@ package directories
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/helpers"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/helpers"
 	"io/ioutil"
 	"os"
 	"path"
@@ -53,7 +53,7 @@ var JSONRecordsForm = forms.Form{
 				forms.IsList{
 					Validators: []forms.Validator{
 						forms.IsStringMap{
-							Form: &epsForms.ChangeRecordForm,
+							Form: &hyperForms.ChangeRecordForm,
 						},
 					},
 				},
@@ -67,15 +67,15 @@ type JSONDirectorySettings struct {
 }
 
 type Records struct {
-	Records []*eps.ChangeRecord `json:"records"`
+	Records []*hyper.ChangeRecord `json:"records"`
 }
 
 type JSONDirectory struct {
-	eps.BaseDirectory
+	hyper.BaseDirectory
 	mutex    sync.Mutex
 	settings JSONDirectorySettings
-	records  []*eps.ChangeRecord
-	entries  map[string]*eps.DirectoryEntry
+	records  []*hyper.ChangeRecord
+	entries  map[string]*hyper.DirectoryEntry
 }
 
 func JSONDirectorySettingsValidator(settings map[string]interface{}) (interface{}, error) {
@@ -90,9 +90,9 @@ func JSONDirectorySettingsValidator(settings map[string]interface{}) (interface{
 	}
 }
 
-func MakeJSONDirectory(name string, settings interface{}) (eps.Directory, error) {
+func MakeJSONDirectory(name string, settings interface{}) (hyper.Directory, error) {
 	d := &JSONDirectory{
-		BaseDirectory: eps.BaseDirectory{
+		BaseDirectory: hyper.BaseDirectory{
 			Name_: name,
 		},
 		settings: settings.(JSONDirectorySettings),
@@ -105,15 +105,15 @@ func (f *JSONDirectory) load() error {
 	if records, err := loadRecords(f.settings.Path); err != nil {
 		return err
 	} else {
-		entries := make(map[string]*eps.DirectoryEntry)
+		entries := make(map[string]*hyper.DirectoryEntry)
 
 		for _, record := range records {
 			entry, ok := entries[record.Name]
 			if !ok {
-				entry = eps.MakeDirectoryEntry()
+				entry = hyper.MakeDirectoryEntry()
 				entry.Name = record.Name
 			}
-			if err := helpers.IntegrateChangeRecord(&eps.SignedChangeRecord{Record: record}, entry); err != nil {
+			if err := helpers.IntegrateChangeRecord(&hyper.SignedChangeRecord{Record: record}, entry); err != nil {
 				return err
 			}
 			entries[record.Name] = entry
@@ -122,12 +122,12 @@ func (f *JSONDirectory) load() error {
 		f.entries = entries
 		f.records = records
 
-		eps.Log.Tracef("Loaded %d directory entries from %d records...", len(f.entries), len(f.records))
+		hyper.Log.Tracef("Loaded %d directory entries from %d records...", len(f.entries), len(f.records))
 		return nil
 	}
 }
 
-func (f *JSONDirectory) Entries(query *eps.DirectoryQuery) ([]*eps.DirectoryEntry, error) {
+func (f *JSONDirectory) Entries(query *hyper.DirectoryQuery) ([]*hyper.DirectoryEntry, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 
@@ -135,26 +135,26 @@ func (f *JSONDirectory) Entries(query *eps.DirectoryQuery) ([]*eps.DirectoryEntr
 		return nil, fmt.Errorf("error loading JSON directory: %w", err)
 	}
 
-	entries := make([]*eps.DirectoryEntry, 0)
+	entries := make([]*hyper.DirectoryEntry, 0)
 
 	for _, entry := range f.entries {
 		entries = append(entries, entry)
 	}
 
-	return eps.FilterDirectoryEntriesByQuery(entries, query), nil
+	return hyper.FilterDirectoryEntriesByQuery(entries, query), nil
 }
 
-func (f *JSONDirectory) EntryFor(name string) (*eps.DirectoryEntry, error) {
-	if entries, err := f.Entries(&eps.DirectoryQuery{Operator: name}); err != nil {
+func (f *JSONDirectory) EntryFor(name string) (*hyper.DirectoryEntry, error) {
+	if entries, err := f.Entries(&hyper.DirectoryQuery{Operator: name}); err != nil {
 		return nil, fmt.Errorf("error retrieving entry: %w", err)
 	} else if len(entries) == 0 {
-		return nil, eps.NoEntryFound
+		return nil, hyper.NoEntryFound
 	} else {
 		return entries[0], nil
 	}
 }
 
-func (f *JSONDirectory) OwnEntry() (*eps.DirectoryEntry, error) {
+func (f *JSONDirectory) OwnEntry() (*hyper.DirectoryEntry, error) {
 	return f.EntryFor(f.Name())
 }
 
@@ -176,7 +176,7 @@ func getRecordsFiles(recordsPath string) []string {
 	return paths
 }
 
-func loadRecords(recordsPath string) ([]*eps.ChangeRecord, error) {
+func loadRecords(recordsPath string) ([]*hyper.ChangeRecord, error) {
 
 	fi, err := os.Stat(recordsPath)
 	if err != nil {
@@ -189,10 +189,10 @@ func loadRecords(recordsPath string) ([]*eps.ChangeRecord, error) {
 		recordsFiles = []string{recordsPath}
 	}
 
-	allRecords := make([]*eps.ChangeRecord, 0)
+	allRecords := make([]*hyper.ChangeRecord, 0)
 
 	for _, recordsFile := range recordsFiles {
-		eps.Log.Tracef("Adding records from %v...", recordsFile)
+		hyper.Log.Tracef("Adding records from %v...", recordsFile)
 		if file, err := os.Open(recordsFile); err != nil {
 			return nil, fmt.Errorf("error opening records file '%s': %w", recordsFile, err)
 		} else {

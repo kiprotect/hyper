@@ -4,11 +4,11 @@
 SHELL := /bin/bash
 VERSION ?= development
 
-GOFLAGS ?= $(GOFLAGS:) -ldflags "-X 'github.com/iris-connect/eps.Version=$(VERSION)'"
+GOFLAGS ?= $(GOFLAGS:) -ldflags "-X 'github.com/iris-connect/hyper.Version=$(VERSION)'"
 
-export EPS_TEST = yes
+export HYPER_TEST = yes
 
-EPS_TEST_SETTINGS ?= "$(shell pwd)/settings/test"
+HYPER_TEST_SETTINGS ?= "$(shell pwd)/settings/test"
 
 all: dep install
 
@@ -22,24 +22,24 @@ install: build
 	go install $(GOFLAGS) ./...
 
 test:
-	EPS_SETTINGS=$(EPS_TEST_SETTINGS) go test $(testargs) `go list ./...`
+	HYPER_SETTINGS=$(HYPER_TEST_SETTINGS) go test $(testargs) `go list ./...`
 
 test-races:
-	EPS_SETTINGS=$(EPS_TEST_SETTINGS) go test -race $(testargs) `go list ./...`
+	HYPER_SETTINGS=$(HYPER_TEST_SETTINGS) go test -race $(testargs) `go list ./...`
 
 bench:
-	EPS_SETTINGS=$(EPS_TEST_SETTINGS) go test -run=NONE -bench=. $(GOFLAGS) `go list ./... | grep -v api/`
+	HYPER_SETTINGS=$(HYPER_TEST_SETTINGS) go test -run=NONE -bench=. $(GOFLAGS) `go list ./... | grep -v api/`
 
 clean:
 	@go clean $(GOFLAGS) -i ./...
 
 copyright:
-	python .scripts/make_copyright_headers.py
+	python3 .scripts/make_copyright_headers.py
 
 protobuf:
 	protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    protobuf/eps.proto
+    protobuf/hyper.proto
 
 certs:
 	rm -rf settings/dev/certs/*

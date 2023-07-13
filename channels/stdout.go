@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,15 +22,15 @@ package channels
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
 )
 
 type StdoutSettings struct {
 }
 
 type StdoutChannel struct {
-	eps.BaseChannel
+	hyper.BaseChannel
 	Settings StdoutSettings
 }
 
@@ -50,7 +50,7 @@ func StdoutSettingsValidator(settings map[string]interface{}) (interface{}, erro
 	}
 }
 
-func MakeStdoutChannel(settings interface{}) (eps.Channel, error) {
+func MakeStdoutChannel(settings interface{}) (hyper.Channel, error) {
 	return &StdoutChannel{
 		Settings: settings.(StdoutSettings),
 	}, nil
@@ -68,7 +68,7 @@ func (c *StdoutChannel) Close() error {
 	return nil
 }
 
-func (c *StdoutChannel) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *StdoutChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 	if jsonData, err := json.MarshalIndent(request, "", "  "); err != nil {
 		return nil, fmt.Errorf("error marshaling to JSON: %w", err)
 	} else {
@@ -77,7 +77,7 @@ func (c *StdoutChannel) DeliverRequest(request *eps.Request) (*eps.Response, err
 	return nil, nil
 }
 
-func (c *StdoutChannel) CanDeliverTo(address *eps.Address) bool {
+func (c *StdoutChannel) CanDeliverTo(address *hyper.Address) bool {
 	if address.Operator == c.Directory().Name() {
 		return true
 	}

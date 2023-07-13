@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,13 +17,13 @@
 package sd
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/jsonrpc"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/jsonrpc"
 )
 
 type Settings struct {
-	Definitions   *eps.Definitions               `json:"definitions"`
-	Metrics       *eps.MetricsSettings           `json:"metrics"`
+	Definitions   *hyper.Definitions             `json:"definitions"`
+	Metrics       *hyper.MetricsSettings         `json:"metrics"`
 	JSONRPCServer *jsonrpc.JSONRPCServerSettings `json:"jsonrpc_server`
 	Directory     *RecordDirectorySettings       `json:"directory"`
 }

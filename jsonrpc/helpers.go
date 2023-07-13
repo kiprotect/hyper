@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,9 +20,9 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/http"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/http"
 	"regexp"
 	"strings"
 )
@@ -31,11 +31,11 @@ var jsonContentTypeRegexp = regexp.MustCompile("(?i)^application/json(?:;.*)?$")
 
 // extracts the request data from
 func ExtractJSONRequest(c *http.Context) {
-	eps.Log.Debugf("Extracting JSON data...")
+	hyper.Log.Debugf("Extracting JSON data...")
 
 	invalidJSONResponse := Response{JSONRPC: "2.0,", Error: &Error{Code: -32700, Message: "JSON required"}}
 	invalidRequestResponse := func(err error) *Response {
-		eps.Log.Debugf("invalid JSON request: %v", err)
+		hyper.Log.Debugf("invalid JSON request: %v", err)
 		return &Response{JSONRPC: "2.0,", Error: &Error{Code: -32600, Message: fmt.Sprintf("invalid request: %v", err), Data: err}}
 	}
 	serverErrorResponse := Response{JSONRPC: "2.0,", Error: &Error{Code: -32603, Message: "internal server error"}}
@@ -84,7 +84,7 @@ func ExtractJSONRequest(c *http.Context) {
 
 		// this should never happen if the form validation is correct...
 		if err := JSONRPCRequestForm.Coerce(&request, validJSON); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			c.JSON(500, serverErrorResponse)
 			return
 		}

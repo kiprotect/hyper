@@ -17,6 +17,21 @@
     * A **message broker / mesh router** services that transmits
     requests between different actors in the system and ensures
     mutual authorization and authentication.
+145a7dc7a406bc9b:
+  de: >-
+    Für die ersten Schritte lesen Sie bitte das [Handbuch Erste
+    Schritte]({{'getting-started'|href}}). Danach können Sie sich
+    die [ausführliche EPS-Dokumentation]({{'hyper.index'|href}})
+    ansehen. Wenn Sie den Proxy oder das Dienstverzeichnis ausführen
+    möchten, können Sie sich die entsprechende [Proxy-Dokumentation]({{'proxy.index'|href}})
+    sowie die [Dienstverzeichnis-Dokumentation]({{'sd.index'|href}})
+    ansehen.
+  en: >-
+    To get started please read the [Getting Started Guide]({{'getting-started'|href}}).
+    After that you can check out the [detailed EPS documentation]({{'hyper.index'|href}}).
+    If you want to run the proxy or service directory you can
+    check out the respective [proxy documentation]({{'proxy.index'|href}})
+    as well as [service directory documentation]({{'sd.index'|href}}).
 1a61d779ced1e9fb:
   de: >-
     Zusätzlich bietet es einen **TLS-Passthrough-Proxy-Dienst,
@@ -38,35 +53,59 @@
     components:
 31ac0b260c8a780d:
   de: >-
-    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/eps)
-    bitte [ein Issue auf Github](https://github.com/iris-connect/eps),
+    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/hyper)
+    bitte [ein Issue auf Github](https://github.com/iris-connect/hyper),
     wo unsere Community Ihnen helfen kann.
   en: >-
-    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/eps)
+    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/hyper)
     where our community can help you.
 38040ad7581c97df:
   de: >-
-    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/eps)
-    bitte [ein Issue auf Github](https://github.com/iris-connect/eps),
+    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/hyper)
+    bitte [ein Issue auf Github](https://github.com/iris-connect/hyper),
     wo unsere Community Ihnen helfen kann.
   en: >-
-    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/eps)
+    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/hyper)
     where our community can help you.
 4908d7bb9a072dc3:
   de: '# Willkommen!'
   en: '# Welcome!'
+87f1d564e3741f0d:
+  de: >-
+    Für die ersten Schritte lesen Sie bitte das [Handbuch Erste
+    Schritte]({{'getting-started'|href}}). Danach können Sie sich
+    die [ausführliche Hyper-Dokumentation]({{'hyper.index'|href}})
+    ansehen. Wenn Sie den Proxy oder das Serviceverzeichnis ausführen
+    möchten, können Sie sich die entsprechende [Proxy-Dokumentation]({{'proxy.index'|href}})
+    sowie die [Serviceverzeichnis-Dokumentation]({{'sd.index'|href}})
+    ansehen.
+  en: >-
+    To get started please read the [Getting Started Guide]({{'getting-started'|href}}).
+    After that you can check out the [detailed Hyper documentation]({{'hyper.index'|href}}).
+    If you want to run the proxy or service directory you can
+    check out the respective [proxy documentation]({{'proxy.index'|href}})
+    as well as [service directory documentation]({{'sd.index'|href}}).
+af06b7af979b1ab9:
+  de: >-
+    **Hyper** bietet mehrere Server- und Client-Komponenten, die
+    die Kommunikation im IRIS-Ökosystem verwalten und sichern.
+    Hyper bietet vor allem zwei Kernkomponenten:
+  en: >-
+    The **Hyper** provides several server and client components
+    that manage and secure the communication in the IRIS ecosystem.
+    Notably, the Hyper provides two core components:
 c27e8e74cb8cd379:
   de: >-
     Für die ersten Schritte lesen Sie bitte die Anleitung " [Erste
     Schritte"]({{'getting-started'|href}}). Danach können Sie
-    sich die [detaillierte EPS-Dokumentation]({{'eps.index'|href}})
+    sich die [detaillierte EPS-Dokumentation]({{'hyper.index'|href}})
     ansehen. Wenn Sie den Proxy oder das Dienstverzeichnis ausführen
     möchten, können Sie sich die jeweilige [Proxy-Dokumentation]({{'proxy.index'|href}})
     sowie die [Dienstverzeichnis-Dokumentation]({{'sd.index'|href}})
     ansehen.
   en: >-
     To get started please read the [Getting Started Guide]({{'getting-started'|href}}).
-    After that you can check out the [detailed EPS documentation]({{'eps.index'|href}}).
+    After that you can check out the [detailed EPS documentation]({{'hyper.index'|href}}).
     If you want to run the proxy or service directory you can
     check out the respective [proxy documentation]({{'proxy.index'|href}})
     as well as [service directory documentation]({{'sd.index'|href}}).
@@ -87,3 +126,11 @@ d4f76297b5cf6d12:
 e3b0c44298fc1c14:
   de: ''
   en: ''
+f40295929c844d22:
+  de: >-
+    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/hyper)
+    bitte [ein Issue auf Github](https://github.com/iris-connect/hyper),
+    wo unsere Community Ihnen helfen kann.
+  en: >-
+    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/hyper)
+    where our community can help you.

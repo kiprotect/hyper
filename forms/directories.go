@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@ package forms
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 )
 
 type AreValidDirectorySettings struct {
@@ -29,7 +29,7 @@ func (f AreValidDirectorySettings) Validate(input interface{}, inputs map[string
 }
 
 func (f AreValidDirectorySettings) ValidateWithContext(input interface{}, inputs map[string]interface{}, context map[string]interface{}) (interface{}, error) {
-	definitions, ok := context["definitions"].(*eps.Definitions)
+	definitions, ok := context["definitions"].(*hyper.Definitions)
 	if !ok {
 		return nil, fmt.Errorf("expected a 'definitions' context")
 	}
@@ -55,7 +55,7 @@ func (f IsValidDirectoryType) Validate(input interface{}, inputs map[string]inte
 }
 
 func (f IsValidDirectoryType) ValidateWithContext(input interface{}, inputs map[string]interface{}, context map[string]interface{}) (interface{}, error) {
-	definitions, ok := context["definitions"].(*eps.Definitions)
+	definitions, ok := context["definitions"].(*hyper.Definitions)
 	if !ok {
 		return nil, fmt.Errorf("expected a 'definitions' context")
 	}

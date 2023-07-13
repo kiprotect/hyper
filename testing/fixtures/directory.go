@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,14 +18,14 @@ package fixtures
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
 )
 
 type Directory struct{}
 
 func (c Directory) Setup(fixtures map[string]interface{}) (interface{}, error) {
-	settings, ok := fixtures["settings"].(*eps.Settings)
+	settings, ok := fixtures["settings"].(*hyper.Settings)
 
 	if !ok {
 		return nil, fmt.Errorf("settings missing")

@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,8 +18,8 @@ package helpers
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
 	"github.com/urfave/cli"
 )
 
@@ -39,8 +39,8 @@ func Decorate(commands []cli.Command, decorator Decorator, service string) []cli
 	return newCommands
 }
 
-func Settings(definitions *eps.Definitions) (*eps.Settings, error) {
-	if settingsPaths, fs, err := helpers.SettingsPaths("EPS_SETTINGS"); err != nil {
+func Settings(definitions *hyper.Definitions) (*hyper.Settings, error) {
+	if settingsPaths, fs, err := helpers.SettingsPaths("HYPER_SETTINGS"); err != nil {
 		return nil, err
 	} else {
 		return helpers.Settings(settingsPaths, fs, definitions)
@@ -51,7 +51,7 @@ var CommonCommands = []cli.Command{
 	{
 		Name:   "version",
 		Usage:  "Print the software version",
-		Action: func(c *cli.Context) error { fmt.Println(eps.Version); return nil },
+		Action: func(c *cli.Context) error { fmt.Println(hyper.Version); return nil },
 	},
 }
 
@@ -77,17 +77,17 @@ func InitCLI(f func(c *cli.Context) error, service string) func(c *cli.Context) 
 	return func(c *cli.Context) error {
 
 		level := c.GlobalString("level")
-		logLevel, err := eps.ParseLevel(level)
+		logLevel, err := hyper.ParseLevel(level)
 		if err != nil {
 			return fmt.Errorf("error parsing flag: %w", err)
 		}
-		eps.Log.SetLevel(logLevel)
+		hyper.Log.SetLevel(logLevel)
 
-		eps.Log.Debugf("%s version: %s", service, eps.Version)
+		hyper.Log.Debugf("%s version: %s", service, hyper.Version)
 
 		format := c.GlobalString("format")
 		if format != "" {
-			if err := eps.SetLogFormat(format, service); err != nil {
+			if err := hyper.SetLogFormat(format, service); err != nil {
 				return fmt.Errorf("error setting log formatter: %w", err)
 			}
 		}

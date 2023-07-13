@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,10 +17,10 @@
 package channels_test
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/channels"
-	th "github.com/iris-connect/eps/testing"
-	"github.com/iris-connect/eps/testing/fixtures"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/channels"
+	th "github.com/kiprotect/hyper/testing"
+	"github.com/kiprotect/hyper/testing/fixtures"
 	"testing"
 )
 
@@ -58,7 +58,7 @@ func TestGRPCClientConnection(t *testing.T) {
 
 	client := cf["client"].(*channels.GRPCClientChannel)
 
-	request := &eps.Request{
+	request := &hyper.Request{
 		ID: "hd-1.add(1)",
 	}
 

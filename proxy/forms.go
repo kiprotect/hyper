@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,11 +18,11 @@ package proxy
 
 import (
 	"fmt"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/jsonrpc"
-	"github.com/iris-connect/eps/net"
-	"github.com/iris-connect/eps/tls"
 	"github.com/kiprotect/go-helpers/forms"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/jsonrpc"
+	"github.com/kiprotect/hyper/net"
+	"github.com/kiprotect/hyper/tls"
 	"regexp"
 	"time"
 )
@@ -50,7 +50,7 @@ var SettingsForm = forms.Form{
 			Validators: []forms.Validator{
 				forms.IsOptional{},
 				forms.IsStringMap{
-					Form: &epsForms.MetricsSettingsForm,
+					Form: &hyperForms.MetricsSettingsForm,
 				},
 			},
 		},
@@ -139,7 +139,7 @@ var PrivateSettingsForm = forms.Form{
 			Name: "datastore",
 			Validators: []forms.Validator{
 				forms.IsStringMap{
-					Form: &epsForms.DatastoreForm,
+					Form: &hyperForms.DatastoreForm,
 				},
 			},
 		},
@@ -182,7 +182,7 @@ var PublicSettingsForm = forms.Form{
 			Name: "datastore",
 			Validators: []forms.Validator{
 				forms.IsStringMap{
-					Form: &epsForms.DatastoreForm,
+					Form: &hyperForms.DatastoreForm,
 				},
 			},
 		},

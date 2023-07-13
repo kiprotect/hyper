@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,8 +19,8 @@ package jsonrpc
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/tls"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -57,7 +57,7 @@ func (c *Client) Call(request *Request) (*Response, error) {
 	}
 
 	if c.settings.ProxyUrl != "" {
-		eps.Log.Debugf("Using proxy URL %s", c.settings.ProxyUrl)
+		hyper.Log.Debugf("Using proxy URL %s", c.settings.ProxyUrl)
 		if proxyUrl, err := url.Parse(c.settings.ProxyUrl); err != nil {
 			return nil, err
 		} else {
@@ -75,7 +75,7 @@ func (c *Client) Call(request *Request) (*Response, error) {
 		transport.TLSClientConfig = tlsConfig
 	}
 
-	eps.Log.Debugf("Generating request to endpoint %s...", c.settings.Endpoint)
+	hyper.Log.Debugf("Generating request to endpoint %s...", c.settings.Endpoint)
 
 	req, err := http.NewRequest("POST", c.settings.Endpoint, bytes.NewReader(data))
 

@@ -1,9 +1,9 @@
 # Integration
 
-Integrating with the IRIS infrastructure is easy (we hope). First, you need to deploy the `eps` server together with the settings and certificates we've provided to you. This is as easy as downloading the latest `eps` version from our server, unpacking the settings archive we've provided you with and running
+Integrating with the IRIS infrastructure is easy (we hope). First, you need to deploy the `hyper` server together with the settings and certificates we've provided to you. This is as easy as downloading the latest `hyper` version from our server, unpacking the settings archive we've provided you with and running
 
 ```bash
-EPS_SETTINGS=path/to/settings eps server run
+HYPER_SETTINGS=path/to/settings hyper server run
 ```
 
 This should open a local JSON-RPC server on port `5555` that you can connect to via TLS (you'll need to add the root CA certificate to your certificate chain for this). This server is your gateway to all IRIS services. Simply look up the services that a specific operator provides and send a request that contains the name of the operator and the service method you want to call. For example, to interact with a "locations" service provided by operator "ls-1", you'd simply post a JSON RPC message like this:
@@ -28,27 +28,27 @@ That's it!
 
 ## Asynchronous Calls
 
-The calls we've seen above were all synchronous, i.e. making a call resulted in a direct response. Sometimes calls need to be asynchronous though, e.g. because replying to them takes time. If you make an asynchronous call to another service, you'll get back an acknowledgment first. As soon as the service you've called has a response ready, it will send it back to your via the `eps` network, using the same `id` you provided (which enables you to match the response to your request). Likewise, you can respond to calls from other services in an asynchronous way, simply pushing the response to your local JSON-RPC server with a method name `respond` (without a service name). Do not forget to include the same `id` that you received with the original request, as this will contain the "return address" of the request.
+The calls we've seen above were all synchronous, i.e. making a call resulted in a direct response. Sometimes calls need to be asynchronous though, e.g. because replying to them takes time. If you make an asynchronous call to another service, you'll get back an acknowledgment first. As soon as the service you've called has a response ready, it will send it back to your via the `hyper` network, using the same `id` you provided (which enables you to match the response to your request). Likewise, you can respond to calls from other services in an asynchronous way, simply pushing the response to your local JSON-RPC server with a method name `respond` (without a service name). Do not forget to include the same `id` that you received with the original request, as this will contain the "return address" of the request.
 
 ## Integration Example
 
-To get a concrete idea of how to integrate with the IRIS infrastructure using the EPS server we have created a simple demo setup that illustrates all components. The demo consists of three components:
+To get a concrete idea of how to integrate with the IRIS infrastructure using the Hyper server we have created a simple demo setup that illustrates all components. The demo consists of three components:
 
-* An `eps` server simulating a `health department`, named `hd-1`
-* An `eps` server simulation an operator offering a "locations" service, named `ls-1`
-* The actual location service `eps-ls` offered by the operator `ls-1`
+* An `hyper` server simulating a `health department`, named `hd-1`
+* An `hyper` server simulation an operator offering a "locations" service, named `ls-1`
+* The actual location service `hyper-ls` offered by the operator `ls-1`
 
 ## Getting Up And Running
 
 First, please check the README on how to create all necessary TLS certificates and build the software. Then, start the individual services on different terminals:
 
 ```bash
-# run the `eps` server of the "locations" operator ls-1
-EPS_SETTINGS=settings/dev/roles/ls-1 eps --level debug server run
-# run the `eps` server of the health department hd-1
-EPS_SETTINGS=settings/dev/roles/hd-1 eps --level debug server run
+# run the `hyper` server of the "locations" operator ls-1
+HYPER_SETTINGS=settings/dev/roles/ls-1 hyper --level debug server run
+# run the `hyper` server of the health department hd-1
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper --level debug server run
 # run the "locations" service
-eps-ls
+hyper-ls
 ```
 
 ## Testing
@@ -71,7 +71,7 @@ This should return a simple JSON response:
 }
 ```
 
-The request first went to the health department's `eps` server, was first routed to `ls-1`'s `eps` server via gRPC and was then passed to the JSON-RPC API of the local `eps-ls` service running there. The result was then passsed back along the entire chain.
+The request first went to the health department's `hyper` server, was first routed to `ls-1`'s `hyper` server via gRPC and was then passed to the JSON-RPC API of the local `hyper-ls` service running there. The result was then passsed back along the entire chain.
 
 You can also perform a lookup of the location you've just added:
 

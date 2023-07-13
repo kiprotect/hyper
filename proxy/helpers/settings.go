@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,13 +17,13 @@
 package helpers
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/proxy"
 	"github.com/kiprotect/go-helpers/settings"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/proxy"
 	"io/fs"
 )
 
-func Settings(settingsPaths []string, fs fs.FS, definitions *eps.Definitions) (*proxy.Settings, error) {
+func Settings(settingsPaths []string, fs fs.FS, definitions *hyper.Definitions) (*proxy.Settings, error) {
 	if rawSettings, err := settings.MakeSettings(settingsPaths, fs); err != nil {
 		return nil, err
 	} else if params, err := proxy.SettingsForm.ValidateWithContext(rawSettings.Values, map[string]interface{}{"definitions": definitions}); err != nil {

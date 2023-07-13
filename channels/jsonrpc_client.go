@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,12 +18,12 @@ package channels
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/jsonrpc"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/jsonrpc"
 )
 
 type JSONRPCClientChannel struct {
-	eps.BaseChannel
+	hyper.BaseChannel
 	Settings *jsonrpc.JSONRPCClientSettings
 }
 
@@ -39,7 +39,7 @@ func JSONRPCClientSettingsValidator(settings map[string]interface{}) (interface{
 	}
 }
 
-func MakeJSONRPCClientChannel(settings interface{}) (eps.Channel, error) {
+func MakeJSONRPCClientChannel(settings interface{}) (hyper.Channel, error) {
 	rpcSettings := settings.(jsonrpc.JSONRPCClientSettings)
 	return &JSONRPCClientChannel{
 		Settings: &rpcSettings,
@@ -58,13 +58,13 @@ func (c *JSONRPCClientChannel) Close() error {
 	return nil
 }
 
-func (c *JSONRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *JSONRPCClientChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 
 	client := jsonrpc.MakeClient(c.Settings)
 	jsonrpcRequest := &jsonrpc.Request{}
-	jsonrpcRequest.FromEPSRequest(request)
+	jsonrpcRequest.FromHyperRequest(request)
 
-	if groups := eps.MethodNameRegexp.FindStringSubmatch(jsonrpcRequest.Method); groups == nil {
+	if groups := hyper.MethodNameRegexp.FindStringSubmatch(jsonrpcRequest.Method); groups == nil {
 		return nil, fmt.Errorf("invalid method name")
 	} else {
 		// we remove the operator name from the method call before passing it in
@@ -73,13 +73,13 @@ func (c *JSONRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Respon
 
 	jsonrpcResponse, err := client.Call(jsonrpcRequest)
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return nil, fmt.Errorf("error calling JSON-RPC server: %w", err)
 	}
-	return jsonrpcResponse.ToEPSResponse(), nil
+	return jsonrpcResponse.ToHyperResponse(), nil
 }
 
-func (c *JSONRPCClientChannel) CanDeliverTo(address *eps.Address) bool {
+func (c *JSONRPCClientChannel) CanDeliverTo(address *hyper.Address) bool {
 
 	if address.Operator == c.Directory().Name() {
 		return true

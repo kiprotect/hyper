@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,10 +19,10 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/protobuf"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/protobuf"
+	"github.com/kiprotect/hyper/tls"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
@@ -34,20 +34,20 @@ import (
 )
 
 type ConnectedClient struct {
-	CallServer protobuf.EPS_ServerCallServer
+	CallServer protobuf.Hyper_ServerCallServer
 	Stop       chan bool
-	directory  eps.Directory
-	Info       *eps.ClientInfo
+	directory  hyper.Directory
+	Info       *hyper.ClientInfo
 	mutex      sync.Mutex
 }
 
 type Server struct {
-	protobuf.UnimplementedEPSServer
+	protobuf.UnimplementedHyperServer
 	listener         net.Listener
 	server           *grpc.Server
 	settings         *GRPCServerSettings
 	connectedClients []*ConnectedClient
-	directory        eps.Directory
+	directory        hyper.Directory
 	mutex            sync.Mutex
 	handler          Handler
 }
@@ -69,7 +69,7 @@ func (s *Server) Stop() error {
 // currently we allow messages up to 4MB in size
 var MaxMessageSize = 1024 * 1024 * 4
 
-func MakeServer(settings *GRPCServerSettings, handler Handler, listener net.Listener, directory eps.Directory) (*Server, error) {
+func MakeServer(settings *GRPCServerSettings, handler Handler, listener net.Listener, directory hyper.Directory) (*Server, error) {
 	opts := []grpc.ServerOption{
 		grpc.MaxRecvMsgSize(MaxMessageSize),
 		grpc.MaxSendMsgSize(MaxMessageSize),
@@ -91,14 +91,14 @@ func MakeServer(settings *GRPCServerSettings, handler Handler, listener net.List
 		settings:         settings,
 	}
 
-	protobuf.RegisterEPSServer(server.server, server)
+	protobuf.RegisterHyperServer(server.server, server)
 
 	return server, nil
 }
 
-func (c *ConnectedClient) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *ConnectedClient) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 
-	eps.Log.Debugf("Trying to deliver request to connected client '%s'...", c.Info.Name)
+	hyper.Log.Debugf("Trying to deliver request to connected client '%s'...", c.Info.Name)
 
 	// we need to ensure only one goroutine calls this method at once
 	c.mutex.Lock()
@@ -119,29 +119,29 @@ func (c *ConnectedClient) DeliverRequest(request *eps.Request) (*eps.Response, e
 	}
 
 	if err := c.CallServer.Send(pbRequest); err != nil {
-		eps.Log.Errorf("Cannot deliver request: %v", err)
+		hyper.Log.Errorf("Cannot deliver request: %v", err)
 		c.Stop <- true
 		return nil, fmt.Errorf("error sending gRPC request: %w", err)
 	}
 
 	if pbResponse, err := c.CallServer.Recv(); err != nil {
-		eps.Log.Errorf("Cannot receive response: %v", err)
+		hyper.Log.Errorf("Cannot receive response: %v", err)
 		// we close the connection
 		c.Stop <- true
 		return nil, fmt.Errorf("error receiving gRPC response: %w", err)
 	} else {
 
-		var responseError *eps.Error
+		var responseError *hyper.Error
 
 		if pbResponse.Error != nil {
-			responseError = &eps.Error{
+			responseError = &hyper.Error{
 				Code:    int(pbResponse.Error.Code),
 				Data:    pbResponse.Error.Data.AsMap(),
 				Message: pbResponse.Error.Message,
 			}
 		}
 
-		response := &eps.Response{
+		response := &hyper.Response{
 			ID:     &pbResponse.Id,
 			Result: pbResponse.Result.AsMap(),
 			Error:  responseError,
@@ -153,12 +153,12 @@ func (c *ConnectedClient) DeliverRequest(request *eps.Request) (*eps.Response, e
 }
 
 type Handler interface {
-	HandleRequest(*eps.Request, *eps.ClientInfo) (*eps.Response, error)
+	HandleRequest(*hyper.Request, *hyper.ClientInfo) (*hyper.Response, error)
 }
 
-func (s *Server) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (s *Server) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 
-	address, err := eps.GetAddress(request.ID)
+	address, err := hyper.GetAddress(request.ID)
 
 	if err != nil {
 		return nil, fmt.Errorf("error parsing address: %w", err)
@@ -173,7 +173,7 @@ func (s *Server) DeliverRequest(request *eps.Request) (*eps.Response, error) {
 	return client.DeliverRequest(request)
 }
 
-func (s *Server) CanDeliverTo(address *eps.Address) bool {
+func (s *Server) CanDeliverTo(address *hyper.Address) bool {
 	for _, connectedClient := range s.connectedClients {
 		if connectedClient.Info.Name == address.Operator {
 			return true
@@ -196,7 +196,7 @@ func (s *Server) Call(context context.Context, pbRequest *protobuf.Request) (*pr
 		return nil, fmt.Errorf("cannot determine client info")
 	}
 
-	request := &eps.Request{
+	request := &hyper.Request{
 		ID:     pbRequest.Id,
 		Params: pbRequest.Params.AsMap(),
 		Method: pbRequest.Method,
@@ -297,7 +297,7 @@ type ClientAnnouncement struct {
 	Name string `json:"name"`
 }
 
-func (s *Server) ServerCall(server protobuf.EPS_ServerCallServer) error {
+func (s *Server) ServerCall(server protobuf.Hyper_ServerCallServer) error {
 
 	// this is a bidirectional message stream
 
@@ -316,7 +316,7 @@ func (s *Server) ServerCall(server protobuf.EPS_ServerCallServer) error {
 	pbResponse, err := server.Recv()
 
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return fmt.Errorf("can't receive handshake packet: %v", err)
 	}
 
@@ -331,7 +331,7 @@ func (s *Server) ServerCall(server protobuf.EPS_ServerCallServer) error {
 
 	name := clientAnnouncement.Name
 
-	eps.Log.Debugf("Client announced itself as '%s'", name)
+	hyper.Log.Debugf("Client announced itself as '%s'", name)
 
 	if !clientInfoAuthInfo.ClientInfos.HasName(name) {
 		return fmt.Errorf("invalid client name supplied")
@@ -349,7 +349,7 @@ func (s *Server) ServerCall(server protobuf.EPS_ServerCallServer) error {
 		s.setClient(client)
 	}
 
-	eps.Log.Debugf("Received incoming gRPC connection from client '%s' (primary name)", clientInfoAuthInfo.ClientInfos.PrimaryName())
+	hyper.Log.Debugf("Received incoming gRPC connection from client '%s' (primary name)", clientInfoAuthInfo.ClientInfos.PrimaryName())
 
 	// we update the CallServer reference in the client (in case it has been updated)
 	s.mutex.Lock()

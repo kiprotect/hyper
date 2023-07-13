@@ -47,11 +47,27 @@
     can do this.
 1a954abe3ceebb57:
   de: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records
     --reset settings/dev/directory/001_base.json
   en: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records
     --reset settings/dev/directory/001_base.json
+24f760e4a6f51aea:
+  de: >-
+    Alle Änderungen im Dienstverzeichnis werden kryptografisch
+    signiert. Dazu verfügt jeder Akteur im Hyper-System über ein
+    Paar ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das
+    Dienstverzeichnis ist aus einer Reihe von **Änderungsdatensätzen**
+    aufgebaut. Jeder Änderungssatz enthält den Namen eines **Akteurs**,
+    einen **Abschnitt** und die eigentlichen Daten, die geändert
+    werden sollen.
+  en: >-
+    All changes in the service directory are cryptographically
+    signed. For this, every actor in the Hyper system has a pair
+    of ECDSA keys and an accompanying certificate. The service
+    directory is constructed from a series of **change records**.
+    Each change record contains the name of an **operator**, a
+    **section** and the actual data that should be changed.
 286c8348132c91e0:
   de: >-
     Das Dienstverzeichnis implementiert einen gruppenbasierten
@@ -133,6 +149,29 @@
 370ba8f42421daab:
   de: '# Service-Verzeichnis'
   en: '# Service Directory'
+3da8254914cd3660:
+  de: >-
+    Mit Hilfe des Verzeichnisses können Hyper-Server feststellen,
+    ob und wie sie sich mit einem anderen Betreiber verbinden
+    können. Betreiber, die nur über ausgehende Verbindungen verfügen
+    (z.B. `ga-leipzig` im obigen Beispiel), können das Verzeichnis
+    nutzen, um zu erfahren, dass sie möglicherweise asynchrone
+    Antworten von anderen Betreibern erhalten (z.B. `ls-1`) und
+    dann ausgehende Verbindungen zu diesen Betreibern öffnen,
+    über die sie Antworten erhalten können. Hyper-Server können
+    das Dienstverzeichnis auch verwenden, um festzustellen, ob
+    sie eine Nachricht von einem bestimmten Betreiber annehmen
+    sollen.
+  en: >-
+    The directory allows Hyper servers to determine whether and
+    how they can connect to another operator. Operators that only
+    have outgoing connectivity (e.g. `ga-leipzig` in the example
+    above) can use the directory to learn that they might receive
+    asynchronous responses from other operators (e.g. `ls-1`)
+    and then open outgoing connections to these operators through
+    which they can receive replies. Hyper servers can also use
+    the service directory to determine whether they should accept
+    a message from a given operator.
 42e5f743979c8630:
   de: '  "Signatur": {'
   en: '  "signature": {'
@@ -179,18 +218,18 @@
 75c4d80c505696ca:
   de: >-
     Änderungsdatensätze können über die JSON-RPC-API an das Dienstverzeichnis
-    übermittelt werden. Die `eps` CLI bietet dafür eine Funktion
+    übermittelt werden. Die `hyper` CLI bietet dafür eine Funktion
     über die `sd submit-records` :
   en: >-
     Change records can be submitted to the service directory via
-    the JSON-RPC API. The `eps` CLI provides a function for this
-    via the `sd submit-records`:
+    the JSON-RPC API. The `hyper` CLI provides a function for
+    this via the `sd submit-records`:
 842f408d31dc00c6:
   de: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records
     settings/dev/directory/001_base.json
   en: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records
     settings/dev/directory/001_base.json
 8885213facd6943a:
   de: '### Signierdaten'
@@ -262,6 +301,44 @@ d3480d1f41a64956:
     By default, this will store and retrieve change records from
     a file located at `/tmp/service-directory.records`. To reset
     the service directory, simply delete this file.
+ddabc6b9443bb091:
+  de: >-
+    Änderungsdatensätze können über die JSON-RPC-API an das Dienstverzeichnis
+    übermittelt werden. Die `hyper` CLI bietet dafür eine Funktion
+    über die `sd submit-records`:
+  en: >-
+    Change records can be submitted to the service directory via
+    the JSON-RPC API. The `hyper` CLI provides a function for
+    this via the `sd submit-records`:
+ddd4dc0a22db3f43:
+  de: >-
+    Das Dienstverzeichnis implementiert einen gruppenbasierten
+    Berechtigungsmechanismus. Derzeit gibt es nur `yes/no` Berechtigungen
+    (d.h. ein Mitglied einer bestimmten Gruppe kann eine bestimmte
+    Dienstmethode entweder aufrufen oder nicht). Feiner abgestufte
+    Berechtigungen (z.B. kann ein Anbieter von Kontaktverfolgungen
+    nur seine eigenen Einträge im Dienst "Standorte" bearbeiten)
+    müssen von den Diensten selbst implementiert werden. Zu diesem
+    Zweck stellt der Hyper-Server den Diensten Informationen über
+    die aufrufende Gegenstelle über einen speziellen Parameter
+    (`_caller`) zur Verfügung, der zusammen mit den anderen RPC-Methodenparametern
+    übergeben wird. Diese Struktur enthält auch den aktuellen
+    Eintrag des Aufrufers aus dem Dienstverzeichnis, so dass der
+    aufgerufene Dienst den Aufrufer leicht identifizieren und
+    autorisieren kann.
+  en: >-
+    The service directory implements a group-based permissions
+    mechanism. Currently, only `yes/no` permissions exist (i.e.
+    a member of a given group either can or cannot call a given
+    service method). More fine-grained permissions (e.g. a contact
+    tracing provider can only edit its own entries in the "locations"
+    service) need to be implemented by the services themselves.
+    For that purpose, the Hyper server makes information about
+    the calling peer available to the services via a special parameter
+    (`_caller`) that gets passed along with the other RPC method
+    parameters. This structure also contains the current entry
+    of the caller from the service directory, making it easy for
+    the called service to identify and authorize the caller.
 e3b0c44298fc1c14:
   de: ''
   en: ''
@@ -276,6 +353,15 @@ efd8c4bc5036a0df:
 f1b901847390b0ed:
   de: '`` `'
   en: '```'
+f80dc825d4376e5e:
+  de: >-
+    Das Hyper-Server-Paket bietet auch einen `sd` API-Server-Befehl,
+    der einen JSON-RPC-Server öffnet, der das Dienstverzeichnis
+    verteilt.
+  en: >-
+    The Hyper server package also provides a `sd` API server command
+    that opens a JSON-RPC server which distributes the service
+    directory.
 f8e46305c7a2cd91:
   de: export SD_SETTINGS=settings/dev/roles/sd-1/sdh
   en: export SD_SETTINGS=settings/dev/roles/sd-1/sdh

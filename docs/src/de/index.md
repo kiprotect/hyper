@@ -1,6 +1,6 @@
 # Willkommen!
 
-Das **Endpoint System (EPS)** bietet mehrere Server- und Client-Komponenten, die die Kommunikation im IRIS-Ökosystem verwalten und sichern. Insbesondere bietet das EPS zwei Kernkomponenten:
+**Hyper** bietet mehrere Server- und Client-Komponenten, die die Kommunikation im IRIS-Ökosystem verwalten und sichern. Hyper bietet vor allem zwei Kernkomponenten:
 
 * Ein **Message-Broker / Mesh-Router-Dienst**, der Anfragen zwischen verschiedenen Akteuren im System weiterleitet und die gegenseitige Autorisierung und Authentifizierung sicherstellt.
 * Ein **verteiltes Dienstverzeichnis**, das kryptografisch signierte Informationen über Akteure im System speichert und vom Message Broker für die Authentifizierung, die Dienstsuche und den Verbindungsaufbau verwendet wird.
@@ -9,6 +9,6 @@ Zusätzlich bietet es einen **TLS-Passthrough-Proxy-Dienst, der** eine direkte, 
 
 ## Erste Schritte
 
-Für die ersten Schritte lesen Sie bitte die Anleitung " [Erste Schritte"]({{'getting-started'|href}}). Danach können Sie sich die [detaillierte EPS-Dokumentation]({{'eps.index'|href}}) ansehen. Wenn Sie den Proxy oder das Dienstverzeichnis ausführen möchten, können Sie sich die jeweilige [Proxy-Dokumentation]({{'proxy.index'|href}}) sowie die [Dienstverzeichnis-Dokumentation]({{'sd.index'|href}}) ansehen.
+Für die ersten Schritte lesen Sie bitte das [Handbuch Erste Schritte]({{'getting-started'|href}}). Danach können Sie sich die [ausführliche Hyper-Dokumentation]({{'hyper.index'|href}}) ansehen. Wenn Sie den Proxy oder das Serviceverzeichnis ausführen möchten, können Sie sich die entsprechende [Proxy-Dokumentation]({{'proxy.index'|href}}) sowie die [Serviceverzeichnis-Dokumentation]({{'sd.index'|href}}) ansehen.
 
-Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/eps) bitte [ein Issue auf Github](https://github.com/iris-connect/eps), wo unsere Community Ihnen helfen kann.
+Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/hyper) bitte [ein Issue auf Github](https://github.com/iris-connect/hyper), wo unsere Community Ihnen helfen kann.

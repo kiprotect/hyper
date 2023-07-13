@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,16 +17,16 @@
 package helpers
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/metrics"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/metrics"
 	"github.com/urfave/cli"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-func Server(settings *eps.Settings) ([]cli.Command, error) {
+func Server(settings *hyper.Settings) ([]cli.Command, error) {
 
 	return []cli.Command{
 		{
@@ -38,26 +38,26 @@ func Server(settings *eps.Settings) ([]cli.Command, error) {
 				{
 					Name:  "run",
 					Flags: []cli.Flag{},
-					Usage: "Run the EPS server.",
+					Usage: "Run the Hyper server.",
 					Action: func(c *cli.Context) error {
-						eps.Log.Info("Opening all channels...")
+						hyper.Log.Info("Opening all channels...")
 
 						directory, err := helpers.InitializeDirectory(settings)
 
 						if err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						broker, err := helpers.InitializeMessageBroker(settings, directory)
 
 						if err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						channels, err := helpers.OpenChannels(broker, directory, settings)
 
 						if err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						// we wait for CTRL-C / Interrupt
@@ -66,18 +66,18 @@ func Server(settings *eps.Settings) ([]cli.Command, error) {
 
 						metricsServer := metrics.MakePrometheusMetricsServer(settings.Metrics)
 
-						eps.Log.Info("Waiting for CTRL-C...")
+						hyper.Log.Info("Waiting for CTRL-C...")
 
 						<-sigchan
 
-						eps.Log.Info("Stopping channels...")
+						hyper.Log.Info("Stopping channels...")
 
 						// errors occuring within CloseChannels get logged automatically...
 						helpers.CloseChannels(channels)
 
 						if metricsServer != nil {
 							if err := metricsServer.Stop(); err != nil {
-								eps.Log.Error(err)
+								hyper.Log.Error(err)
 							}
 						}
 

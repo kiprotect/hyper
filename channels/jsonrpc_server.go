@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,13 +18,13 @@ package channels
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/jsonrpc"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/jsonrpc"
 )
 
 type JSONRPCServerChannel struct {
-	eps.BaseChannel
+	hyper.BaseChannel
 	Settings *jsonrpc.JSONRPCServerSettings
 	Server   *jsonrpc.JSONRPCServer
 }
@@ -41,7 +41,7 @@ func JSONRPCServerSettingsValidator(settings map[string]interface{}) (interface{
 	}
 }
 
-func MakeJSONRPCServerChannel(settings interface{}) (eps.Channel, error) {
+func MakeJSONRPCServerChannel(settings interface{}) (hyper.Channel, error) {
 	rpcSettings := settings.(jsonrpc.JSONRPCServerSettings)
 
 	s := &JSONRPCServerChannel{
@@ -58,7 +58,7 @@ func MakeJSONRPCServerChannel(settings interface{}) (eps.Channel, error) {
 
 func (c *JSONRPCServerChannel) handler(context *jsonrpc.Context) *jsonrpc.Response {
 
-	request := &eps.Request{}
+	request := &hyper.Request{}
 
 	// we make sure the parameters are well-formed
 	if params, err := forms.RequestForm.Validate(map[string]interface{}{
@@ -66,10 +66,10 @@ func (c *JSONRPCServerChannel) handler(context *jsonrpc.Context) *jsonrpc.Respon
 		"params": context.Request.Params,
 		"id":     context.Request.ID,
 	}); err != nil {
-		eps.Log.Debug(err)
+		hyper.Log.Debug(err)
 		return context.Error(400, fmt.Sprintf("invalid request: %v", err), err)
 	} else if err := forms.RequestForm.Coerce(request, params); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return context.InternalError()
 	}
 
@@ -78,12 +78,12 @@ func (c *JSONRPCServerChannel) handler(context *jsonrpc.Context) *jsonrpc.Respon
 	request.ID = fmt.Sprintf("%s(%s)", request.Method, request.ID)
 
 	// this request comes from the server itself
-	clientInfo := &eps.ClientInfo{
+	clientInfo := &hyper.ClientInfo{
 		Name: c.Directory().Name(),
 	}
 
 	if entry, err := c.Directory().OwnEntry(); err != nil {
-		eps.Log.Errorf("Error retrieving own directory entry: %v", err)
+		hyper.Log.Errorf("Error retrieving own directory entry: %v", err)
 		return context.InternalError()
 	} else {
 		clientInfo.Entry = entry
@@ -95,7 +95,7 @@ func (c *JSONRPCServerChannel) handler(context *jsonrpc.Context) *jsonrpc.Respon
 		if response == nil {
 			return context.Result(map[string]interface{}{"message": "submitted"})
 		}
-		jsonrpcResponse := jsonrpc.FromEPSResponse(response)
+		jsonrpcResponse := jsonrpc.FromHyperResponse(response)
 		if jsonrpcResponse.Error != nil {
 			return context.Error(jsonrpcResponse.Error.Code, jsonrpcResponse.Error.Message, jsonrpcResponse.Error.Data)
 		} else {
@@ -116,10 +116,10 @@ func (c *JSONRPCServerChannel) Close() error {
 	return c.Server.Stop()
 }
 
-func (c *JSONRPCServerChannel) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *JSONRPCServerChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 	return nil, nil
 }
 
-func (c *JSONRPCServerChannel) CanDeliverTo(address *eps.Address) bool {
+func (c *JSONRPCServerChannel) CanDeliverTo(address *hyper.Address) bool {
 	return false
 }

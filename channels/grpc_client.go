@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,17 +20,17 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/grpc"
-	"github.com/iris-connect/eps/helpers"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/grpc"
+	"github.com/kiprotect/hyper/helpers"
 	"net"
 	"sync"
 	"time"
 )
 
 type GRPCClientChannel struct {
-	eps.BaseChannel
+	hyper.BaseChannel
 	Settings    grpc.GRPCClientSettings
 	connections map[string]*GRPCServerConnection
 	stop        chan bool
@@ -56,7 +56,7 @@ func (c *GRPCServerConnection) Open() error {
 	defer c.mutex.Unlock()
 	if c.connected {
 		if c.establishedAddress == c.Address && c.establishedName == c.Name {
-			eps.Log.Tracef("connection to server '%s' still good...", c.Name)
+			hyper.Log.Tracef("connection to server '%s' still good...", c.Name)
 			// we're already connected and nothing changed
 			return nil
 		}
@@ -67,7 +67,7 @@ func (c *GRPCServerConnection) Open() error {
 	} else if c.connecting {
 		return nil
 	} else {
-		eps.Log.Tracef("opening a new gRPC client connection to server '%s'", c.Name)
+		hyper.Log.Tracef("opening a new gRPC client connection to server '%s'", c.Name)
 	}
 	c.connecting = true
 	defer func() { c.connecting = false }()
@@ -87,12 +87,12 @@ func (c *GRPCServerConnection) Open() error {
 			for {
 				if !stopping {
 					if err := client.ServerCall(c.channel, c.stop); err != nil {
-						eps.Log.Errorf("server call failed: %v", err)
+						hyper.Log.Errorf("server call failed: %v", err)
 						stopping = true
 						// there was a connection error, we stop the loop
 						go func() {
 							if err := c.Close(); err != nil {
-								eps.Log.Error(err)
+								hyper.Log.Error(err)
 							}
 						}()
 					} else {
@@ -122,7 +122,7 @@ func (c *GRPCServerConnection) Close() error {
 	}
 	if c.client != nil {
 		if err := c.client.Close(); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 		}
 		c.client = nil
 	}
@@ -192,7 +192,7 @@ func GRPCClientSettingsValidator(settings map[string]interface{}) (interface{}, 
 	}
 }
 
-func MakeGRPCClientChannel(settings interface{}) (eps.Channel, error) {
+func MakeGRPCClientChannel(settings interface{}) (hyper.Channel, error) {
 	return &GRPCClientChannel{
 		Settings:    settings.(grpc.GRPCClientSettings),
 		connections: make(map[string]*GRPCServerConnection),
@@ -204,7 +204,7 @@ func (c *GRPCClientChannel) Open() error {
 	// we start the background task
 	go c.backgroundTask()
 	if err := c.openConnections(); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 	return nil
 }
@@ -231,16 +231,16 @@ func (c *GRPCClientChannel) clearStaleConnections() error {
 		if connection.Stale {
 			// this connection is stale, we remove it
 			if err := connection.Close(); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 				lastErr = err
 			}
-			eps.Log.Tracef("Removing stale connection with name '%s' and address '%s'...", connection.Name, connection.Address)
+			hyper.Log.Tracef("Removing stale connection with name '%s' and address '%s'...", connection.Name, connection.Address)
 			delete(c.connections, key)
 		} else {
-			eps.Log.Tracef("Keeping connection with name '%s' and address '%s' open...", connection.Name, connection.Address)
+			hyper.Log.Tracef("Keeping connection with name '%s' and address '%s' open...", connection.Name, connection.Address)
 		}
 	}
-	eps.Log.Tracef("%d open gRPC server-client connections in total...", len(c.connections))
+	hyper.Log.Tracef("%d open gRPC server-client connections in total...", len(c.connections))
 	return lastErr
 }
 
@@ -264,7 +264,7 @@ func (c *GRPCClientChannel) closeConnections() error {
 	for _, connection := range c.connections {
 		if err := connection.Close(); err != nil {
 			lastErr = err
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 		}
 	}
 	return lastErr
@@ -280,19 +280,19 @@ func (c *GRPCClientChannel) backgroundTask() {
 		// adapt our outgoing connections to that...
 		select {
 		case <-c.stop:
-			eps.Log.Debug("Stopping gRPC client background task")
+			hyper.Log.Debug("Stopping gRPC client background task")
 			c.stop <- true
 			return
 		case <-time.After(60 * time.Second):
 			if err := c.openConnections(); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 		}
 	}
 }
 
 func (c *GRPCClientChannel) openConnections() error {
-	if entries, err := c.Directory().Entries(&eps.DirectoryQuery{
+	if entries, err := c.Directory().Entries(&hyper.DirectoryQuery{
 		Channels: []string{"grpc_server"},
 	}); err != nil {
 		return fmt.Errorf("error retrieving directory entries: %w", err)
@@ -302,7 +302,7 @@ func (c *GRPCClientChannel) openConnections() error {
 		// we only connect to entries that can actually call services on this
 		// endpoint (incoming requests only, as outgoing ones go through the
 		// regular client channel and do not require an open connection)
-		peerEntries := eps.GetPeers(ownEntry, entries, true)
+		peerEntries := hyper.GetPeers(ownEntry, entries, true)
 		// we mark all connections as stale
 		c.markConnectionsStale()
 		for _, entry := range peerEntries {
@@ -311,10 +311,10 @@ func (c *GRPCClientChannel) openConnections() error {
 			// server via its own client...
 			if ownEntry.Channel("grpc_server") != nil && entry.Channel("grpc_client") != nil {
 				if settings, err := getEntrySettings(ownEntry.Channel("grpc_server").Settings); err != nil {
-					eps.Log.Trace(err)
+					hyper.Log.Trace(err)
 					continue
 				} else if settings.Internal == false && settings.Proxy == "" {
-					eps.Log.Debugf("Skipping gRPC client connection from '%s' to '%s' as the latter has a gRPC client and the former a publicly available gRPC server", ownEntry.Name, entry.Name)
+					hyper.Log.Debugf("Skipping gRPC client connection from '%s' to '%s' as the latter has a gRPC client and the former a publicly available gRPC server", ownEntry.Name, entry.Name)
 					continue
 				}
 			}
@@ -333,10 +333,10 @@ func (c *GRPCClientChannel) openConnections() error {
 					// only reachable through a proxy...
 					continue
 				}
-				eps.Log.Tracef("Maintaining connection to %s at %s", entry.Name, settings.Address)
+				hyper.Log.Tracef("Maintaining connection to %s at %s", entry.Name, settings.Address)
 				if err := c.openConnection(settings.Address, entry.Name); err != nil {
 					// we only log this as tracing errors
-					eps.Log.Trace(err)
+					hyper.Log.Trace(err)
 				}
 			}
 		}
@@ -346,7 +346,7 @@ func (c *GRPCClientChannel) openConnections() error {
 
 func (c *GRPCClientChannel) openConnection(address, name string) error {
 
-	eps.Log.Tracef("Opening gRPC client connection to name '%s' and address '%s'...", name, address)
+	hyper.Log.Tracef("Opening gRPC client connection to name '%s' and address '%s'...", name, address)
 
 	conn := c.getConnection(name)
 
@@ -367,7 +367,7 @@ func (c *GRPCClientChannel) openConnection(address, name string) error {
 
 }
 
-func (c *GRPCClientChannel) HandleRequest(request *eps.Request, clientInfo *eps.ClientInfo) (*eps.Response, error) {
+func (c *GRPCClientChannel) HandleRequest(request *hyper.Request, clientInfo *hyper.ClientInfo) (*hyper.Response, error) {
 	return c.MessageBroker().DeliverRequest(request, clientInfo)
 }
 
@@ -393,9 +393,9 @@ var RequestConnectionResponseForm = forms.Form{
 	},
 }
 
-func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *GRPCClientChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 
-	address, err := eps.GetAddress(request.ID)
+	address, err := hyper.GetAddress(request.ID)
 
 	if err != nil {
 		return nil, fmt.Errorf("error parsing address: %w", err)
@@ -425,17 +425,17 @@ func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response,
 
 	if settings.Proxy != "" {
 
-		eps.Log.Tracef("Destination is only reachable via proxy '%s'...", settings.Proxy)
+		hyper.Log.Tracef("Destination is only reachable via proxy '%s'...", settings.Proxy)
 
 		if !c.Settings.UseProxy {
 			return nil, fmt.Errorf("destination is only reachable via proxy but proxying is disabled")
 		}
 
 		dialer = func(context context.Context, addr string) (net.Conn, error) {
-			eps.Log.Tracef("Dialing operator '%s' through proxy...", address.Operator)
+			hyper.Log.Tracef("Dialing operator '%s' through proxy...", address.Operator)
 
 			// this request comes from ourselves
-			clientInfo := &eps.ClientInfo{
+			clientInfo := &hyper.ClientInfo{
 				Name: c.Directory().Name(),
 			}
 
@@ -447,14 +447,14 @@ func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response,
 
 			method := fmt.Sprintf("%s.requestConnection", settings.Proxy)
 
-			// does not need to be secure just unique for this EPS server...
+			// does not need to be secure just unique for this Hyper server...
 			id, err := helpers.RandomID(8)
 
 			if err != nil {
 				return nil, err
 			}
 
-			request := &eps.Request{
+			request := &hyper.Request{
 				Method: method,
 				ID:     fmt.Sprintf("%s(%s)", method, hex.EncodeToString(id)),
 				Params: map[string]interface{}{
@@ -485,7 +485,7 @@ func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response,
 					return nil, fmt.Errorf("could not write token")
 				}
 
-				eps.Log.Infof("Successfully established gRPC client connection to proxy %s", requestConnectionResponse.Endpoint)
+				hyper.Log.Infof("Successfully established gRPC client connection to proxy %s", requestConnectionResponse.Endpoint)
 
 				return proxyConnection, nil
 			}
@@ -501,7 +501,7 @@ func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response,
 		// we ensure the client will always be closed
 		defer func() {
 			if err := client.Close(); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 		}()
 
@@ -515,7 +515,7 @@ func (c *GRPCClientChannel) DeliverRequest(request *eps.Request) (*eps.Response,
 	}
 }
 
-func (c *GRPCClientChannel) CanDeliverTo(address *eps.Address) bool {
+func (c *GRPCClientChannel) CanDeliverTo(address *hyper.Address) bool {
 
 	// we'll never deliver to ourselves...
 	if address.Operator == c.Directory().Name() {
@@ -525,7 +525,7 @@ func (c *GRPCClientChannel) CanDeliverTo(address *eps.Address) bool {
 	// we check if the requested service offers a gRPC server
 	if entry, err := c.DirectoryEntry(address, "grpc_server"); entry != nil {
 		if settings, err := getEntrySettings(entry.Channel("grpc_server").Settings); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			return false
 		} else if settings.Internal {
 			return false
@@ -535,7 +535,7 @@ func (c *GRPCClientChannel) CanDeliverTo(address *eps.Address) bool {
 		return true
 	} else if err != nil {
 		// we log this error
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 	return false

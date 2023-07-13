@@ -64,20 +64,20 @@
   en: '  },'
 32ad6642857a71d2:
   de: >-
-    EPS_SETTINGS=settings/dev/roles/ls-1 eps --level debug server
-    run
+    HYPER_SETTINGS=settings/dev/roles/ls-1 hyper --level debug
+    server run
   en: >-
-    EPS_SETTINGS=settings/dev/roles/ls-1 eps --level debug server
-    run
+    HYPER_SETTINGS=settings/dev/roles/ls-1 hyper --level debug
+    server run
 33e6d96d6b2466a6:
   de: '## Aufstehen und loslegen'
   en: '## Getting Up And Running'
 4061b828bfb714db:
   de: >-
-    * Ein `eps` Server, der einen `health department` simuliert,
+    * Ein `hyper` Server, der einen `health department` simuliert,
     namens `hd-1`
   en: >-
-    * An `eps` server simulating a `health department`, named
+    * An `hyper` server simulating a `health department`, named
     `hd-1`
 4908d7bb9a072dc3:
   de: '# Willkommen!'
@@ -105,17 +105,17 @@
   en: '# Getting Started'
 71db010f1e7f230d:
   de: >-
-    Die Anfrage ging zunächst an den `eps` Server des Gesundheitsamtes,
-    wurde über gRPC zunächst an den `ls-1` 's `eps` Server weitergeleitet
+    Die Anfrage ging zunächst an den `hyper` Server des Gesundheitsamtes,
+    wurde über gRPC zunächst an den `ls-1` 's `hyper` Server weitergeleitet
     und wurde dann an die JSON-RPC API des dort laufenden lokalen
-    `eps-ls` Dienstes übergeben. Das Ergebnis wurde dann entlang
+    `hyper-ls` Dienstes übergeben. Das Ergebnis wurde dann entlang
     der gesamten Kette zurückgereicht.
   en: >-
-    The request first went to the health department's `eps` server,
-    was first routed to `ls-1`'s `eps` server via gRPC and was
-    then passed to the JSON-RPC API of the local `eps-ls` service
-    running there. The result was then passsed back along the
-    entire chain.
+    The request first went to the health department's `hyper`
+    server, was first routed to `ls-1`'s `hyper` server via gRPC
+    and was then passed to the JSON-RPC API of the local `hyper-ls`
+    service running there. The result was then passsed back along
+    the entire chain.
 73359a980f456243:
   de: >-
     Die Anrufe, die wir oben gesehen haben, waren alle synchron,
@@ -124,7 +124,7 @@
     Zeit benötigt. Wenn Sie einen asynchronen Aufruf an einen
     anderen Dienst tätigen, erhalten Sie zunächst eine Bestätigung
     zurück. Sobald der von Ihnen aufgerufene Dienst eine Antwort
-    bereit hat, sendet er diese über das Netzwerk `eps` an Sie
+    bereit hat, sendet er diese über das Netzwerk `hyper` an Sie
     zurück, wobei er dieselbe `id` verwendet, die Sie angegeben
     haben (wodurch Sie die Antwort mit Ihrer Anfrage abgleichen
     können). Ebenso können Sie auf Aufrufe von anderen Diensten
@@ -140,7 +140,7 @@
     time. If you make an asynchronous call to another service,
     you'll get back an acknowledgment first. As soon as the service
     you've called has a response ready, it will send it back to
-    your via the `eps` network, using the same `id` you provided
+    your via the `hyper` network, using the same `id` you provided
     (which enables you to match the response to your request).
     Likewise, you can respond to calls from other services in
     an asynchronous way, simply pushing the response to your local
@@ -149,8 +149,8 @@
     with the original request, as this will contain the "return
     address" of the request.
 75f068a6706fd1a5:
-  de: EPS_SETTINGS=Pfad/zu/Einstellungen eps Serverlauf
-  en: EPS_SETTINGS=path/to/settings eps server run
+  de: HYPER_SETTINGS=Pfad/zu/Einstellungen hyper Serverlauf
+  en: HYPER_SETTINGS=path/to/settings hyper server run
 76a4da331a5e6d20:
   de: >-
     Daher ist die Interaktion mit dem entfernten "locations"-Dienst
@@ -183,19 +183,26 @@
   de: >-
     Die Integration mit der IRIS-Infrastruktur unter Verwendung
     des EPS-Servers ist einfach (hoffen wir). Zunächst müssen
-    Sie den `eps` Server zusammen mit den Einstellungen und Zertifikaten,
-    die wir Ihnen zur Verfügung gestellt haben, bereitstellen.
-    Dies ist so einfach wie das Herunterladen der neuesten Version
-    von `eps` von unserem Server, das Entpacken des Einstellungsarchivs,
-    das wir Ihnen zur Verfügung gestellt haben, und das Ausführen
-    von
+    Sie den `hyper` Server zusammen mit den Einstellungen und
+    Zertifikaten, die wir Ihnen zur Verfügung gestellt haben,
+    bereitstellen. Dies ist so einfach wie das Herunterladen der
+    neuesten Version von `hyper` von unserem Server, das Entpacken
+    des Einstellungsarchivs, das wir Ihnen zur Verfügung gestellt
+    haben, und das Ausführen von
   en: >-
     Integrating with the IRIS infrastructure using the EPS server
-    is easy (we hope). First, you need to deploy the `eps` server
+    is easy (we hope). First, you need to deploy the `hyper` server
     together with the settings and certificates we've provided
-    to you. This is as easy as downloading the latest `eps` version
-    from our server, unpacking the settings archive we've provided
-    you with and running
+    to you. This is as easy as downloading the latest `hyper`
+    version from our server, unpacking the settings archive we've
+    provided you with and running
+866318525bce04e9:
+  de: >-
+    * Der tatsächliche vom Betreiber angebotene Ortungsdienst
+    `hyper-ls` `ls-1`
+  en: >-
+    * The actual location service `hyper-ls` offered by the operator
+    `ls-1`
 96627637c668e59c:
   de: >-
     Sie können auch eine Suche nach dem Ort durchführen, den Sie
@@ -206,32 +213,52 @@
 9a63cc38ece60304:
   de: >-
     * Der tatsächliche vom Betreiber angebotene Ortungsdienst
-    `eps-ls` `ls-1`
+    `hyper-ls` `ls-1`
   en: >-
-    * The actual location service `eps-ls` offered by the operator
+    * The actual location service `hyper-ls` offered by the operator
     `ls-1`
 9e4de4a404f24f30:
   de: >-
     Die Integration in die IRIS-Infrastruktur ist einfach (hoffen
-    wir). Zuerst müssen Sie den `eps` Server zusammen mit den
+    wir). Zuerst müssen Sie den `hyper` Server zusammen mit den
     Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung
     gestellt haben, bereitstellen. Dies ist so einfach wie das
-    Herunterladen der neuesten `eps` Version von unserem Server,
+    Herunterladen der neuesten `hyper` Version von unserem Server,
     das Entpacken des Einstellungsarchivs, das wir Ihnen zur Verfügung
     gestellt haben, und das Ausführen von
   en: >-
     Integrating with the IRIS infrastructure is easy (we hope).
-    First, you need to deploy the `eps` server together with the
-    settings and certificates we've provided to you. This is as
-    easy as downloading the latest `eps` version from our server,
-    unpacking the settings archive we've provided you with and
-    running
+    First, you need to deploy the `hyper` server together with
+    the settings and certificates we've provided to you. This
+    is as easy as downloading the latest `hyper` version from
+    our server, unpacking the settings archive we've provided
+    you with and running
+9eb019b85616095b:
+  de: >-
+    * Ein `hyper` Server, der eine `health department` simuliert,
+    namens `hd-1`
+  en: >-
+    * An `hyper` server simulating a `health department`, named
+    `hd-1`
 9f7be4282ad2bc48:
   de: '  "id": "1"'
   en: '  "id": "1"'
 a56726cde84dae15:
   de: '`` `json'
   en: '```json'
+a5d3f91bf9fb2652:
+  de: >-
+    Die Anfrage ging zunächst an den `hyper` Server des Gesundheitsamtes,
+    wurde zunächst über gRPC an den `hyper` Server von `ls-1`
+    weitergeleitet und dann an die JSON-RPC API des dort laufenden
+    lokalen `hyper-ls` Dienstes übergeben. Das Ergebnis wurde
+    dann über die gesamte Kette zurückgereicht.
+  en: >-
+    The request first went to the health department's `hyper`
+    server, was first routed to `ls-1`'s `hyper` server via gRPC
+    and was then passed to the JSON-RPC API of the local `hyper-ls`
+    service running there. The result was then passsed back along
+    the entire chain.
 a8429fbe3208ed81:
   de: "\t\t\"id\": \"af5ca4da5caa\""
   en: "\t\t\"id\": \"af5ca4da5caa\""
@@ -241,6 +268,23 @@ aac773e7121c848f:
 ad332335cfaa348c:
   de: '`` `bash'
   en: '```bash'
+b45ff24ce12545e3:
+  de: >-
+    Die Integration in die IRIS-Infrastruktur mit Hilfe des Hyper-Servers
+    ist einfach (hoffen wir). Zunächst müssen Sie den `hyper`
+    Server zusammen mit den Einstellungen und Zertifikaten, die
+    wir Ihnen zur Verfügung gestellt haben, einrichten. Dazu laden
+    Sie einfach die neueste Version von `hyper` von unserem Server
+    herunter, entpacken das Archiv mit den Einstellungen, das
+    wir Ihnen zur Verfügung gestellt haben, und führen Folgendes
+    aus
+  en: >-
+    Integrating with the IRIS infrastructure using the Hyper server
+    is easy (we hope). First, you need to deploy the `hyper` server
+    together with the settings and certificates we've provided
+    to you. This is as easy as downloading the latest `hyper`
+    version from our server, unpacking the settings archive we've
+    provided you with and running
 bb03df39382c6d69:
   de: >-
     Dies sollte einen lokalen JSON-RPC-Server auf Port `5555`
@@ -290,10 +334,10 @@ c17da092503e7334:
     services on different terminals:
 c39b4fd1e7c3253d:
   de: >-
-    * Eine `eps` Server-Simulation eines Betreibers, der einen
+    * Eine `hyper` Server-Simulation eines Betreibers, der einen
     "Standort"-Dienst anbietet, namens `ls-1`
   en: >-
-    * An `eps` server simulation an operator offering a "locations"
+    * An `hyper` server simulation an operator offering a "locations"
     service, named `ls-1`
 c6144136c5fdde00:
   de: '## Erste Schritte'
@@ -313,21 +357,32 @@ c7b62b98689be9bd:
     IRIS ecosystem you can use the `jsonrpc_client`, simply specifying
     an API endpoint that incoming requests will be delivered to
     using the same syntax as above.
+c8f2ffdddaf8b5ba:
+  de: >-
+    Um eine konkrete Vorstellung von der Integration mit der IRIS-Infrastruktur
+    unter Verwendung des Hyper-Servers zu erhalten, haben wir
+    ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
+    Die Demo besteht aus drei Komponenten:
+  en: >-
+    To get a concrete idea of how to integrate with the IRIS infrastructure
+    using the Hyper server we have created a simple demo setup
+    that illustrates all components. The demo consists of three
+    components:
 cfd61106fd63f32e:
   de: >-
-    # führen Sie den `eps` Server des "Standorte"-Operators ls-1
-    aus
-  en: '# run the `eps` server of the "locations" operator ls-1'
+    # führen Sie den `hyper` Server des "Standorte"-Operators
+    ls-1 aus
+  en: '# run the `hyper` server of the "locations" operator ls-1'
 d10b36aa74a59bcf:
   de: '}'
   en: '}'
 d209ebd37a47e8e3:
   de: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps --level debug server
-    run
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper --level debug
+    server run
   en: >-
-    EPS_SETTINGS=settings/dev/roles/hd-1 eps --level debug server
-    run
+    HYPER_SETTINGS=settings/dev/roles/hd-1 hyper --level debug
+    server run
 d4f76297b5cf6d12:
   de: >-
     * Ein **verteiltes Dienstverzeichnis**, das kryptografisch
@@ -354,14 +409,54 @@ d63f07282871cc1b:
     database, and `lookup`, which will look up a location based
     on its `name`. For example, to add a location to the service:
 e1f52c58de5dafdb:
-  de: eps-ls
-  en: eps-ls
+  de: hyper-ls
+  en: hyper-ls
 e2a434bf3cfce828:
   de: "\t\"id\": \"1\","
   en: "\t\"id\": \"1\","
+e2ac0362d9d589ef:
+  de: >-
+    * Eine `hyper` Server-Simulation eines Betreibers, der einen
+    "Standort"-Dienst anbietet, namens `ls-1`
+  en: >-
+    * An `hyper` server simulation an operator offering a "locations"
+    service, named `ls-1`
 e3b0c44298fc1c14:
   de: ''
   en: ''
+e50defcec6c5beb3:
+  de: >-
+    Die Anrufe, die wir oben gesehen haben, waren alle synchron,
+    d.h. ein Anruf führte zu einer direkten Antwort. Manchmal
+    sind jedoch asynchrone Anrufe erforderlich, z.B. weil die
+    Beantwortung der Anrufe Zeit in Anspruch nimmt. Wenn Sie einen
+    asynchronen Aufruf an einen anderen Dienst tätigen, erhalten
+    Sie zunächst eine Bestätigung zurück. Sobald der von Ihnen
+    aufgerufene Dienst eine Antwort bereit hat, sendet er diese
+    über das Netzwerk `hyper` an Sie zurück, wobei er dieselbe
+    `id` verwendet, die Sie angegeben haben (wodurch Sie die Antwort
+    Ihrer Anfrage zuordnen können). Ebenso können Sie auf Aufrufe
+    von anderen Diensten asynchron reagieren, indem Sie die Antwort
+    einfach an Ihren lokalen JSON-RPC-Server mit dem Methodennamen
+    `respond` (ohne den Namen des Dienstes) weiterleiten. Vergessen
+    Sie nicht, dieselbe `id` anzugeben, die Sie mit der ursprünglichen
+    Anfrage erhalten haben, da diese die "Rücksendeadresse" der
+    Anfrage enthält.
+  en: >-
+    The calls we've seen above were all synchronous, i.e. making
+    a call resulted in a direct response. Sometimes calls need
+    to be asynchronous though, e.g. because replying to them takes
+    time. If you make an asynchronous call to another service,
+    you'll get back an acknowledgment first. As soon as the service
+    you've called has a response ready, it will send it back to
+    your via the `hyper` network, using the same `id` you provided
+    (which enables you to match the response to your request).
+    Likewise, you can respond to calls from other services in
+    an asynchronous way, simply pushing the response to your local
+    JSON-RPC server with a method name `respond` (without a service
+    name). Do not forget to include the same `id` that you received
+    with the original request, as this will contain the "return
+    address" of the request.
 ed0dbdf6e65ff948:
   de: "\t},"
   en: "\t},"
@@ -382,5 +477,6 @@ f69f5194f3fd2ea6:
   de: '  "jsonrpc": "2.0",'
   en: '  "jsonrpc": "2.0",'
 f7aef63198dec0a4:
-  de: '# Betreiben Sie den `eps` Server des Gesundheitsamtes hd-1'
-  en: '# run the `eps` server of the health department hd-1'
+  de: '# Betreiben Sie den `hyper` Server des Gesundheitsamtes
+    hd-1'
+  en: '# run the `hyper` server of the health department hd-1'

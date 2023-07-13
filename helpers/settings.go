@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,10 @@
 package helpers
 
 import (
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
 	"github.com/kiprotect/go-helpers/forms"
 	"github.com/kiprotect/go-helpers/settings"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -60,14 +60,14 @@ func RealSettingsPaths(envSettingsName string) ([]string, error) {
 	return sanitizedValues, nil
 }
 
-func Settings(settingsPaths []string, fs fs.FS, definitions *eps.Definitions) (*eps.Settings, error) {
-	eps.Log.Info(settingsPaths)
+func Settings(settingsPaths []string, fs fs.FS, definitions *hyper.Definitions) (*hyper.Settings, error) {
+	hyper.Log.Info(settingsPaths)
 	if rawSettings, err := settings.MakeSettings(settingsPaths, fs); err != nil {
 		return nil, err
-	} else if params, err := epsForms.SettingsForm.ValidateWithContext(rawSettings.Values, map[string]interface{}{"definitions": definitions}); err != nil {
+	} else if params, err := hyperForms.SettingsForm.ValidateWithContext(rawSettings.Values, map[string]interface{}{"definitions": definitions}); err != nil {
 		return nil, err
 	} else {
-		settings := &eps.Settings{
+		settings := &hyper.Settings{
 			Definitions: definitions,
 		}
 		if err := forms.Coerce(settings, params); err != nil {

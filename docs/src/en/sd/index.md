@@ -2,13 +2,13 @@
 
 The service directory is a central database that contains information about all operators in the IRIS ecosystem. It contains information about how operators can be reached and which services they provide.
 
-The directory allows EPS servers to determine whether and how they can connect to another operator. Operators that only have outgoing connectivity (e.g. `ga-leipzig` in the example above) can use the directory to learn that they might receive asynchronous responses from other operators (e.g. `ls-1`) and then open outgoing connections to these operators through which they can receive replies. EPS servers can also use the service directory to determine whether they should accept a message from a given operator.
+The directory allows Hyper servers to determine whether and how they can connect to another operator. Operators that only have outgoing connectivity (e.g. `ga-leipzig` in the example above) can use the directory to learn that they might receive asynchronous responses from other operators (e.g. `ls-1`) and then open outgoing connections to these operators through which they can receive replies. Hyper servers can also use the service directory to determine whether they should accept a message from a given operator.
 
-The service directory implements a group-based permissions mechanism. Currently, only `yes/no` permissions exist (i.e. a member of a given group either can or cannot call a given service method). More fine-grained permissions (e.g. a contact tracing provider can only edit its own entries in the "locations" service) need to be implemented by the services themselves. For that purpose, the EPS server makes information about the calling peer available to the services via a special parameter (`_caller`) that gets passed along with the other RPC method parameters. This structure also contains the current entry of the caller from the service directory, making it easy for the called service to identify and authorize the caller.
+The service directory implements a group-based permissions mechanism. Currently, only `yes/no` permissions exist (i.e. a member of a given group either can or cannot call a given service method). More fine-grained permissions (e.g. a contact tracing provider can only edit its own entries in the "locations" service) need to be implemented by the services themselves. For that purpose, the Hyper server makes information about the calling peer available to the services via a special parameter (`_caller`) that gets passed along with the other RPC method parameters. This structure also contains the current entry of the caller from the service directory, making it easy for the called service to identify and authorize the caller.
 
 ## Service Directory API
 
-The EPS server package also provides a `sd` API server command that opens a JSON-RPC server which distributes the service directory.
+The Hyper server package also provides a `sd` API server command that opens a JSON-RPC server which distributes the service directory.
 
 ```bash
 SD_SETTINGS=settings/dev/roles/sd-1 sd run
@@ -18,20 +18,20 @@ By default, this will store and retrieve change records from a file located at `
 
 ## Signature Schema
 
-All changes in the service directory are cryptographically signed. For this, every actor in the EPS system has a pair of ECDSA keys and an accompanying certificate. The service directory is constructed from a series of **change records**. Each change record contains the name of an **operator**, a **section** and the actual data that should be changed.
+All changes in the service directory are cryptographically signed. For this, every actor in the Hyper system has a pair of ECDSA keys and an accompanying certificate. The service directory is constructed from a series of **change records**. Each change record contains the name of an **operator**, a **section** and the actual data that should be changed.
 
 ### Submitting Change records
 
-Change records can be submitted to the service directory via the JSON-RPC API. The `eps` CLI provides a function for this via the `sd submit-records`:
+Change records can be submitted to the service directory via the JSON-RPC API. The `hyper` CLI provides a function for this via the `sd submit-records`:
 
 ```bash
-EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records settings/dev/directory/001_base.json
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records settings/dev/directory/001_base.json
 ```
 
 You can also reset the service directory by specifying the `--reset` flag:
 
 ```
-EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records --reset settings/dev/directory/001_base.json
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records --reset settings/dev/directory/001_base.json
 ```
 
 **Warning:** This will erase all previous records from the service directory. Only operators with an `sd-admin` role can do this.

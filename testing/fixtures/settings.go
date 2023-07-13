@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,9 +18,9 @@ package fixtures
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/definitions"
-	"github.com/iris-connect/eps/helpers"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/definitions"
+	"github.com/kiprotect/hyper/helpers"
 	"path"
 )
 
@@ -31,15 +31,15 @@ type Settings struct {
 
 func (c Settings) Setup(fixtures map[string]interface{}) (interface{}, error) {
 	// we set the loglevel to 'debug' so we can see which settings files are being loaded
-	var defs *eps.Definitions
+	var defs *hyper.Definitions
 	var paths []string
 	var ok bool
-	if defs, ok = fixtures["definitions"].(*eps.Definitions); !ok {
+	if defs, ok = fixtures["definitions"].(*hyper.Definitions); !ok {
 		defs = &definitions.Default
 	}
 
 	if c.EnvSettingsName == "" {
-		c.EnvSettingsName = "EPS_SETTINGS"
+		c.EnvSettingsName = "HYPER_SETTINGS"
 	}
 
 	settingsPaths, fs, err := helpers.SettingsPaths(c.EnvSettingsName)
@@ -60,7 +60,7 @@ func (c Settings) Setup(fixtures map[string]interface{}) (interface{}, error) {
 	} else {
 		paths = settingsPaths
 	}
-	eps.Log.SetLevel(eps.DebugLogLevel)
+	hyper.Log.SetLevel(hyper.DebugLogLevel)
 	return helpers.Settings(paths, fs, defs)
 }
 

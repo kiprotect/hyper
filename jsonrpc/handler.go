@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,8 +18,8 @@ package jsonrpc
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
 	"reflect"
 )
 
@@ -109,16 +109,16 @@ func MethodsHandler(methods map[string]*Method) (Handler, error) {
 			} else {
 				if paramsStruct, err := handlerStruct(method.Handler); err != nil {
 					// this should never happen...
-					eps.Log.Error(err)
+					hyper.Log.Error(err)
 					return context.InternalError()
 				} else if err := method.Form.Coerce(paramsStruct, params); err != nil {
 					// this shouldn't happen either...
-					eps.Log.Error(err)
+					hyper.Log.Error(err)
 					return context.InternalError()
 				} else {
 					if response, err := callHandler(context, method.Handler, paramsStruct); err != nil {
 						// and neither should this...
-						eps.Log.Error(err)
+						hyper.Log.Error(err)
 						return context.InternalError()
 					} else {
 						return response

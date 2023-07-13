@@ -16,6 +16,23 @@
   en: >-
     * P accepts A's connection, retrieves B's matching connection
     and proxies traffic between them.
+277f6702ed07a4d6:
+  de: >-
+    * A sendet eine Nachricht `connectionRequest` über das Hyper-System
+    an P und gibt dabei den gRPC-Serverkanal von B als Empfänger
+    an.
+  en: >-
+    * A sends a `connectionRequest` message to P over the Hyper
+    system, specifying B's gRPC server channel as the recipient.
+332fc607f73cc6e3:
+  de: >-
+    Der Proxy unterstützt auch einen Peer-to-Peer (P2P) Modus,
+    der es zwei Hyper-Servern ermöglicht, eine sichere Verbindung
+    über den Proxy herzustellen.
+  en: >-
+    The proxy also supports a peer-to-peer (P2P) mode, which enables
+    two Hyper servers to establish a secure connection through
+    the proxy.
 3880b300aba74873:
   de: >-
     Um eine Testinfrastruktur einzurichten, führen Sie einfach
@@ -88,6 +105,15 @@ dedb276f651a90e7:
     Der Vermittlungsprozess für eine P2P-Verbindung läuft wie
     folgt ab:
   en: 'The brokering process for a P2P connection is as follows:'
+e25e9b49e51606f1:
+  de: >-
+    * P erstellt ein Token und sendet über das Hyper-System eine
+    Nachricht an B, in der er die Anfrage von A weiterleitet und
+    einen Proxy-Endpunkt angibt, mit dem er sich verbinden soll.
+  en: >-
+    * P creates a token and send a message to B over the Hyper
+    system, forwarding A's request and specifying a proxy endpoint
+    to connect to.
 e3b0c44298fc1c14:
   de: ''
   en: ''
@@ -103,3 +129,8 @@ e73747a519bd9785:
     with the necessary entries. Then you should be able to request
     a ping from the HD-2 server through the proxy via the HD-1
     JSON-RPC server:
+ee9f7f0cb49bf2ab:
+  de: >-
+    * Hyper-Server A möchte eine Verbindung zu Hyper-Server B
+    herstellen.
+  en: '* Hyper server A wants to connect to Hyper server B.'

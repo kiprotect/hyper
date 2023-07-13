@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,8 +18,8 @@ package jsonrpc
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/http"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/http"
 	"regexp"
 	"strconv"
 	"strings"
@@ -40,7 +40,7 @@ func convertID(id interface{}) interface{} {
 			if n, err := strconv.Atoi(matches[1]); err != nil {
 				// this should not happen, if it does we log the error and
 				// return the string value (could only be an overflow)
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 				return id
 			} else {
 				return n

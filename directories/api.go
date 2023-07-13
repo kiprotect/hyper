@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,11 +19,11 @@ package directories
 import (
 	"crypto/x509"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/jsonrpc"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/jsonrpc"
 	"sync"
 	"time"
 )
@@ -97,7 +97,7 @@ type APIDirectorySettings struct {
 }
 
 type CacheEntry struct {
-	Entry     *eps.DirectoryEntry
+	Entry     *hyper.DirectoryEntry
 	FetchedAt time.Time
 }
 
@@ -106,14 +106,14 @@ type DirectoryCache struct {
 }
 
 type APIDirectory struct {
-	eps.BaseDirectory
+	hyper.BaseDirectory
 	lastUpdate        time.Time
 	settings          APIDirectorySettings
 	jsonrpcClient     *jsonrpc.Client
 	rootCerts         []*x509.Certificate
 	intermediateCerts []*x509.Certificate
-	entries           map[string]*eps.DirectoryEntry
-	records           []*eps.SignedChangeRecord
+	entries           map[string]*hyper.DirectoryEntry
+	records           []*hyper.SignedChangeRecord
 	mutex             sync.Mutex
 }
 
@@ -129,7 +129,7 @@ func APIDirectorySettingsValidator(settings map[string]interface{}) (interface{}
 	}
 }
 
-func MakeAPIDirectory(name string, settings interface{}) (eps.Directory, error) {
+func MakeAPIDirectory(name string, settings interface{}) (hyper.Directory, error) {
 	apiSettings := settings.(APIDirectorySettings)
 
 	rootCerts := make([]*x509.Certificate, 0)
@@ -159,12 +159,12 @@ func MakeAPIDirectory(name string, settings interface{}) (eps.Directory, error) 
 	}
 
 	d := &APIDirectory{
-		BaseDirectory: eps.BaseDirectory{
+		BaseDirectory: hyper.BaseDirectory{
 			Name_: name,
 		},
 		jsonrpcClient:     jsonrpc.MakeClient(apiSettings.JSONRPCClient),
-		entries:           make(map[string]*eps.DirectoryEntry),
-		records:           []*eps.SignedChangeRecord{},
+		entries:           make(map[string]*hyper.DirectoryEntry),
+		records:           []*hyper.SignedChangeRecord{},
 		rootCerts:         rootCerts,
 		intermediateCerts: intermediateCerts,
 		settings:          apiSettings,
@@ -172,7 +172,7 @@ func MakeAPIDirectory(name string, settings interface{}) (eps.Directory, error) 
 
 	// we still allow the services to start even if the API is not reachable...
 	if err := d.update(); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 	return d, nil
@@ -186,7 +186,7 @@ var UpdateForm = forms.Form{
 				forms.IsList{
 					Validators: []forms.Validator{
 						forms.IsStringMap{
-							Form: &epsForms.SignedChangeRecordForm,
+							Form: &hyperForms.SignedChangeRecordForm,
 						},
 					},
 				},
@@ -196,10 +196,10 @@ var UpdateForm = forms.Form{
 }
 
 type UpdateRecords struct {
-	Records []*eps.SignedChangeRecord `json:"records"`
+	Records []*hyper.SignedChangeRecord `json:"records"`
 }
 
-func (f *APIDirectory) Entries(query *eps.DirectoryQuery) ([]*eps.DirectoryEntry, error) {
+func (f *APIDirectory) Entries(query *hyper.DirectoryQuery) ([]*hyper.DirectoryEntry, error) {
 
 	f.mutex.Lock()
 	lastUpdate := f.lastUpdate
@@ -214,7 +214,7 @@ func (f *APIDirectory) Entries(query *eps.DirectoryQuery) ([]*eps.DirectoryEntry
 		// last update was more than 1 minute ago, we update in the background
 		go func() {
 			if err := f.update(); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 		}()
 	}
@@ -222,32 +222,32 @@ func (f *APIDirectory) Entries(query *eps.DirectoryQuery) ([]*eps.DirectoryEntry
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 
-	entries := make([]*eps.DirectoryEntry, len(f.entries))
+	entries := make([]*hyper.DirectoryEntry, len(f.entries))
 	i := 0
 	for _, entry := range f.entries {
 		entries[i] = entry
 		i++
 	}
-	return eps.FilterDirectoryEntriesByQuery(entries, query), nil
+	return hyper.FilterDirectoryEntriesByQuery(entries, query), nil
 }
 
-func (f *APIDirectory) EntryFor(name string) (*eps.DirectoryEntry, error) {
+func (f *APIDirectory) EntryFor(name string) (*hyper.DirectoryEntry, error) {
 	// locking is done by Entries method
-	if entries, err := f.Entries(&eps.DirectoryQuery{Operator: name}); err != nil {
+	if entries, err := f.Entries(&hyper.DirectoryQuery{Operator: name}); err != nil {
 		return nil, fmt.Errorf("error retrieving service directory entry: %w", err)
 	} else if len(entries) == 0 {
-		return nil, eps.NoEntryFound
+		return nil, hyper.NoEntryFound
 	} else {
 		return entries[0], nil
 	}
 }
 
-func (f *APIDirectory) OwnEntry() (*eps.DirectoryEntry, error) {
+func (f *APIDirectory) OwnEntry() (*hyper.DirectoryEntry, error) {
 	// locking is done by Entries method
 	return f.EntryFor(f.Name())
 }
 
-func (f *APIDirectory) Tip() (*eps.SignedChangeRecord, error) {
+func (f *APIDirectory) Tip() (*hyper.SignedChangeRecord, error) {
 
 	// to do: ensure there's always one server name and endpoint
 	f.jsonrpcClient.SetServerName(f.settings.ServerNames[0])
@@ -268,11 +268,11 @@ func (f *APIDirectory) Tip() (*eps.SignedChangeRecord, error) {
 
 		if mapResult, ok := result.Result.(map[string]interface{}); !ok {
 			return nil, fmt.Errorf("expected a map as result for 'getTip' call to service directory")
-		} else if params, err := epsForms.SignedChangeRecordForm.Validate(mapResult); err != nil {
+		} else if params, err := hyperForms.SignedChangeRecordForm.Validate(mapResult); err != nil {
 			return nil, err
 		} else {
-			signedChangeRecord := &eps.SignedChangeRecord{}
-			if err := epsForms.SignedChangeRecordForm.Coerce(signedChangeRecord, params); err != nil {
+			signedChangeRecord := &hyper.SignedChangeRecord{}
+			if err := hyperForms.SignedChangeRecordForm.Coerce(signedChangeRecord, params); err != nil {
 				return nil, err
 			} else {
 				return signedChangeRecord, nil
@@ -283,7 +283,7 @@ func (f *APIDirectory) Tip() (*eps.SignedChangeRecord, error) {
 	return nil, nil
 }
 
-func (f *APIDirectory) Submit(signedChangeRecords []*eps.SignedChangeRecord) error {
+func (f *APIDirectory) Submit(signedChangeRecords []*hyper.SignedChangeRecord) error {
 	// to do: ensure there's always one server name and endpoint
 	f.jsonrpcClient.SetServerName(f.settings.ServerNames[0])
 	f.jsonrpcClient.SetEndpoint(f.settings.Endpoints[0])
@@ -295,7 +295,7 @@ func (f *APIDirectory) Submit(signedChangeRecords []*eps.SignedChangeRecord) err
 		return fmt.Errorf("error submitting records to service directory: %w", err)
 	} else {
 		if result.Error != nil {
-			eps.Log.Error(result.Error)
+			hyper.Log.Error(result.Error)
 			return fmt.Errorf("JSON-RPC error: %s", result.Error.Message)
 		}
 		return nil
@@ -303,11 +303,11 @@ func (f *APIDirectory) Submit(signedChangeRecords []*eps.SignedChangeRecord) err
 
 }
 
-func (f *APIDirectory) integrate(records []*eps.SignedChangeRecord) error {
+func (f *APIDirectory) integrate(records []*hyper.SignedChangeRecord) error {
 	for _, record := range records {
 		entry, ok := f.entries[record.Record.Name]
 		if !ok {
-			entry = eps.MakeDirectoryEntry()
+			entry = hyper.MakeDirectoryEntry()
 			entry.Name = record.Record.Name
 		}
 		if err := helpers.IntegrateChangeRecord(record, entry); err != nil {
@@ -329,7 +329,7 @@ func (f *APIDirectory) update() error {
 		return nil
 	}
 
-	eps.Log.Tracef("Updating service directory...")
+	hyper.Log.Tracef("Updating service directory...")
 	f.lastUpdate = time.Now()
 
 	// to do: ensure there's always one server name and endpoint
@@ -370,7 +370,7 @@ func (f *APIDirectory) update() error {
 			} else {
 				records := updateRecords.Records
 
-				var fullRecords []*eps.SignedChangeRecord
+				var fullRecords []*hyper.SignedChangeRecord
 				var resetEntries bool
 
 				if len(records) > 0 && records[0].ParentHash != tipHash {
@@ -381,7 +381,7 @@ func (f *APIDirectory) update() error {
 					if len(f.records) > 0 && records[0].Record.CreatedAt.Time.Before(f.records[0].Record.CreatedAt.Time) {
 						return fmt.Errorf("server tried to provide an outdated service directory")
 					} else {
-						eps.Log.Warning("Service directory root changed!")
+						hyper.Log.Warning("Service directory root changed!")
 						// we reset the entries
 						fullRecords = records
 						resetEntries = true
@@ -401,7 +401,7 @@ func (f *APIDirectory) update() error {
 
 				f.records = fullRecords
 				if resetEntries {
-					f.entries = make(map[string]*eps.DirectoryEntry)
+					f.entries = make(map[string]*hyper.DirectoryEntry)
 				}
 
 				// we integrate the new records

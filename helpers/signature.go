@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -26,7 +26,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 	"io/ioutil"
 	"math/big"
 	"net/url"
@@ -130,12 +130,12 @@ func BigInt(s string) (*big.Int, error) {
 	return i, nil
 }
 
-func LoadSignedData(data []byte) (*eps.SignedData, error) {
-	signedData := &eps.SignedData{}
+func LoadSignedData(data []byte) (*hyper.SignedData, error) {
+	signedData := &hyper.SignedData{}
 	return signedData, json.Unmarshal(data, &signedData)
 }
 
-func Verify(signedData *eps.SignedData, rootCerts []*x509.Certificate, intermediateCerts []*x509.Certificate, name string) (bool, error) {
+func Verify(signedData *hyper.SignedData, rootCerts []*x509.Certificate, intermediateCerts []*x509.Certificate, name string) (bool, error) {
 
 	cert, err := LoadCertificateFromString(signedData.Signature.Certificate, true)
 
@@ -227,7 +227,7 @@ func GetSubjectInfo(cert *x509.Certificate) (*SubjectInfo, error) {
 	return subjectInfo, nil
 
 }
-func Sign(data interface{}, key *ecdsa.PrivateKey, cert *x509.Certificate) (*eps.SignedData, error) {
+func Sign(data interface{}, key *ecdsa.PrivateKey, cert *x509.Certificate) (*hyper.SignedData, error) {
 
 	hash, err := StructuredHash(data)
 
@@ -245,9 +245,9 @@ func Sign(data interface{}, key *ecdsa.PrivateKey, cert *x509.Certificate) (*eps
 	if err != nil {
 		return nil, err
 	} else {
-		return &eps.SignedData{
+		return &hyper.SignedData{
 			Data: data,
-			Signature: &eps.Signature{
+			Signature: &hyper.Signature{
 				R:           r.String(),
 				S:           s.String(),
 				Certificate: string(pem.EncodeToMemory(block)),

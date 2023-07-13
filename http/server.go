@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,9 +20,9 @@ import (
 	"context"
 	cryptoTls "crypto/tls"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsNet "github.com/iris-connect/eps/net"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	hyperNet "github.com/kiprotect/hyper/net"
+	"github.com/kiprotect/hyper/tls"
 	"net"
 	"net/http"
 	"regexp"
@@ -133,13 +133,13 @@ func handleRouteGroup(context *Context, group *RouteGroup, handlers []Handler) {
 	for i, route := range group.Routes {
 		// routes only match full URLs
 		if groups := route.Regexp.FindStringSubmatch(context.Request.URL.Path); groups != nil {
-			eps.Log.Debugf("Route %d matched path '%s'.", i, context.Request.URL.Path)
+			hyper.Log.Debugf("Route %d matched path '%s'.", i, context.Request.URL.Path)
 			context.RouteParams = groups[1:]
 			// we combine the group handlers with the route handlers
 			for j, handler := range append(append(handlers, group.Handlers...), route.Handlers...) {
 				handler(context)
 				if context.Aborted {
-					eps.Log.Debugf("Handler %d aborted the processing.", j)
+					hyper.Log.Debugf("Handler %d aborted the processing.", j)
 					// the handler has aborted the processing of this request
 					// so we break out of the loop...
 					break
@@ -193,7 +193,7 @@ func (s *HTTPServer) Start() error {
 		if listener, err := net.Listen("tcp", s.settings.BindAddress); err != nil {
 			return err
 		} else if s.settings.TCPRateLimits != nil {
-			s.listener = epsNet.MakeRateLimitedListener(listener, s.settings.TCPRateLimits)
+			s.listener = hyperNet.MakeRateLimitedListener(listener, s.settings.TCPRateLimits)
 		} else {
 			s.listener = listener
 		}
@@ -212,7 +212,7 @@ func (s *HTTPServer) Start() error {
 
 			// something went wrong, we log and store the error...
 
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 
 			s.mutex.Lock()
 			s.err = err
@@ -246,6 +246,6 @@ func (s *HTTPServer) Start() error {
 }
 
 func (s *HTTPServer) Stop() error {
-	eps.Log.Debugf("Shutting down HTTP server...")
+	hyper.Log.Debugf("Shutting down HTTP server...")
 	return s.server.Shutdown(context.TODO())
 }

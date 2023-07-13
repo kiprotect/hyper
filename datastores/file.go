@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -39,9 +39,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
 	"io"
 	"os"
 	"path/filepath"
@@ -220,7 +220,7 @@ func (d *DataChunk) Write(writer io.Writer) error {
 	return nil
 }
 
-func ToBytes(e *eps.DataEntry) []byte {
+func ToBytes(e *hyper.DataEntry) []byte {
 	bytes := make([]byte, len(e.Data)+len(e.ID)+4)
 	bytes[0] = ENTRY_VERSION
 	bytes[1] = e.Type
@@ -230,8 +230,8 @@ func ToBytes(e *eps.DataEntry) []byte {
 	return bytes
 }
 
-func FromBytes(data []byte) (*eps.DataEntry, error) {
-	e := &eps.DataEntry{}
+func FromBytes(data []byte) (*hyper.DataEntry, error) {
+	e := &hyper.DataEntry{}
 	if data[0] != ENTRY_VERSION {
 		return nil, fmt.Errorf("invalid version")
 	}
@@ -257,7 +257,7 @@ func MakeDataChunk(id []byte, chunks, index uint16, data []byte) *DataChunk {
 }
 
 // Splits a data entry into multiple data chunks.
-func Split(e *eps.DataEntry) ([]*DataChunk, error) {
+func Split(e *hyper.DataEntry) ([]*DataChunk, error) {
 	bytes := ToBytes(e)
 	effectiveBufferSize := BUFFER_SIZE - CHUNK_HEADER_SIZE
 	chunks := len(bytes) / effectiveBufferSize
@@ -281,13 +281,13 @@ func Split(e *eps.DataEntry) ([]*DataChunk, error) {
 			id, uint16(chunks), uint16(i), bytes[i*effectiveBufferSize:end],
 		)
 	}
-	eps.Log.Debugf("Split into %d entries", len(dataChunks))
+	hyper.Log.Debugf("Split into %d entries", len(dataChunks))
 	return dataChunks, nil
 }
 
-func Reassemble(chunks []*DataChunk) (*eps.DataEntry, error) {
-	e := &eps.DataEntry{}
-	e.Type = eps.NullType
+func Reassemble(chunks []*DataChunk) (*hyper.DataEntry, error) {
+	e := &hyper.DataEntry{}
+	e.Type = hyper.NullType
 	e.Data = nil
 	e.ID = nil
 	data := make([]byte, 0, 100)
@@ -306,7 +306,7 @@ func Reassemble(chunks []*DataChunk) (*eps.DataEntry, error) {
 }
 
 type ByPosition struct {
-	Entries   []*eps.DataEntry
+	Entries   []*hyper.DataEntry
 	Positions map[string]int
 }
 
@@ -326,14 +326,14 @@ func (b ByPosition) Less(i, j int) bool {
 
 // Reassembles data entries from a list of data chunks. Returns any remaining
 // data chunks (which might be used later).
-func reassemble(chunks []*DataChunk) ([]*eps.DataEntry, []*DataChunk, error) {
+func reassemble(chunks []*DataChunk) ([]*hyper.DataEntry, []*DataChunk, error) {
 	/*
 		We can assume that chunks occur in the right order, but they still can
 		be interleaved within each other.
 	*/
 	chunkPositions := make(map[string]int)
 	entryPositions := make(map[string]int)
-	dataEntries := make([]*eps.DataEntry, 0, 10)
+	dataEntries := make([]*hyper.DataEntry, 0, 10)
 	remainingChunks := make([]*DataChunk, 0, 10)
 	chunksByID := make(map[string][]*DataChunk)
 	for i, chunk := range chunks {
@@ -367,7 +367,7 @@ func reassemble(chunks []*DataChunk) ([]*eps.DataEntry, []*DataChunk, error) {
 		Positions: entryPositions,
 	}
 	sort.Sort(sortedByPosition)
-	eps.Log.Debugf("Found %d entries, %d remaining chunks", len(dataEntries), len(remainingChunks))
+	hyper.Log.Debugf("Found %d entries, %d remaining chunks", len(dataEntries), len(remainingChunks))
 	return sortedByPosition.Entries, remainingChunks, nil
 }
 
@@ -384,7 +384,7 @@ type FileSettings struct {
 	Filename string `json:"filename"`
 }
 
-func MakeFile(settings interface{}) (eps.Datastore, error) {
+func MakeFile(settings interface{}) (hyper.Datastore, error) {
 
 	fileSettings := settings.(FileSettings)
 
@@ -432,8 +432,8 @@ func (f *FileDatastore) readChunks() ([]*DataChunk, error) {
 		}
 		if err := chunk.Read(f.rfile); err != nil {
 			if _, seekErr := f.rfile.Seek(position, 0); seekErr != nil {
-				eps.Log.Errorf("Warning, two errors occured.")
-				eps.Log.Error(seekErr)
+				hyper.Log.Errorf("Warning, two errors occured.")
+				hyper.Log.Error(seekErr)
 			}
 			return nil, err
 		}
@@ -445,7 +445,7 @@ func (f *FileDatastore) readChunks() ([]*DataChunk, error) {
 	return chunks, nil
 }
 
-func (f *FileDatastore) Read() ([]*eps.DataEntry, error) {
+func (f *FileDatastore) Read() ([]*hyper.DataEntry, error) {
 
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
@@ -465,7 +465,7 @@ func (f *FileDatastore) Read() ([]*eps.DataEntry, error) {
 	return dataEntries, nil
 }
 
-func (f *FileDatastore) Write(entry *eps.DataEntry) error {
+func (f *FileDatastore) Write(entry *hyper.DataEntry) error {
 	if chunks, err := Split(entry); err != nil {
 		return err
 	} else {

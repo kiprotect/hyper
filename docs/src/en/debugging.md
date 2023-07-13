@@ -1,6 +1,6 @@
 # Debugging
 
-This document describes various strategies to debug problems related to the EPS system.
+This document describes various strategies to debug problems related to the Hyper system.
 
 ## TLS
 

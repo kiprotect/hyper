@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,10 +20,10 @@ import (
 	"context"
 	"crypto/x509"
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/protobuf"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/protobuf"
+	"github.com/kiprotect/hyper/tls"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
@@ -37,7 +37,7 @@ import (
 type Dialer func(context context.Context, addr string) (net.Conn, error)
 
 type Client struct {
-	directory   eps.Directory
+	directory   hyper.Directory
 	connection  *grpc.ClientConn
 	clientInfos *ClientInfos
 	dialer      Dialer
@@ -46,7 +46,7 @@ type Client struct {
 }
 
 type ClientInfos struct {
-	Infos []*eps.ClientInfo
+	Infos []*hyper.ClientInfo
 }
 
 func (c *ClientInfos) PrimaryName() string {
@@ -56,7 +56,7 @@ func (c *ClientInfos) PrimaryName() string {
 	return c.Infos[0].Name
 }
 
-func (c *ClientInfos) ClientInfo(name string) *eps.ClientInfo {
+func (c *ClientInfos) ClientInfo(name string) *hyper.ClientInfo {
 	for _, info := range c.Infos {
 		if info.Name == name || name == "" {
 			return info
@@ -76,13 +76,13 @@ func (c *ClientInfos) HasName(name string) bool {
 
 func MakeClientInfos() *ClientInfos {
 	return &ClientInfos{
-		Infos: []*eps.ClientInfo{},
+		Infos: []*hyper.ClientInfo{},
 	}
 }
 
 type VerifyCredentials struct {
 	credentials.TransportCredentials
-	directory   eps.Directory
+	directory   hyper.Directory
 	ClientInfos *ClientInfos
 }
 
@@ -91,9 +91,9 @@ type ClientInfoAuthInfo struct {
 	ClientInfos *ClientInfos
 }
 
-func (c *VerifyCredentials) checkFingerprint(cert *x509.Certificate, name string) (*eps.DirectoryEntry, bool, error) {
+func (c *VerifyCredentials) checkFingerprint(cert *x509.Certificate, name string) (*hyper.DirectoryEntry, bool, error) {
 	if entry, err := c.directory.EntryFor(name); err != nil {
-		if err == eps.NoEntryFound {
+		if err == hyper.NoEntryFound {
 			return nil, false, nil
 		}
 		return nil, false, fmt.Errorf("error retrieving directory entry for '%s' for fingerprint check: %w", name, err)
@@ -131,7 +131,7 @@ func (c *VerifyCredentials) handshake(conn net.Conn, authInfo credentials.AuthIn
 		clientInfos = MakeClientInfos()
 	} else {
 		// we reset the infos
-		clientInfos.Infos = []*eps.ClientInfo{}
+		clientInfos.Infos = []*hyper.ClientInfo{}
 	}
 
 	for _, name := range names {
@@ -141,7 +141,7 @@ func (c *VerifyCredentials) handshake(conn net.Conn, authInfo credentials.AuthIn
 		} else if !ok {
 			continue
 		} else {
-			clientInfo := &eps.ClientInfo{
+			clientInfo := &hyper.ClientInfo{
 				Name:  name,
 				Entry: entry,
 			}
@@ -230,7 +230,7 @@ func (c *Client) Close() error {
 
 func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 
-	client := protobuf.NewEPSClient(c.connection)
+	client := protobuf.NewHyperClient(c.connection)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -255,7 +255,7 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 
 	// we announce the client name to the server
 	if err := stream.Send(pbResponse); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 	for {
@@ -286,7 +286,7 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 			return fmt.Errorf("error receiving gRPC request: %w", err)
 		}
 
-		request := &eps.Request{
+		request := &hyper.Request{
 			ID:     pbRequest.Id,
 			Params: pbRequest.Params.AsMap(),
 			Method: pbRequest.Method,
@@ -306,7 +306,7 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 			}
 
 			if err := stream.Send(pbResponse); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 
 			continue
@@ -327,7 +327,7 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 			if response.Result != nil {
 				resultStruct, err := structpb.NewStruct(response.Result)
 				if err != nil {
-					eps.Log.Error(err)
+					hyper.Log.Error(err)
 				}
 				pbResponse.Result = resultStruct
 			}
@@ -340,7 +340,7 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 				if response.Error.Data != nil {
 					errorStruct, err := structpb.NewStruct(response.Error.Data)
 					if err != nil {
-						eps.Log.Error(err)
+						hyper.Log.Error(err)
 					}
 					pbResponse.Error.Data = errorStruct
 				}
@@ -348,16 +348,16 @@ func (c *Client) ServerCall(handler Handler, stop chan bool) error {
 		}
 
 		if err := stream.Send(pbResponse); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 		}
 
 	}
 
 }
 
-func (c *Client) SendRequest(request *eps.Request) (*eps.Response, error) {
+func (c *Client) SendRequest(request *hyper.Request) (*hyper.Response, error) {
 
-	client := protobuf.NewEPSClient(c.connection)
+	client := protobuf.NewHyperClient(c.connection)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -365,7 +365,7 @@ func (c *Client) SendRequest(request *eps.Request) (*eps.Response, error) {
 	paramsStruct, err := structpb.NewStruct(request.Params)
 
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return nil, fmt.Errorf("error serializing params for gRPC: %w", err)
 	}
 
@@ -379,21 +379,21 @@ func (c *Client) SendRequest(request *eps.Request) (*eps.Response, error) {
 	pbResponse, err := client.Call(ctx, pbRequest)
 
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return nil, fmt.Errorf("error performing gRPC call: %w", err)
 	}
 
-	var responseError *eps.Error
+	var responseError *hyper.Error
 
 	if pbResponse.Error != nil {
-		responseError = &eps.Error{
+		responseError = &hyper.Error{
 			Code:    int(pbResponse.Error.Code),
 			Data:    pbResponse.Error.Data.AsMap(),
 			Message: pbResponse.Error.Message,
 		}
 	}
 
-	response := &eps.Response{
+	response := &hyper.Response{
 		Result: pbResponse.Result.AsMap(),
 		ID:     &pbResponse.Id,
 		Error:  responseError,
@@ -403,7 +403,7 @@ func (c *Client) SendRequest(request *eps.Request) (*eps.Response, error) {
 
 }
 
-func MakeClient(settings *GRPCClientSettings, dialer Dialer, directory eps.Directory) (*Client, error) {
+func MakeClient(settings *GRPCClientSettings, dialer Dialer, directory hyper.Directory) (*Client, error) {
 
 	return &Client{
 		settings:  settings,

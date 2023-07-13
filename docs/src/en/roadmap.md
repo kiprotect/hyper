@@ -13,7 +13,7 @@
 
 ## JSON-RPC Client Channel
 
-* Add a way to specify which services are reachable via the channel to e.g. enable an operator of an EPS server to define multiple JSON-RPC clients for different services in the infrastructure.
+* Add a way to specify which services are reachable via the channel to e.g. enable an operator of an Hyper server to define multiple JSON-RPC clients for different services in the infrastructure.
 
 ## Service Directory API
 

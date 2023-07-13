@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -26,13 +26,13 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/http"
-	"github.com/iris-connect/eps/jsonrpc"
-	epsTls "github.com/iris-connect/eps/tls"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/http"
+	"github.com/kiprotect/hyper/jsonrpc"
+	hyperTls "github.com/kiprotect/hyper/tls"
 	"io/ioutil"
 	"net"
 	goHttp "net/http"
@@ -42,7 +42,7 @@ import (
 )
 
 type PrivateServer struct {
-	dataStore     eps.Datastore
+	dataStore     hyper.Datastore
 	settings      *PrivateServerSettings
 	announcements []*PrivateAnnouncement
 	jsonrpcServer *jsonrpc.JSONRPCServer
@@ -137,19 +137,19 @@ func (p *ProxyConnection) jsonrpcHandler(done chan bool) func(request *jsonrpc.C
 		jsonData, err := json.Marshal(c.Request)
 
 		if err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			c.HTTPContext.AbortWithStatus(goHttp.StatusInternalServerError)
 			return nil
 		}
 
 		jsonrpcEndpoint := fmt.Sprintf("%s", p.settings.JSONRPCClient.Endpoint)
 
-		eps.Log.Debugf("Forwarding JSON-RPC request to '%s'", jsonrpcEndpoint)
+		hyper.Log.Debugf("Forwarding JSON-RPC request to '%s'", jsonrpcEndpoint)
 
 		proxyRequest, err := goHttp.NewRequest("POST", jsonrpcEndpoint, bytes.NewReader(jsonData))
 
 		if err != nil {
-			eps.Log.Errorf("Cannot form JSON-RPC request: %v", err)
+			hyper.Log.Errorf("Cannot form JSON-RPC request: %v", err)
 			c.HTTPContext.AbortWithStatus(goHttp.StatusInternalServerError)
 			return nil
 		}
@@ -161,11 +161,11 @@ func (p *ProxyConnection) jsonrpcHandler(done chan bool) func(request *jsonrpc.C
 		httpClient := goHttp.Client{}
 
 		if resp, err := httpClient.Do(proxyRequest); err != nil {
-			eps.Log.Errorf("An error occurred when forwarding the JSON-RPC request: %v", err)
+			hyper.Log.Errorf("An error occurred when forwarding the JSON-RPC request: %v", err)
 			c.HTTPContext.AbortWithStatus(goHttp.StatusBadGateway)
 			return nil
 		} else {
-			eps.Log.Debugf("Request successfully proxied, returning response...")
+			hyper.Log.Debugf("Request successfully proxied, returning response...")
 			c.HTTPContext.AbortWithResponse(resp)
 		}
 
@@ -192,7 +192,7 @@ func (p *ProxyConnection) httpHandler(done chan bool) func(c *http.Context) {
 
 		proxyRequest, err := goHttp.NewRequest(c.Request.Method, fmt.Sprintf("http://%s%s", p.settings.Address, pathAndQuery), bytes.NewReader(body))
 		if err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			c.AbortWithStatus(goHttp.StatusInternalServerError)
 			return
 		}
@@ -272,7 +272,7 @@ func (p *ProxyConnection) TerminateTLS(proxyConnection net.Conn) error {
 	})
 
 	if err := server.Start(); err != nil {
-		eps.Log.Errorf("Error: %v", err)
+		hyper.Log.Errorf("Error: %v", err)
 		return err
 	} else {
 		defer server.Stop()
@@ -291,7 +291,7 @@ func (p *ProxyConnection) TerminateTLS(proxyConnection net.Conn) error {
 
 func (p *ProxyConnection) ForwardTLS(proxyConnection net.Conn) error {
 
-	eps.Log.Debugf("Forwarding TLS connection to '%s'", p.settings.Address)
+	hyper.Log.Debugf("Forwarding TLS connection to '%s'", p.settings.Address)
 
 	internalConnection, err := net.Dial("tcp", p.settings.Address)
 
@@ -310,16 +310,16 @@ func (p *ProxyConnection) ForwardTLS(proxyConnection net.Conn) error {
 		for {
 			n, err := left.Read(buf)
 			if err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 				close()
 				return
 			}
 			if m, err := right.Write(buf[:n]); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 				close()
 				return
 			} else if m != n {
-				eps.Log.Errorf("cannot write all data")
+				hyper.Log.Errorf("cannot write all data")
 				close()
 				return
 			}
@@ -360,7 +360,7 @@ var IncomingConnectionForm = forms.Form{
 			Name: "_client",
 			Validators: []forms.Validator{
 				forms.IsStringMap{
-					Form: &epsForms.ClientInfoForm,
+					Form: &hyperForms.ClientInfoForm,
 				},
 			},
 		},
@@ -385,15 +385,15 @@ func (c *PrivateServer) getAnnouncements(context *jsonrpc.Context, params *GetPr
 }
 
 type IncomingConnectionParams struct {
-	Domain   string          `json:"domain"`
-	Endpoint string          `json:"endpoint"`
-	Token    []byte          `json:"token"`
-	Client   *eps.ClientInfo `json:"_client"`
+	Domain   string            `json:"domain"`
+	Endpoint string            `json:"endpoint"`
+	Token    []byte            `json:"token"`
+	Client   *hyper.ClientInfo `json:"_client"`
 }
 
 func (c *PrivateServer) incomingConnection(context *jsonrpc.Context, params *IncomingConnectionParams) *jsonrpc.Response {
 
-	eps.Log.Debugf("Incoming connection for domain '%s' from '%s', ID: %s", params.Domain, params.Client.Name, context.Request.ID)
+	hyper.Log.Debugf("Incoming connection for domain '%s' from '%s', ID: %s", params.Domain, params.Client.Name, context.Request.ID)
 
 	found := false
 	for _, announcement := range c.announcements {
@@ -408,7 +408,7 @@ func (c *PrivateServer) incomingConnection(context *jsonrpc.Context, params *Inc
 	}
 
 	if !found {
-		eps.Log.Debugf("No matching announcement found, closing...")
+		hyper.Log.Debugf("No matching announcement found, closing...")
 		return context.Error(404, "no matching connection found", nil)
 	}
 
@@ -416,14 +416,14 @@ func (c *PrivateServer) incomingConnection(context *jsonrpc.Context, params *Inc
 
 	go func() {
 		if err := connection.Run(); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 		}
 	}()
 
 	return context.Result(map[string]interface{}{"message": "ok"})
 }
 
-func MakePrivateServer(settings *PrivateServerSettings, definitions *eps.Definitions) (*PrivateServer, error) {
+func MakePrivateServer(settings *PrivateServerSettings, definitions *hyper.Definitions) (*PrivateServer, error) {
 
 	dataStore, err := helpers.InitializeDatastore(settings.Datastore, definitions)
 
@@ -439,7 +439,7 @@ func MakePrivateServer(settings *PrivateServerSettings, definitions *eps.Definit
 	}
 
 	if settings.InternalEndpoint.TLS != nil {
-		if tlsConfig, err := epsTls.TLSServerConfig(settings.InternalEndpoint.TLS); err != nil {
+		if tlsConfig, err := hyperTls.TLSServerConfig(settings.InternalEndpoint.TLS); err != nil {
 			return nil, err
 		} else {
 			server.tlsConfig = tlsConfig
@@ -516,7 +516,7 @@ var PrivateAnnounceConnectionForm = forms.Form{
 			Name: "_client",
 			Validators: []forms.Validator{
 				forms.IsStringMap{
-					Form: &epsForms.ClientInfoForm,
+					Form: &hyperForms.ClientInfoForm,
 				},
 			},
 		},
@@ -524,10 +524,10 @@ var PrivateAnnounceConnectionForm = forms.Form{
 }
 
 type PrivateAnnounceConnectionParams struct {
-	ClientInfo *eps.ClientInfo `json:"_client"`
-	ExpiresAt  *time.Time      `json:"expires_at"`
-	Domain     string          `json:"domain"`
-	Proxy      string          `json:"proxy"`
+	ClientInfo *hyper.ClientInfo `json:"_client"`
+	ExpiresAt  *time.Time        `json:"expires_at"`
+	Domain     string            `json:"domain"`
+	Proxy      string            `json:"proxy"`
 }
 
 func (c *PrivateServer) announceConnection(context *jsonrpc.Context, params *PrivateAnnounceConnectionParams) *jsonrpc.Response {
@@ -593,30 +593,30 @@ func (c *PrivateServer) announceConnection(context *jsonrpc.Context, params *Pri
 		id, err := helpers.RandomID(16)
 
 		if err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			return context.InternalError()
 		}
 
 		rawData, err := json.Marshal(newAnnouncement)
 
 		if err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			return context.InternalError()
 		}
 
-		dataEntry := &eps.DataEntry{
+		dataEntry := &hyper.DataEntry{
 			Type: PrivateAnnouncementType,
 			ID:   id,
 			Data: rawData,
 		}
 
 		if err := c.dataStore.Write(dataEntry); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			return context.InternalError()
 		}
 
 		if err := c.announceConnectionsRPC([]*PrivateAnnouncement{newAnnouncement}); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			return context.InternalError()
 		}
 
@@ -636,7 +636,7 @@ func (s *PrivateServer) announceConnectionsRPC(announcements []*PrivateAnnouncem
 			return fmt.Errorf("expected all announcements for the same proxy")
 		}
 	}
-	eps.Log.Debugf("Sending %d announcements for proxy '%s'", len(announcements), proxy)
+	hyper.Log.Debugf("Sending %d announcements for proxy '%s'", len(announcements), proxy)
 	request := jsonrpc.MakeRequest(fmt.Sprintf("%s.announceConnections", proxy), "", map[string]interface{}{
 		"connections": announcements,
 	})
@@ -647,7 +647,7 @@ func (s *PrivateServer) announceConnectionsRPC(announcements []*PrivateAnnouncem
 	}
 
 	if result.Error != nil {
-		eps.Log.Error(result.Error)
+		hyper.Log.Error(result.Error)
 		return fmt.Errorf(result.Error.Message)
 	}
 
@@ -676,7 +676,7 @@ loop:
 
 		for _, announcements := range groupedAnnouncements {
 			if err := s.announceConnectionsRPC(announcements); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 		}
 
@@ -700,7 +700,7 @@ func (s *PrivateServer) Stop() error {
 	select {
 	case <-s.stop:
 	case <-time.After(5 * time.Second):
-		eps.Log.Error("timeout when closing announcements")
+		hyper.Log.Error("timeout when closing announcements")
 	}
 
 	return s.jsonrpcServer.Stop()

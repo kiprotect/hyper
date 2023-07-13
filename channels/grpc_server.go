@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,16 +18,16 @@ package channels
 
 import (
 	"fmt"
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/grpc"
-	epsNet "github.com/iris-connect/eps/net"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/grpc"
+	hyperNet "github.com/kiprotect/hyper/net"
 	"net"
 	"sync"
 	"time"
 )
 
 type GRPCServerChannel struct {
-	eps.BaseChannel
+	hyper.BaseChannel
 	server        *grpc.Server
 	proxyListener *ProxyListener
 	Settings      grpc.GRPCServerSettings
@@ -45,13 +45,13 @@ func GRPCServerSettingsValidator(settings map[string]interface{}) (interface{}, 
 	}
 }
 
-func MakeGRPCServerChannel(settings interface{}) (eps.Channel, error) {
+func MakeGRPCServerChannel(settings interface{}) (hyper.Channel, error) {
 	return &GRPCServerChannel{
 		Settings: settings.(grpc.GRPCServerSettings),
 	}, nil
 }
 
-func (c *GRPCServerChannel) HandleConnectionRequest(address *eps.Address, request *eps.Request) (*eps.Response, error) {
+func (c *GRPCServerChannel) HandleConnectionRequest(address *hyper.Address, request *hyper.Request) (*hyper.Response, error) {
 	if connectionRequest, err := parseConnectionRequest(request); err != nil {
 		return nil, err
 	} else if connectionRequest.Channel != c.Type() {
@@ -72,17 +72,17 @@ func (c *GRPCServerChannel) HandleConnectionRequest(address *eps.Address, reques
 			proxyConnection.Close()
 			return nil, fmt.Errorf("could not write token")
 		}
-		eps.Log.Tracef("Successfully established gRPC server connection to proxy %s", connectionRequest.Endpoint)
+		hyper.Log.Tracef("Successfully established gRPC server connection to proxy %s", connectionRequest.Endpoint)
 
 		if err := c.proxyListener.Inject(proxyConnection); err != nil {
 			return nil, err
 		}
 
 	}
-	return &eps.Response{}, nil
+	return &hyper.Response{}, nil
 }
 
-func (c *GRPCServerChannel) HandleRequest(request *eps.Request, clientInfo *eps.ClientInfo) (*eps.Response, error) {
+func (c *GRPCServerChannel) HandleRequest(request *hyper.Request, clientInfo *hyper.ClientInfo) (*hyper.Response, error) {
 	return c.MessageBroker().DeliverRequest(request, clientInfo)
 }
 
@@ -151,7 +151,7 @@ func (c *GRPCServerChannel) Open() error {
 	}
 
 	if c.Settings.TCPRateLimits != nil {
-		lis = epsNet.MakeRateLimitedListener(lis, c.Settings.TCPRateLimits)
+		lis = hyperNet.MakeRateLimitedListener(lis, c.Settings.TCPRateLimits)
 	}
 
 	c.proxyListener = MakeProxyListener(lis)
@@ -166,11 +166,11 @@ func (c *GRPCServerChannel) Close() error {
 	return nil
 }
 
-func (c *GRPCServerChannel) DeliverRequest(request *eps.Request) (*eps.Response, error) {
+func (c *GRPCServerChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 	return c.server.DeliverRequest(request)
 }
 
-func (c *GRPCServerChannel) CanDeliverTo(address *eps.Address) bool {
+func (c *GRPCServerChannel) CanDeliverTo(address *hyper.Address) bool {
 
 	// we'll never deliver to ourselves...
 	if address.Operator == c.Directory().Name() {

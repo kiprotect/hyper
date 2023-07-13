@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,29 +20,29 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
 )
 
-func InitializeDirectory(settings *eps.Settings) (eps.Directory, error) {
+func InitializeDirectory(settings *hyper.Settings) (hyper.Directory, error) {
 	definition := settings.Definitions.DirectoryDefinitions[settings.Directory.Type]
 	return definition.Maker(settings.Name, settings.Directory.Settings)
 }
 
 // Integrates a record into the directory
-func IntegrateChangeRecord(record *eps.SignedChangeRecord, entry *eps.DirectoryEntry) error {
+func IntegrateChangeRecord(record *hyper.SignedChangeRecord, entry *hyper.DirectoryEntry) error {
 
 	config := map[string]interface{}{
 		record.Record.Section: record.Record.Data,
 	}
 
 	// we directly coerce the updated settings into the entry
-	if err := epsForms.DirectoryEntryForm.Coerce(entry, config); err != nil {
+	if err := hyperForms.DirectoryEntryForm.Coerce(entry, config); err != nil {
 		return err
 	} else {
 		if entry.Records == nil {
-			entry.Records = make([]*eps.SignedChangeRecord, 0)
+			entry.Records = make([]*hyper.SignedChangeRecord, 0)
 		}
 		// we append the change record to the entry for audit logging purposes
 		entry.Records = append(entry.Records, record)
@@ -51,7 +51,7 @@ func IntegrateChangeRecord(record *eps.SignedChangeRecord, entry *eps.DirectoryE
 }
 
 type CertificatesList struct {
-	Certificates []*eps.OperatorCertificate `json:"certificates"`
+	Certificates []*hyper.OperatorCertificate `json:"certificates"`
 }
 
 var CertificatesListForm = forms.Form{
@@ -63,7 +63,7 @@ var CertificatesListForm = forms.Form{
 				forms.IsList{
 					Validators: []forms.Validator{
 						forms.IsStringMap{
-							Form: &epsForms.OperatorCertificateForm,
+							Form: &hyperForms.OperatorCertificateForm,
 						},
 					},
 				},
@@ -72,19 +72,19 @@ var CertificatesListForm = forms.Form{
 	},
 }
 
-func GetRecordFingerprint(records []*eps.SignedChangeRecord, name, keyUsage string) string {
+func GetRecordFingerprint(records []*hyper.SignedChangeRecord, name, keyUsage string) string {
 	lastFingerprint := ""
 	for _, record := range records {
 		if record.Record.Section != "certificates" || record.Record.Name != name {
 			continue
 		}
 		if params, err := CertificatesListForm.Validate(map[string]interface{}{"certificates": record.Record.Data}); err != nil {
-			eps.Log.Error(err)
+			hyper.Log.Error(err)
 			continue
 		} else {
 			certificatesList := &CertificatesList{}
 			if err := CertificatesListForm.Coerce(certificatesList, params); err != nil {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 				continue
 			}
 			for _, certificate := range certificatesList.Certificates {
@@ -97,7 +97,7 @@ func GetRecordFingerprint(records []*eps.SignedChangeRecord, name, keyUsage stri
 	return lastFingerprint
 }
 
-func VerifyRecordHash(record *eps.SignedChangeRecord) (bool, error) {
+func VerifyRecordHash(record *hyper.SignedChangeRecord) (bool, error) {
 
 	submittedHash := record.Hash
 
@@ -114,8 +114,8 @@ func VerifyRecordHash(record *eps.SignedChangeRecord) (bool, error) {
 	return true, nil
 }
 
-func VerifyRecord(record *eps.SignedChangeRecord, verifiedRecords []*eps.SignedChangeRecord, rootCerts []*x509.Certificate, intermediateCerts []*x509.Certificate) (bool, error) {
-	signedData := &eps.SignedData{
+func VerifyRecord(record *hyper.SignedChangeRecord, verifiedRecords []*hyper.SignedChangeRecord, rootCerts []*x509.Certificate, intermediateCerts []*x509.Certificate) (bool, error) {
+	signedData := &hyper.SignedData{
 		Data:      record,
 		Signature: record.Signature,
 	}
@@ -171,7 +171,7 @@ func VerifyRecord(record *eps.SignedChangeRecord, verifiedRecords []*eps.SignedC
 	return Verify(signedData, rootCerts, intermediateCerts, "")
 }
 
-func CalculateRecordHash(record *eps.SignedChangeRecord) error {
+func CalculateRecordHash(record *hyper.SignedChangeRecord) error {
 
 	// we always reset the hash before calculating the new one
 	record.Hash = ""

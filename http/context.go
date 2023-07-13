@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@ package http
 
 import (
 	"encoding/json"
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 	"io/ioutil"
 	"net/http"
 )
@@ -86,7 +86,7 @@ func (c *Context) AbortWithResponse(response *http.Response) {
 
 	c.Writer.WriteHeader(response.StatusCode)
 	if _, err := c.Writer.Write(bytes); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 	c.Abort()
@@ -100,7 +100,7 @@ func (c *Context) JSON(status int, data interface{}) {
 
 	if c.HeaderWritten {
 		// the header was already written, we ignore this...
-		eps.Log.Error("Header was already written")
+		hyper.Log.Error("Header was already written")
 		return
 	}
 
@@ -110,7 +110,7 @@ func (c *Context) JSON(status int, data interface{}) {
 	if err != nil {
 		// the data cannot be serialized to JSON, we log an error and return
 		// a 500 response...
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		bytes, _ = json.Marshal(H{"message": "internal server error"})
 		status = 500
 	}

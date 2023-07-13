@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@ package metrics
 
 import (
 	"context"
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"time"
@@ -28,7 +28,7 @@ type PrometheusMetricsServer struct {
 	server *http.Server
 }
 
-func MakePrometheusMetricsServer(settings *eps.MetricsSettings) *PrometheusMetricsServer {
+func MakePrometheusMetricsServer(settings *hyper.MetricsSettings) *PrometheusMetricsServer {
 
 	if settings == nil {
 		return nil
@@ -38,12 +38,12 @@ func MakePrometheusMetricsServer(settings *eps.MetricsSettings) *PrometheusMetri
 		server: &http.Server{Addr: settings.BindAddress, Handler: promhttp.Handler()},
 	}
 
-	eps.Log.Infof("Serving metrics on %s...", settings.BindAddress)
+	hyper.Log.Infof("Serving metrics on %s...", settings.BindAddress)
 
 	go func() {
 		if err := p.server.ListenAndServe(); err != nil {
 			if err != http.ErrServerClosed {
-				eps.Log.Error(err)
+				hyper.Log.Error(err)
 			}
 		}
 	}()
@@ -53,7 +53,7 @@ func MakePrometheusMetricsServer(settings *eps.MetricsSettings) *PrometheusMetri
 
 func (p *PrometheusMetricsServer) Stop() error {
 
-	eps.Log.Info("Shutting down Prometheus metrics server...")
+	hyper.Log.Info("Shutting down Prometheus metrics server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,10 +23,10 @@ proxy via a separate TCP channel.
 package sd
 
 import (
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/jsonrpc"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/jsonrpc"
 	"regexp"
 	"sync"
 )
@@ -46,7 +46,7 @@ var SubmitChangeRecordsForm = forms.Form{
 				forms.IsList{
 					Validators: []forms.Validator{
 						forms.IsStringMap{
-							Form: &epsForms.SignedChangeRecordForm,
+							Form: &hyperForms.SignedChangeRecordForm,
 						},
 					},
 				},
@@ -56,12 +56,12 @@ var SubmitChangeRecordsForm = forms.Form{
 }
 
 type SubmitChangeRecordsParams struct {
-	Records []*eps.SignedChangeRecord `json:"records"`
+	Records []*hyper.SignedChangeRecord `json:"records"`
 }
 
 func (c *Server) submitChangeRecords(context *jsonrpc.Context, params *SubmitChangeRecordsParams) *jsonrpc.Response {
 	if err := c.directory.Append(params.Records); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return context.InternalError()
 	} else {
 		return context.Acknowledge()
@@ -77,7 +77,7 @@ type GetTipParams struct {
 
 func (c *Server) getTip(context *jsonrpc.Context, params *GetTipParams) *jsonrpc.Response {
 	if record, err := c.directory.Tip(); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return context.InternalError()
 	} else {
 		return context.Result(record)
@@ -93,7 +93,7 @@ var GetEntriesForm = forms.Form{
 
 func (c *Server) getEntries(context *jsonrpc.Context, params *GetEntriesParams) *jsonrpc.Response {
 	if entries, err := c.directory.AllEntries(); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return context.InternalError()
 	} else {
 		return context.Result(entries)
@@ -117,7 +117,7 @@ var GetEntryForm = forms.Form{
 
 func (c *Server) getEntry(context *jsonrpc.Context, params *GetEntryParams) *jsonrpc.Response {
 	if entry, err := c.directory.Entry(params.Name); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return context.InternalError()
 	} else if entry == nil {
 		return context.NotFound()
@@ -146,7 +146,7 @@ var GetRecordsForm = forms.Form{
 }
 
 func (c *Server) getRecords(context *jsonrpc.Context, params *GetRecordsParams) *jsonrpc.Response {
-	eps.Log.Infof("Getting records after '%s'", params.After)
+	hyper.Log.Infof("Getting records after '%s'", params.After)
 	if records, err := c.directory.Records(params.After); err != nil {
 		return context.InternalError()
 	} else {

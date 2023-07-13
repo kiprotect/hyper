@@ -2,7 +2,7 @@ name: $OP
 vars:
   OP:
     source: env
-    variable: EPS_OP
+    variable: HYPER_OP
     type: string
 directory:
   type: json

@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@
 package testing
 
 import (
-	"github.com/iris-connect/eps"
+	"github.com/kiprotect/hyper"
 )
 
 type Fixture interface {
@@ -38,7 +38,7 @@ func TeardownFixtures(fixtureConfigs []FC, fixtures map[string]interface{}) erro
 	var teardownErr error
 	for _, fixtureConfig := range fixtureConfigs {
 		if err := fixtureConfig.F.Teardown(fixtures[fixtureConfig.Name]); err != nil {
-			eps.Log.Errorf("error tearing down fixture %s", fixtureConfig.Name)
+			hyper.Log.Errorf("error tearing down fixture %s", fixtureConfig.Name)
 			teardownErr = err
 		}
 	}
@@ -53,7 +53,7 @@ func SetupFixtures(fixtureConfigs []FC) (map[string]interface{}, error) {
 		var result interface{}
 		var err error
 		if result, err = fixtureConfig.F.Setup(fixtures); err != nil {
-			eps.Log.Errorf("error creating fixture %s", fixtureConfig.Name)
+			hyper.Log.Errorf("error creating fixture %s", fixtureConfig.Name)
 			return nil, err
 		}
 		if fixtureConfig.Name == "" {

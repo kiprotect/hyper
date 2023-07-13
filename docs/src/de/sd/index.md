@@ -2,13 +2,13 @@
 
 Das Dienstverzeichnis ist eine zentrale Datenbank, die Informationen über alle Betreiber im IRIS-Ökosystem enthält. Es enthält Informationen darüber, wie die Betreiber erreicht werden können und welche Dienste sie anbieten.
 
-Mit Hilfe des Verzeichnisses können EPS-Server feststellen, ob und wie sie sich mit einem anderen Betreiber verbinden können. Betreiber, die nur über ausgehende Verbindungen verfügen (z. B. `ga-leipzig` im obigen Beispiel), können das Verzeichnis verwenden, um zu erfahren, dass sie möglicherweise asynchrone Antworten von anderen Betreibern (z. B. `ls-1`) erhalten und dann ausgehende Verbindungen zu diesen Betreibern öffnen, über die sie Antworten erhalten können. EPS-Server können das Dienstverzeichnis auch verwenden, um festzustellen, ob sie eine Nachricht von einem bestimmten Betreiber annehmen sollen.
+Mit Hilfe des Verzeichnisses können Hyper-Server feststellen, ob und wie sie sich mit einem anderen Betreiber verbinden können. Betreiber, die nur über ausgehende Verbindungen verfügen (z.B. `ga-leipzig` im obigen Beispiel), können das Verzeichnis nutzen, um zu erfahren, dass sie möglicherweise asynchrone Antworten von anderen Betreibern erhalten (z.B. `ls-1`) und dann ausgehende Verbindungen zu diesen Betreibern öffnen, über die sie Antworten erhalten können. Hyper-Server können das Dienstverzeichnis auch verwenden, um festzustellen, ob sie eine Nachricht von einem bestimmten Betreiber annehmen sollen.
 
-Das Dienstverzeichnis implementiert einen gruppenbasierten Berechtigungsmechanismus. Derzeit existieren nur `yes/no` Berechtigungen (d. h. ein Mitglied einer bestimmten Gruppe kann eine bestimmte Dienstmethode entweder aufrufen oder nicht). Feinkörnigere Berechtigungen (z. B. kann ein Anbieter von Kontaktverfolgungen nur seine eigenen Einträge im Dienst "Standorte" bearbeiten) müssen von den Diensten selbst implementiert werden. Zu diesem Zweck stellt der EPS-Server den Diensten Informationen über die aufrufende Gegenstelle über einen speziellen Parameter (`_caller`) zur Verfügung, der zusammen mit den anderen RPC-Methodenparametern übergeben wird. Diese Struktur enthält auch den aktuellen Eintrag des Aufrufers aus dem Dienstverzeichnis, was es dem aufgerufenen Dienst erleichtert, den Aufrufer zu identifizieren und zu autorisieren.
+Das Dienstverzeichnis implementiert einen gruppenbasierten Berechtigungsmechanismus. Derzeit gibt es nur `yes/no` Berechtigungen (d.h. ein Mitglied einer bestimmten Gruppe kann eine bestimmte Dienstmethode entweder aufrufen oder nicht). Feiner abgestufte Berechtigungen (z.B. kann ein Anbieter von Kontaktverfolgungen nur seine eigenen Einträge im Dienst "Standorte" bearbeiten) müssen von den Diensten selbst implementiert werden. Zu diesem Zweck stellt der Hyper-Server den Diensten Informationen über die aufrufende Gegenstelle über einen speziellen Parameter (`_caller`) zur Verfügung, der zusammen mit den anderen RPC-Methodenparametern übergeben wird. Diese Struktur enthält auch den aktuellen Eintrag des Aufrufers aus dem Dienstverzeichnis, so dass der aufgerufene Dienst den Aufrufer leicht identifizieren und autorisieren kann.
 
 ## Dienstverzeichnis-API
 
-Das EPS-Serverpaket bietet auch einen `sd` API-Server-Befehl, der einen JSON-RPC-Server öffnet, der das Dienstverzeichnis verteilt.
+Das Hyper-Server-Paket bietet auch einen `sd` API-Server-Befehl, der einen JSON-RPC-Server öffnet, der das Dienstverzeichnis verteilt.
 
 ```bash
 SD_SETTINGS=settings/dev/roles/sd-1 sd run
@@ -18,20 +18,20 @@ Standardmäßig werden damit Änderungsdatensätze in einer Datei gespeichert un
 
 ## Signatur-Schema
 
-Alle Änderungen im Dienstverzeichnis werden kryptografisch signiert. Dazu besitzt jeder Akteur im EPS-System ein Paar ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das Serviceverzeichnis ist aus einer Reihe von **Änderungsdatensätzen** aufgebaut. Jeder Änderungssatz enthält den Namen eines **Akteurs**, einen **Abschnitt** und die eigentlichen Daten, die geändert werden sollen.
+Alle Änderungen im Dienstverzeichnis werden kryptografisch signiert. Dazu verfügt jeder Akteur im Hyper-System über ein Paar ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das Dienstverzeichnis ist aus einer Reihe von **Änderungsdatensätzen** aufgebaut. Jeder Änderungssatz enthält den Namen eines **Akteurs**, einen **Abschnitt** und die eigentlichen Daten, die geändert werden sollen.
 
 ### Einreichen von Änderungsdatensätzen
 
-Änderungsdatensätze können über die JSON-RPC-API an das Dienstverzeichnis übermittelt werden. Die `eps` CLI bietet dafür eine Funktion über die `sd submit-records` :
+Änderungsdatensätze können über die JSON-RPC-API an das Dienstverzeichnis übermittelt werden. Die `hyper` CLI bietet dafür eine Funktion über die `sd submit-records`:
 
 ```bash
-EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records settings/dev/directory/001_base.json
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records settings/dev/directory/001_base.json
 ```
 
 Sie können das Dienstverzeichnis auch zurücksetzen, indem Sie das Flag `--reset` angeben:
 
 ```
-EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records --reset settings/dev/directory/001_base.json
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records --reset settings/dev/directory/001_base.json
 ```
 
 **Warnung:** Dadurch werden alle vorherigen Datensätze aus dem Dienstverzeichnis gelöscht. Nur Bediener mit einer `sd-admin` Rolle können dies tun.

@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,13 +17,13 @@
 package main
 
 import (
-	"github.com/iris-connect/eps"
-	cmdHelpers "github.com/iris-connect/eps/cmd/helpers"
-	"github.com/iris-connect/eps/definitions"
-	"github.com/iris-connect/eps/helpers"
-	"github.com/iris-connect/eps/metrics"
-	"github.com/iris-connect/eps/proxy"
-	proxyHelpers "github.com/iris-connect/eps/proxy/helpers"
+	"github.com/kiprotect/hyper"
+	cmdHelpers "github.com/kiprotect/hyper/cmd/helpers"
+	"github.com/kiprotect/hyper/definitions"
+	"github.com/kiprotect/hyper/helpers"
+	"github.com/kiprotect/hyper/metrics"
+	"github.com/kiprotect/hyper/proxy"
+	proxyHelpers "github.com/kiprotect/hyper/proxy/helpers"
 	"github.com/urfave/cli"
 	"os"
 	"os/signal"
@@ -49,20 +49,20 @@ func CLI(settings *proxy.Settings) {
 					Flags: []cli.Flag{},
 					Usage: "Run the public TLS proxy.",
 					Action: func(c *cli.Context) error {
-						eps.Log.Info("Starting public proxy...")
+						hyper.Log.Info("Starting public proxy...")
 
 						if settings.Public == nil {
-							eps.Log.Fatal("Public settings undefined!")
+							hyper.Log.Fatal("Public settings undefined!")
 						}
 
 						server, err := proxy.MakePublicServer(settings.Public, settings.Definitions)
 
 						if err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						if err := server.Start(); err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						metricsServer := metrics.MakePrometheusMetricsServer(settings.Metrics)
@@ -71,19 +71,19 @@ func CLI(settings *proxy.Settings) {
 						sigchan := make(chan os.Signal, 1)
 						signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-						eps.Log.Info("Waiting for CTRL-C...")
+						hyper.Log.Info("Waiting for CTRL-C...")
 
 						<-sigchan
 
-						eps.Log.Info("Stopping proxy...")
+						hyper.Log.Info("Stopping proxy...")
 
 						if err := server.Stop(); err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						if metricsServer != nil {
 							if err := metricsServer.Stop(); err != nil {
-								eps.Log.Fatal(err)
+								hyper.Log.Fatal(err)
 							}
 						}
 
@@ -95,20 +95,20 @@ func CLI(settings *proxy.Settings) {
 					Flags: []cli.Flag{},
 					Usage: "Run the private TLS proxy.",
 					Action: func(c *cli.Context) error {
-						eps.Log.Info("Starting private proxy...")
+						hyper.Log.Info("Starting private proxy...")
 
 						if settings.Private == nil {
-							eps.Log.Fatal("Private settings undefined!")
+							hyper.Log.Fatal("Private settings undefined!")
 						}
 
 						server, err := proxy.MakePrivateServer(settings.Private, settings.Definitions)
 
 						if err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						if err := server.Start(); err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						metricsServer := metrics.MakePrometheusMetricsServer(settings.Metrics)
@@ -117,19 +117,19 @@ func CLI(settings *proxy.Settings) {
 						sigchan := make(chan os.Signal, 1)
 						signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-						eps.Log.Info("Waiting for CTRL-C...")
+						hyper.Log.Info("Waiting for CTRL-C...")
 
 						<-sigchan
 
-						eps.Log.Info("Stopping proxy...")
+						hyper.Log.Info("Stopping proxy...")
 
 						if err := server.Stop(); err != nil {
-							eps.Log.Fatal(err)
+							hyper.Log.Fatal(err)
 						}
 
 						if metricsServer != nil {
 							if err := metricsServer.Stop(); err != nil {
-								eps.Log.Fatal(err)
+								hyper.Log.Fatal(err)
 							}
 						}
 
@@ -145,17 +145,17 @@ func CLI(settings *proxy.Settings) {
 	err = app.Run(os.Args)
 
 	if err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 	}
 
 }
 
 func main() {
 	if settingsPaths, fs, err := helpers.SettingsPaths("PROXY_SETTINGS"); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return
 	} else if settings, err := proxyHelpers.Settings(settingsPaths, fs, &definitions.Default); err != nil {
-		eps.Log.Error(err)
+		hyper.Log.Error(err)
 		return
 	} else {
 		CLI(settings)

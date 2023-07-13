@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,10 +20,10 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"github.com/iris-connect/eps"
-	epsForms "github.com/iris-connect/eps/forms"
-	"github.com/iris-connect/eps/helpers"
 	"github.com/kiprotect/go-helpers/forms"
+	"github.com/kiprotect/hyper"
+	hyperForms "github.com/kiprotect/hyper/forms"
+	"github.com/kiprotect/hyper/helpers"
 	"github.com/urfave/cli"
 	"io/ioutil"
 	"time"
@@ -37,7 +37,7 @@ var RecordsForm = forms.Form{
 				forms.IsList{
 					Validators: []forms.Validator{
 						forms.IsStringMap{
-							Form: &epsForms.ChangeRecordForm,
+							Form: &hyperForms.ChangeRecordForm,
 						},
 					},
 				},
@@ -46,15 +46,15 @@ var RecordsForm = forms.Form{
 	},
 }
 
-func getEntries(c *cli.Context, settings *eps.Settings) error {
+func getEntries(c *cli.Context, settings *hyper.Settings) error {
 
 	directory, err := helpers.InitializeDirectory(settings)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
-	query := &eps.DirectoryQuery{}
+	query := &hyper.DirectoryQuery{}
 	name := c.String("name")
 
 	if name != "" {
@@ -64,13 +64,13 @@ func getEntries(c *cli.Context, settings *eps.Settings) error {
 	entries, err := directory.Entries(query)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	jsonData, err := json.Marshal(entries)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	fmt.Println(string(jsonData))
@@ -78,81 +78,81 @@ func getEntries(c *cli.Context, settings *eps.Settings) error {
 }
 
 type Records struct {
-	Records []*eps.ChangeRecord `json:"records"`
+	Records []*hyper.ChangeRecord `json:"records"`
 }
 
-func submitRecords(c *cli.Context, settings *eps.Settings) error {
+func submitRecords(c *cli.Context, settings *hyper.Settings) error {
 
 	reset := c.Bool("reset")
 
 	if settings.Signing == nil {
-		eps.Log.Fatalf("Signing settings undefined!")
+		hyper.Log.Fatalf("Signing settings undefined!")
 	}
 
 	filename := c.Args().Get(0)
 
 	if filename == "" {
-		eps.Log.Fatal("please specify a filename")
+		hyper.Log.Fatal("please specify a filename")
 	}
 
 	jsonBytes, err := ioutil.ReadFile(filename)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	records := &Records{}
 	var rawRecords map[string]interface{}
 
 	if err := json.Unmarshal(jsonBytes, &rawRecords); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	if params, err := RecordsForm.Validate(rawRecords); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	} else if RecordsForm.Coerce(records, params); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	if err := submitChangeRecords(records.Records, settings, reset); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	return nil
 
 }
 
-func submitChangeRecords(changeRecords []*eps.ChangeRecord, settings *eps.Settings, reset bool) error {
+func submitChangeRecords(changeRecords []*hyper.ChangeRecord, settings *hyper.Settings, reset bool) error {
 
 	directory, err := helpers.InitializeDirectory(settings)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
-	writableDirectory, ok := directory.(eps.WritableDirectory)
+	writableDirectory, ok := directory.(hyper.WritableDirectory)
 
 	if !ok {
-		eps.Log.Fatalf("not a writable service directory")
+		hyper.Log.Fatalf("not a writable service directory")
 	}
 
 	certificate, err := helpers.LoadCertificate(settings.Signing.CertificateFile, true)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	rootCertificate, err := helpers.LoadCertificate(settings.Signing.CACertificateFile, false)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	intermediateCertificates := []*x509.Certificate{}
 
 	for _, certificateFile := range settings.Signing.CAIntermediateCertificateFiles {
 		if cert, err := helpers.LoadCertificate(certificateFile, false); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		} else {
 			intermediateCertificates = append(intermediateCertificates, cert)
 		}
@@ -160,19 +160,19 @@ func submitChangeRecords(changeRecords []*eps.ChangeRecord, settings *eps.Settin
 
 	// we ensure the certificate is valid for signing
 	if err := helpers.VerifyCertificate(certificate, rootCertificate, intermediateCertificates, settings.Name); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	key, err := helpers.LoadPrivateKey(settings.Signing.KeyFile)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	lastRecord, err := writableDirectory.Tip()
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	var parentHash string
@@ -181,33 +181,33 @@ func submitChangeRecords(changeRecords []*eps.ChangeRecord, settings *eps.Settin
 		parentHash = lastRecord.Hash
 	}
 
-	signedChangeRecords := make([]*eps.SignedChangeRecord, 0)
+	signedChangeRecords := make([]*hyper.SignedChangeRecord, 0)
 
 	for _, changeRecord := range changeRecords {
 
-		changeRecord.CreatedAt = eps.HashableTime{time.Now()}
+		changeRecord.CreatedAt = hyper.HashableTime{time.Now()}
 
-		signedChangeRecord := &eps.SignedChangeRecord{
+		signedChangeRecord := &hyper.SignedChangeRecord{
 			ParentHash: parentHash,
 			Record:     changeRecord,
 		}
 
 		if err := helpers.CalculateRecordHash(signedChangeRecord); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		}
 
 		signedData, err := helpers.Sign(signedChangeRecord, key, certificate)
 
 		if err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		}
 
-		eps.Log.Info(signedChangeRecord.Hash)
+		hyper.Log.Info(signedChangeRecord.Hash)
 
 		if ok, err := helpers.Verify(signedData, []*x509.Certificate{rootCertificate}, intermediateCertificates, settings.Name); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		} else if !ok {
-			eps.Log.Fatalf("cannot verify signature")
+			hyper.Log.Fatalf("cannot verify signature")
 		}
 
 		signedChangeRecord.Signature = signedData.Signature
@@ -216,53 +216,53 @@ func submitChangeRecords(changeRecords []*eps.ChangeRecord, settings *eps.Settin
 	}
 
 	if err := writableDirectory.Submit(signedChangeRecords); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	return nil
 
 }
 
-func sign(c *cli.Context, settings *eps.Settings) error {
+func sign(c *cli.Context, settings *hyper.Settings) error {
 	if settings.Signing == nil {
-		eps.Log.Fatalf("Signing settings undefined!")
+		hyper.Log.Fatalf("Signing settings undefined!")
 	}
 
 	filename := c.Args().Get(0)
 
 	if filename == "" {
-		eps.Log.Fatal("please specify a filename")
+		hyper.Log.Fatal("please specify a filename")
 	}
 
 	jsonBytes, err := ioutil.ReadFile(filename)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	var jsonData map[string]interface{}
 
 	if err := json.Unmarshal(jsonBytes, &jsonData); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	certificate, err := helpers.LoadCertificate(settings.Signing.CertificateFile, true)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	rootCertificate, err := helpers.LoadCertificate(settings.Signing.CACertificateFile, false)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	intermediateCertificates := []*x509.Certificate{}
 
 	for _, certificateFile := range settings.Signing.CAIntermediateCertificateFiles {
 		if cert, err := helpers.LoadCertificate(certificateFile, false); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		} else {
 			intermediateCertificates = append(intermediateCertificates, cert)
 		}
@@ -270,25 +270,25 @@ func sign(c *cli.Context, settings *eps.Settings) error {
 
 	// we ensure the certificate is valid for signing
 	if err := helpers.VerifyCertificate(certificate, rootCertificate, intermediateCertificates, settings.Name); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	key, err := helpers.LoadPrivateKey(settings.Signing.KeyFile)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	signedData, err := helpers.Sign(jsonData, key, certificate)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	signedDataBytes, err := json.Marshal(signedData)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	fmt.Println(string(signedDataBytes))
@@ -296,74 +296,74 @@ func sign(c *cli.Context, settings *eps.Settings) error {
 	loadedSignedData, err := helpers.LoadSignedData(signedDataBytes)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	if ok, err := helpers.Verify(loadedSignedData, []*x509.Certificate{rootCertificate}, intermediateCertificates, settings.Name); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	} else if !ok {
-		eps.Log.Fatal("Signature is not valid!")
+		hyper.Log.Fatal("Signature is not valid!")
 	}
 
 	return nil
 }
 
-func verify(c *cli.Context, settings *eps.Settings) error {
+func verify(c *cli.Context, settings *hyper.Settings) error {
 
 	if settings.Signing == nil {
-		eps.Log.Fatalf("Signing settings undefined!")
+		hyper.Log.Fatalf("Signing settings undefined!")
 	}
 
 	filename := c.Args().Get(0)
 
 	if filename == "" {
-		eps.Log.Fatal("please specify a filename")
+		hyper.Log.Fatal("please specify a filename")
 	}
 
 	name := c.Args().Get(1)
 
 	if name == "" {
-		eps.Log.Fatal("please specify a name")
+		hyper.Log.Fatal("please specify a name")
 	}
 
 	jsonBytes, err := ioutil.ReadFile(filename)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
-	var signedData *eps.SignedData
+	var signedData *hyper.SignedData
 
 	if err := json.Unmarshal(jsonBytes, &signedData); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	rootCertificate, err := helpers.LoadCertificate(settings.Signing.CACertificateFile, false)
 
 	if err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	}
 
 	intermediateCertificates := []*x509.Certificate{}
 
 	for _, certificateFile := range settings.Signing.CAIntermediateCertificateFiles {
 		if cert, err := helpers.LoadCertificate(certificateFile, false); err != nil {
-			eps.Log.Fatal(err)
+			hyper.Log.Fatal(err)
 		} else {
 			intermediateCertificates = append(intermediateCertificates, cert)
 		}
 	}
 
 	if ok, err := helpers.Verify(signedData, []*x509.Certificate{rootCertificate}, intermediateCertificates, name); err != nil {
-		eps.Log.Fatal(err)
+		hyper.Log.Fatal(err)
 	} else if !ok {
-		eps.Log.Fatal("Signature is not valid!")
+		hyper.Log.Fatal("Signature is not valid!")
 	} else {
-		eps.Log.Info("Signature is ok!")
+		hyper.Log.Info("Signature is ok!")
 	}
 	return nil
 }
-func RecordsCommands(settings *eps.Settings) ([]cli.Command, error) {
+func RecordsCommands(settings *hyper.Settings) ([]cli.Command, error) {
 
 	return []cli.Command{
 		{

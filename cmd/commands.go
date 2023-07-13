@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,16 +17,16 @@
 package cmd
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/cmd/helpers"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/cmd/helpers"
 )
 
-var Commands = eps.CommandsDefinitions{
-	eps.CommandsDefinition{
+var Commands = hyper.CommandsDefinitions{
+	hyper.CommandsDefinition{
 		Name:  "server",
 		Maker: helpers.Server,
 	},
-	eps.CommandsDefinition{
+	hyper.CommandsDefinition{
 		Name:  "records",
 		Maker: helpers.RecordsCommands,
 	},

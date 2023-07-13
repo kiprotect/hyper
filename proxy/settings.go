@@ -1,5 +1,5 @@
-// IRIS Endpoint-Server (EPS)
-// Copyright (C) 2021-2021 The IRIS Endpoint-Server Authors (see AUTHORS.md)
+// KIProtect Hyper
+// Copyright (C) 2021-2023 KIProtect GmbH
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,10 +17,10 @@
 package proxy
 
 import (
-	"github.com/iris-connect/eps"
-	"github.com/iris-connect/eps/jsonrpc"
-	"github.com/iris-connect/eps/net"
-	"github.com/iris-connect/eps/tls"
+	"github.com/kiprotect/hyper"
+	"github.com/kiprotect/hyper/jsonrpc"
+	"github.com/kiprotect/hyper/net"
+	"github.com/kiprotect/hyper/tls"
 	"time"
 )
 
@@ -30,8 +30,8 @@ const (
 )
 
 type Settings struct {
-	Definitions *eps.Definitions       `json:"definitions"`
-	Metrics     *eps.MetricsSettings   `json:"metrics"`
+	Definitions *hyper.Definitions     `json:"definitions"`
+	Metrics     *hyper.MetricsSettings `json:"metrics"`
 	Private     *PrivateServerSettings `json:"private"`
 	Public      *PublicServerSettings  `json:"public"`
 }
@@ -41,7 +41,7 @@ type DirectorySettings struct {
 }
 
 type PublicServerSettings struct {
-	Datastore           *eps.DatastoreSettings         `json:"datastore"`
+	Datastore           *hyper.DatastoreSettings       `json:"datastore"`
 	Name                string                         `json:"name"`
 	TLSBindAddress      string                         `json:"tls_bind_address"`
 	InternalBindAddress string                         `json:"internal_bind_address"`
@@ -79,7 +79,7 @@ type InternalEndpointSettings struct {
 }
 
 type PrivateServerSettings struct {
-	Datastore        *eps.DatastoreSettings         `json:"datastore"`
+	Datastore        *hyper.DatastoreSettings       `json:"datastore"`
 	Name             string                         `json:"name"`
 	Announcements    []*PrivateAnnouncement         `json:"announcements"`
 	InternalEndpoint *InternalEndpointSettings      `json:"internal_endpoint"`

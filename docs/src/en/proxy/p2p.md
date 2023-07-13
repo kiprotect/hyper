@@ -1,15 +1,15 @@
 # Peer To Peer (P2P) Proxy
 
-The proxy also supports a peer-to-peer (P2P) mode, which enables two EPS servers to establish a secure connection through the proxy.
+The proxy also supports a peer-to-peer (P2P) mode, which enables two Hyper servers to establish a secure connection through the proxy.
 
 ## Connection Brokering
 
 The brokering process for a P2P connection is as follows:
 
-* EPS server A wants to connect to EPS server B.
+* Hyper server A wants to connect to Hyper server B.
 * A recognizes through the directory entry of B that it can only be reached through proxy P.
-* A sends a `connectionRequest` message to P over the EPS system, specifying B's gRPC server channel as the recipient.
-* P creates a token and send a message to B over the EPS system, forwarding A's request and specifying a proxy endpoint to connect to.
+* A sends a `connectionRequest` message to P over the Hyper system, specifying B's gRPC server channel as the recipient.
+* P creates a token and send a message to B over the Hyper system, forwarding A's request and specifying a proxy endpoint to connect to.
 * B receives the message and forwards it to the appropriate channel, which handles it and connects to P's endpoint, sending the token as the routing key.
 * P receives the connection from B and stores it.
 * P returns a confirmation to A containing the token and same endpoint.
@@ -26,10 +26,10 @@ SD_SETTINGS=settings/dev/roles/sd-1 sd run
 # run the public proxy
 PROXY_SETTINGS=settings/dev/roles/public-proxy-1 proxy run public
 
-# run all EPS servers
-EPS_SETTINGS=settings/dev/roles/hd-1 eps server run
-EPS_SETTINGS=settings/dev/roles/hd-2 eps server run
-EPS_SETTINGS=settings/dev/roles/public-proxy-eps-1 eps server run
+# run all Hyper servers
+HYPER_SETTINGS=settings/dev/roles/hd-1 hyper server run
+HYPER_SETTINGS=settings/dev/roles/hd-2 hyper server run
+HYPER_SETTINGS=settings/dev/roles/public-proxy-hyper-1 hyper server run
 ```
 
 Make sure you run `make sd-setup` to update the service directory with the necessary entries. Then you should be able to request a ping from the HD-2 server through the proxy via the HD-1 JSON-RPC server:

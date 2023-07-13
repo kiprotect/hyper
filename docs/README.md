@@ -1,6 +1,6 @@
-# EPS Documentation
+# Hyper Documentation
 
-This repository builds the EPS documentation website.
+This repository builds the Hyper documentation website.
 
 ## Setting up the environment
 

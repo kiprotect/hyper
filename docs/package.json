@@ -1,21 +1,21 @@
 {
-  "name": "eps-docs",
+  "name": "hyper-docs",
   "version": "0.0.1",
-  "description": "EPS Documentation",
+  "description": "Hyper Documentation",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/iris-connect/eps.git"
+    "url": "git+ssh://git@github.com/kiprotect/hyper.git"
   },
   "author": "",
   "license": "Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)",
   "bugs": {
-    "url": "https://github.com/iris-connect/eps/issues"
+    "url": "https://github.com/kiprotect/hyper/issues"
   },
-  "homepage": "https://github.com/iris-connect/eps#README",
+  "homepage": "https://github.com/kiprotect/hyper#README",
   "dependencies": {
     "sass": "^1.63.6"
   }

@@ -1,6 +1,12 @@
 086b3d6daeb67685:
   de: <pre>
   en: <pre>
+25d15b2e355d200f:
+  de: 10625 Berlin
+  en: 10625 Berlin
+26dadf45a76e7c21:
+  de: Bismarckstr. 10-12
+  en: Bismarckstr. 10-12
 485b0c2c3b23c2f8:
   de: </pre>
   en: </pre>
@@ -17,12 +23,23 @@
   de: >-
     Wenn Sie Fragen zu EPS haben, [kontaktieren Sie uns](mailto:iris@inoeg.de),
     wir unterstützen und beraten Sie gerne! Sie können auch ein
-    Issue für unsere freundliche [Github-Community](https://github.com/iris-connect/eps)
+    Issue für unsere freundliche [Github-Community](https://github.com/iris-connect/hyper)
     posten.
   en: >-
     If you have questions about EPS please [contact us](mailto:iris@inoeg.de),
     we will be happy to support and advise you! You can also post
-    an issue for our friendly [Github community](https://github.com/iris-connect/eps).
+    an issue for our friendly [Github community](https://github.com/iris-connect/hyper).
+960e464ee7eabe30:
+  de: >-
+    Wenn Sie Fragen zu Hyper haben, [wenden Sie sich](mailto:hyper@kiprotect.com)
+    bitte [an uns](mailto:hyper@kiprotect.com), wir unterstützen
+    und beraten Sie gerne! Sie können auch eine Frage an unsere
+    freundliche [Github-Community](https://github.com/kiprotect/hyper)
+    stellen.
+  en: >-
+    If you have questions about Hyper please [contact us](mailto:hyper@kiprotect.com),
+    we will be happy to support and advise you! You can also post
+    an issue for our friendly [Github community](https://github.com/kiprotect/hyper).
 96734db9f9767dfd:
   de: '## Impressum'
   en: '## Imprint'
@@ -31,18 +48,26 @@
     Wenn Sie Fragen zu EPS haben, [wenden Sie sich](mailto:iris@inoeg.de)
     bitte [an uns](mailto:iris@inoeg.de), wir unterstützen und
     beraten Sie gerne! Sie können auch ein Problem für unsere
-    freundliche [Github-Community](https://github.com/iris-connect/eps)
+    freundliche [Github-Community](https://github.com/iris-connect/hyper)
     melden.
   en: >-
     If you have questions about EPS please [contact us](mailto:iris@inoeg.de),
     we will be happy to support and advise you! You can also post
-    an issue for our friendly [Github community](https://github.com/iris-connect/eps).
+    an issue for our friendly [Github community](https://github.com/iris-connect/hyper).
 9cbd7b638a3d44aa:
   de: Theresa Willem
   en: Theresa Willem
 c5f6a6af26d10dbc:
   de: Alexander Braden
   en: Alexander Braden
+ca0bff42a4272841:
+  de: >-
+    Verantwortlich für den Inhalt dieser Seiten ist die <strong>KIProtect
+    GmbH.</strong> Sie können uns am besten per [E-Mail](mailto:hyper@kiprotect.com)
+    erreichen.
+  en: >-
+    Responsible for the content of these pages is <strong>KIProtect
+    GmbH.</strong> You can reach us best by [e-mail](mailto:hyper@kiprotect.com).
 ce0299f4d8f09351:
   de: >-
     Der für die Verarbeitung Verantwortliche im Sinne der GDPR
@@ -61,6 +86,23 @@ ce0299f4d8f09351:
 d41d7e19cb96b536:
   de: Wir sammeln keine persönlichen Daten.
   en: We do not collect any personal data.
+d75b744fd1a379bf:
+  de: KIProtect GmbH
+  en: KIProtect GmbH
+d807bcc5ba0f113f:
+  de: >-
+    Der für die Verarbeitung Verantwortliche im Sinne der GDPR
+    ist ebenfalls die <strong>KIProtect GmbH</strong>. Diese Website
+    enthält keine selbstladenden Ressourcen Dritter, wie z.B.
+    Analytics-Tracker oder eingebettete Inhalte. Wenn solche Inhalte
+    (z.B. externe Videos) verwendet werden, geschieht dies nur
+    mit der ausdrücklichen Zustimmung des Nutzers.
+  en: >-
+    The controller within the meaning of the GDPR is also <strong>KIProtect
+    GmbH</strong>. This website does not contain any self-loading
+    third-party resources such as analytics trackers or embedded
+    content. If such content (e.g. external videos) is used, this
+    is only done with the explicit consent of the user.
 dcebefe7dfec499b:
   de: '## Kontakt'
   en: '## Contact us'
