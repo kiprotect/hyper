@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/go-redis/redis v6.15.9+incompatible
-	github.com/kiprotect/go-helpers v0.0.0-20211210144244-79ce90e73e79
+	github.com/kiprotect/go-helpers v0.0.0-20230622215249-2b24b29fc854
 	github.com/prometheus/client_golang v1.12.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli v1.22.5
