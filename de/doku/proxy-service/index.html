@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta name="generator" content=
 "HTML Tidy for HTML5 for Linux version 5.6.0">
@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>EPS documentation | Proxy Service - Configuration</title>
+<title>EPS-Dokumentation | Proxy Service - Übersicht</title>
 <link rel="stylesheet" type="text/css" href=
 "/hyper/docs/static/css/main.css">
 <script>
@@ -109,6 +109,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
+<div id="translation-notice">
+<div class="message is-info">
+<div class="message-body">
+<p>Diese Website wurde größtenteils automatisch von der <a href=
+"/hyper/docs/proxy-service">englischen Version</a> übersetzt. Wir
+entschuldigen uns für eventuelle Übersetzungsfehler.</p>
+<span class="x" onclick=
+"localStorage.setItem('translation-notice', true);notice.style.display = 'none'">x</span></div>
+</div>
+</div>
 <script>
 var notice = document.getElementById("translation-notice")
 if (localStorage.getItem("translation-notice") === null && notice !== null){
@@ -125,48 +135,48 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 "is-active">
 <aside class="menu">
 <p class="menu-label" style="text-align:center"><a href=
-"/hyper/docs">EPS documentation</a></p>
+"/hyper/de/doku">EPS-Dokumentation</a></p>
 <ul class="menu-list">
-<li><a href="/hyper/docs">Start</a></li>
-<li><a href="/hyper/docs/getting-started">Getting Started</a></li>
+<li><a href="/hyper/de/doku">Start</a></li>
+<li><a href="/hyper/de/doku/getting-started">Erste
+Schritte</a></li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-hyper-nav">Hyper Service</a>
 <ul class="is-hidden" id="page-hyper-nav">
-<li><a href="/hyper/docs/hyper-service">Overview</a></li>
+<li><a href="/hyper/de/doku/hyper-service">Übersicht</a></li>
 </ul>
 </li>
 <li><a class="is-active" href="#" data-toggle="collapse"
 data-target="page-proxy-nav">Proxy Service</a>
 <ul class="" id="page-proxy-nav">
-<li><a href="/hyper/docs/proxy-service">Overview</a></li>
+<li><a href="/hyper/de/doku/proxy-service">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/installation">Installation</a></li>
+"/hyper/de/doku/proxy-service/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/configuration">Configuration</a></li>
-<li><a href="/hyper/docs/proxy-service/security">Security & Threat
-Model</a></li>
-<li><a href="/hyper/docs/proxy-service/p2p">Peer-To-Peer (P2P)
+"/hyper/de/doku/proxy-service/configuration">Konfiguration</a></li>
+<li><a href="/hyper/de/doku/proxy-service/security">Sicherheit &
+Bedrohungsmodell</a></li>
+<li><a href="/hyper/de/doku/proxy-service/p2p">Peer-To-Peer (P2P)
 Proxy</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-sd-nav">Service Directory</a>
 <ul class="is-hidden" id="page-sd-nav">
-<li><a href="/hyper/docs/service-directory">Overview</a></li>
+<li><a href="/hyper/de/doku/service-directory">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/service-directory/installation">Installation</a></li>
+"/hyper/de/doku/service-directory/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/service-directory/configuration">Configuration</a></li>
+"/hyper/de/doku/service-directory/configuration">Konfiguration</a></li>
 </ul>
 </li>
-<li><a href="/hyper/docs/contact">Contact</a></li>
+<li><a href="/hyper/de/doku/kontakt">Kontakt</a></li>
 <li><a href="#" data-toggle="collapse" data-target=
-"menu-language-dropdown">Languages</a>
+"menu-language-dropdown">Sprachen</a>
 <ul id="menu-language-dropdown" class="is-hidden">
+<li><a class="" href="/hyper/docs/proxy-service">English</a></li>
 <li><a class="is-open is-active" href=
-"/hyper/docs/proxy-service/configuration">English</a></li>
-<li><a class="" href=
-"/hyper/de/doku/proxy-service/configuration">Deutsch</a></li>
+"/hyper/de/doku/proxy-service">Deutsch</a></li>
 </ul>
 </li>
 </ul>
@@ -176,7 +186,109 @@ Proxy</a></li>
 <div class="comments"></div>
 <section class="section first">
 <div class="content">
-<div class="content markdown"></div>
+<div class="content markdown">
+<h1>Der EPS TLS-Passthrough-Proxy</h1>
+<p>Der EPS-Server bietet einen TLS-Passthrough-Proxy-Dienst, der
+eingehende TLS-Verbindungen von öffentlichen Clients an einen
+internen Server weiterleiten kann, ohne die TLS-Verbindung zu
+beenden. Der Dienst besteht aus zwei Servern:</p>
+<ul>
+<li>Ein <strong>öffentlicher Proxy</strong>, der auf einem
+öffentlich zugänglichen TCP-Port auf eingehende TLS-Verbindungen
+lauscht und auf einem anderen TCP-Port auf Verbindungen von
+privaten Proxy-Servern.</li>
+<li>Ein <strong>privater Proxy</strong>, der auf keinem TCP-Port
+lauscht und sich stattdessen aktiv mit dem öffentlichen
+Proxy-Server verbindet, wenn eine Verbindung für ihn verfügbar ist.
+Er leitet diese Verbindung (wiederum ohne TLS zu beenden) an einen
+internen Server weiter, der sie dann bearbeitet.</li>
+</ul>
+<p>Sowohl die privaten als auch die öffentlichen Proxys haben
+zugehörige EPS-Server, über die sie miteinander kommunizieren.</p>
+<p>Der private Proxy kann eingehende Verbindungen an den
+öffentlichen Proxy <strong>ankündigen</strong>. Immer wenn eine
+neue Verbindung diesen Proxy erreicht, vergleicht er sie mit den
+Ankündigungen, die er erhalten hat. Wenn eine Übereinstimmung
+gefunden wird, benachrichtigt er den privaten Proxy über eine
+eingehende Verbindung über das EPS-Netzwerk und sendet ihm außerdem
+ein zufälliges Token. Der private Proxy öffnet eine Verbindung zum
+öffentlichen Proxy, sendet das Token und übernimmt den TCP-Stream.
+Er leitet ihn an einen internen Server weiter.</p>
+<h2>Demo</h2>
+<p>Um diesen Mechanismus zu demonstrieren, haben wir eine
+Beispielkonfiguration vorbereitet. Führen Sie einfach die folgenden
+Schnipsel in verschiedenen Terminals aus (aus dem Hauptverzeichnis
+im Repository):</p>
+<div class="codehilite">
+<pre><code><span class="c1"># prepare the binaries</span>
+make<span class="w"> </span><span class=
+"o">&amp;&</span><span class="w"> </span>make<span class=
+"w"> </span>examples
+<span class="c1"># first terminal</span>
+internal-server<span class="w"> </span><span class=
+"c1">#will open a JSON-RPC server on port 8888</span>
+<span class="c1"># second terminal (public proxy)</span>
+<span class="nv">PROXY_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-1<span class=
+"w"> </span>proxy<span class="w"> </span>run<span class=
+"w"> </span>public
+<span class="c1"># third terminal (private proxy)</span>
+<span class="nv">PROXY_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/private-proxy-1<span class=
+"w"> </span>proxy<span class="w"> </span>run<span class=
+"w"> </span>private
+<span class="c1"># fourth terminal (public proxy EPS server)</span>
+<span class="nv">EPS_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-eps-1<span class=
+"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>run
+<span class="c1"># fifth terminal (private proxy EPS server)</span>
+<span class="nv">EPS_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/private-proxy-eps-1<span class=
+"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>run
+</code></pre></div>
+<p>Wenn alle Dienste laufen, sollten Sie in der Lage sein, eine
+Anfrage an den Proxy zu senden über</p>
+<div class="codehilite">
+<pre><code>curl<span class="w"> </span>--cacert<span class=
+"w"> </span>settings/dev/certs/root.crt<span class=
+"w"> </span>--resolve<span class=
+"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
+"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+<p>Dies sollte die folgenden JSON-Daten zurückgeben:</p>
+<div class="codehilite">
+<pre><code><span class="p">{</span>
+<span class="w">  </span><span class=
+"nt">"message"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"success"</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Die Anfrage, die Sie gesendet haben, erreichte den lokalen
+TLS-Server auf Port 8888 über die beiden Proxys, die über das
+EPS-Netzwerk kommunizierten, um die Verbindung zu vermitteln. Toll,
+nicht wahr?</p>
+<h2>Stresstest</h2>
+<p>Sie können den Server auch einem Stresstest mit parallelen
+Anfragen unterziehen, indem Sie den <code>parallel</code>
+verwenden:</p>
+<div class="codehilite">
+<pre><code>eq<span class="w"> </span><span class=
+"m">1</span><span class="w"> </span><span class=
+"m">2000000</span><span class="w"> </span><span class=
+"p">|</span><span class="w"> </span>parallel<span class=
+"w"> </span>-j<span class="w"> </span><span class=
+"m">25</span><span class="w"> </span>curl<span class=
+"w"> </span>--cacert<span class=
+"w"> </span>settings/dev/certs/root.crt<span class=
+"w"> </span>--resolve<span class=
+"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
+"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span>--data<span class="w"> </span><span class="s2">"{}"</span>
+</code></pre></div>
+<p>Dadurch wird versucht, 25 Anfragen parallel an den Server zu
+senden.</p>
+</div>
 </div>
 </section>
 </div>

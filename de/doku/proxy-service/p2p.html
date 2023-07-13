@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta name="generator" content=
 "HTML Tidy for HTML5 for Linux version 5.6.0">
@@ -7,7 +7,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>EPS documentation | Proxy Service - Configuration</title>
+<title>EPS-Dokumentation | Proxy Service - Peer-To-Peer (P2P)
+Proxy</title>
 <link rel="stylesheet" type="text/css" href=
 "/hyper/docs/static/css/main.css">
 <script>
@@ -109,6 +110,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
+<div id="translation-notice">
+<div class="message is-info">
+<div class="message-body">
+<p>Diese Website wurde größtenteils automatisch von der <a href=
+"/hyper/docs/proxy-service/p2p">englischen Version</a> übersetzt.
+Wir entschuldigen uns für eventuelle Übersetzungsfehler.</p>
+<span class="x" onclick=
+"localStorage.setItem('translation-notice', true);notice.style.display = 'none'">x</span></div>
+</div>
+</div>
 <script>
 var notice = document.getElementById("translation-notice")
 if (localStorage.getItem("translation-notice") === null && notice !== null){
@@ -125,48 +136,49 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 "is-active">
 <aside class="menu">
 <p class="menu-label" style="text-align:center"><a href=
-"/hyper/docs">EPS documentation</a></p>
+"/hyper/de/doku">EPS-Dokumentation</a></p>
 <ul class="menu-list">
-<li><a href="/hyper/docs">Start</a></li>
-<li><a href="/hyper/docs/getting-started">Getting Started</a></li>
+<li><a href="/hyper/de/doku">Start</a></li>
+<li><a href="/hyper/de/doku/getting-started">Erste
+Schritte</a></li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-hyper-nav">Hyper Service</a>
 <ul class="is-hidden" id="page-hyper-nav">
-<li><a href="/hyper/docs/hyper-service">Overview</a></li>
+<li><a href="/hyper/de/doku/hyper-service">Übersicht</a></li>
 </ul>
 </li>
 <li><a class="is-active" href="#" data-toggle="collapse"
 data-target="page-proxy-nav">Proxy Service</a>
 <ul class="" id="page-proxy-nav">
-<li><a href="/hyper/docs/proxy-service">Overview</a></li>
+<li><a href="/hyper/de/doku/proxy-service">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/installation">Installation</a></li>
+"/hyper/de/doku/proxy-service/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/configuration">Configuration</a></li>
-<li><a href="/hyper/docs/proxy-service/security">Security & Threat
-Model</a></li>
-<li><a href="/hyper/docs/proxy-service/p2p">Peer-To-Peer (P2P)
+"/hyper/de/doku/proxy-service/configuration">Konfiguration</a></li>
+<li><a href="/hyper/de/doku/proxy-service/security">Sicherheit &
+Bedrohungsmodell</a></li>
+<li><a href="/hyper/de/doku/proxy-service/p2p">Peer-To-Peer (P2P)
 Proxy</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-sd-nav">Service Directory</a>
 <ul class="is-hidden" id="page-sd-nav">
-<li><a href="/hyper/docs/service-directory">Overview</a></li>
+<li><a href="/hyper/de/doku/service-directory">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/service-directory/installation">Installation</a></li>
+"/hyper/de/doku/service-directory/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/service-directory/configuration">Configuration</a></li>
+"/hyper/de/doku/service-directory/configuration">Konfiguration</a></li>
 </ul>
 </li>
-<li><a href="/hyper/docs/contact">Contact</a></li>
+<li><a href="/hyper/de/doku/kontakt">Kontakt</a></li>
 <li><a href="#" data-toggle="collapse" data-target=
-"menu-language-dropdown">Languages</a>
+"menu-language-dropdown">Sprachen</a>
 <ul id="menu-language-dropdown" class="is-hidden">
-<li><a class="is-open is-active" href=
-"/hyper/docs/proxy-service/configuration">English</a></li>
 <li><a class="" href=
-"/hyper/de/doku/proxy-service/configuration">Deutsch</a></li>
+"/hyper/docs/proxy-service/p2p">English</a></li>
+<li><a class="is-open is-active" href=
+"/hyper/de/doku/proxy-service/p2p">Deutsch</a></li>
 </ul>
 </li>
 </ul>
@@ -176,7 +188,86 @@ Proxy</a></li>
 <div class="comments"></div>
 <section class="section first">
 <div class="content">
-<div class="content markdown"></div>
+<div class="content markdown">
+<h1>Peer-to-Peer (P2P) Proxy</h1>
+<p>Der Proxy unterstützt auch einen Peer-to-Peer (P2P) Modus, der
+es zwei EPS-Servern ermöglicht, eine sichere Verbindung über den
+Proxy herzustellen.</p>
+<h2>Vermittlung von Verbindungen</h2>
+<p>Der Vermittlungsprozess für eine P2P-Verbindung läuft wie folgt
+ab:</p>
+<ul>
+<li>EPS-Server A möchte eine Verbindung zu EPS-Server B
+herstellen.</li>
+<li>A erkennt anhand des Verzeichniseintrags von B, dass er nur
+über den Proxy P erreichbar ist.</li>
+<li>A sendet eine <code>connectionRequest</code> Nachricht über das
+EPS-System an P und gibt dabei den gRPC-Serverkanal von B als
+Empfänger an.</li>
+<li>P erstellt ein Token und sendet über das EPS-System eine
+Nachricht an B, in der er die Anfrage von A weiterleitet und einen
+Proxy-Endpunkt angibt, mit dem er sich verbinden soll.</li>
+<li>B empfängt die Nachricht und leitet sie an den entsprechenden
+Kanal weiter, der sie verarbeitet und eine Verbindung zum Endpunkt
+von P herstellt, wobei der Token als Routing-Schlüssel gesendet
+wird.</li>
+<li>P empfängt die Verbindung von B und speichert sie.</li>
+<li>P sendet eine Bestätigung an A, die den Token und denselben
+Endpunkt enthält.</li>
+<li>A verbindet sich mit dem Endpunkt von P und sendet ebenfalls
+das Token.</li>
+<li>P nimmt die Verbindung von A an, ruft die passende Verbindung
+von B ab und vermittelt den Datenverkehr zwischen ihnen.</li>
+</ul>
+<h2>Testen Sie</h2>
+<p>Um eine Testinfrastruktur einzurichten, führen Sie einfach (in
+verschiedenen Shells):</p>
+<div class="codehilite">
+<pre><code><span class="c1"># run the service directory</span>
+<span class="nv">SD_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/sd-1<span class=
+"w"> </span>sd<span class="w"> </span>run
+<span class="c1"># run the public proxy</span>
+<span class="nv">PROXY_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-1<span class=
+"w"> </span>proxy<span class="w"> </span>run<span class=
+"w"> </span>public
+
+<span class="c1"># run all EPS servers</span>
+<span class="nv">EPS_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/hd-1<span class=
+"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>run
+<span class="nv">EPS_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/hd-2<span class=
+"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>run
+<span class="nv">EPS_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-eps-1<span class=
+"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>run
+</code></pre></div>
+<p>Stellen Sie sicher, dass Sie <code>make sd-setup</code>
+ausführen, um das Dienstverzeichnis mit den erforderlichen
+Einträgen zu aktualisieren. Anschließend sollten Sie in der Lage
+sein, über den Proxy einen Ping vom HD-2 Server über den HD-1
+JSON-RPC Server anzufordern:</p>
+<div class="codehilite">
+<pre><code>curl<span class="w"> </span>--cert<span class=
+"w"> </span>settings/dev/certs/hd-1.crt<span class=
+"w"> </span>--key<span class=
+"w"> </span>settings/dev/certs/hd-1.key<span class=
+"w"> </span>--cacert<span class=
+"w"> </span>settings/dev/certs/root.crt<span class=
+"w"> </span>--resolve<span class=
+"w"> </span>hd-1:5555:127.0.0.1<span class=
+"w"> </span>https://hd-1:5555/jsonrpc<span class=
+"w"> </span>--header<span class="w"> </span><span class=
+"s2">"Content-Type: application/json"</span><span class=
+"w"> </span>--data<span class="w"> </span><span class=
+"s1">'{"method": "hd-2._ping", "id": "1", "params": {}, "jsonrpc": "2.0"}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+</div>
 </div>
 </section>
 </div>

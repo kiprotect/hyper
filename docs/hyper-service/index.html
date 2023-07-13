@@ -7,9 +7,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>EPS documentation | EPS Service - Overview</title>
+<title>EPS documentation | Hyper Service - Overview</title>
 <link rel="stylesheet" type="text/css" href=
-"/eps/docs/static/css/main.css">
+"/hyper/docs/static/css/main.css">
 <script>
   window.MathJax = {
     tex: {
@@ -20,7 +20,7 @@
     }
   };
 </script>
-<script src="/eps/docs/static/js/mathjax/tex-chtml.js" id=
+<script src="/hyper/docs/static/js/mathjax/tex-chtml.js" id=
 "MathJax-script" async></script>
 <style type="text/css">
 pre { line-height: 125%; }
@@ -79,7 +79,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .nt { color: #204a87; font-weight: bold } /* Name.Tag */
 .codehilite .nv { color: #000000 } /* Name.Variable */
 .codehilite .ow { color: #204a87; font-weight: bold } /* Operator.Word */
-.codehilite .w { color: #f8f8f8; text-decoration: underline } /* Text.Whitespace */
+.codehilite .pm { color: #000000; font-weight: bold } /* Punctuation.Marker */
+.codehilite .w { color: #f8f8f8 } /* Text.Whitespace */
 .codehilite .mb { color: #0000cf; font-weight: bold } /* Literal.Number.Bin */
 .codehilite .mf { color: #0000cf; font-weight: bold } /* Literal.Number.Float */
 .codehilite .mh { color: #0000cf; font-weight: bold } /* Literal.Number.Hex */
@@ -124,42 +125,48 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 "is-active">
 <aside class="menu">
 <p class="menu-label" style="text-align:center"><a href=
-"/eps/docs">EPS documentation</a></p>
+"/hyper/docs">EPS documentation</a></p>
 <ul class="menu-list">
-<li><a href="/eps/docs">Start</a></li>
-<li><a href="/eps/docs/getting-started">Getting Started</a></li>
+<li><a href="/hyper/docs">Start</a></li>
+<li><a href="/hyper/docs/getting-started">Getting Started</a></li>
 <li><a class="is-active" href="#" data-toggle="collapse"
-data-target="page-eps-nav">EPS Service</a>
-<ul class="" id="page-eps-nav">
-<li><a href="/eps/docs/eps-service">Overview</a></li>
+data-target="page-hyper-nav">Hyper Service</a>
+<ul class="" id="page-hyper-nav">
+<li><a href="/hyper/docs/hyper-service">Overview</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-proxy-nav">Proxy Service</a>
 <ul class="is-hidden" id="page-proxy-nav">
-<li><a href="/eps/docs/proxy-service">Overview</a></li>
+<li><a href="/hyper/docs/proxy-service">Overview</a></li>
 <li><a href=
-"/eps/docs/proxy-service/installation">Installation</a></li>
+"/hyper/docs/proxy-service/installation">Installation</a></li>
 <li><a href=
-"/eps/docs/proxy-service/configuration">Configuration</a></li>
+"/hyper/docs/proxy-service/configuration">Configuration</a></li>
+<li><a href="/hyper/docs/proxy-service/security">Security & Threat
+Model</a></li>
+<li><a href="/hyper/docs/proxy-service/p2p">Peer-To-Peer (P2P)
+Proxy</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-sd-nav">Service Directory</a>
 <ul class="is-hidden" id="page-sd-nav">
-<li><a href="/eps/docs/service-directory">Overview</a></li>
+<li><a href="/hyper/docs/service-directory">Overview</a></li>
 <li><a href=
-"/eps/docs/service-directory/installation">Installation</a></li>
+"/hyper/docs/service-directory/installation">Installation</a></li>
 <li><a href=
-"/eps/docs/service-directory/configuration">Configuration</a></li>
+"/hyper/docs/service-directory/configuration">Configuration</a></li>
 </ul>
 </li>
-<li><a href="/eps/docs/contact">Contact</a></li>
+<li><a href="/hyper/docs/contact">Contact</a></li>
 <li><a href="#" data-toggle="collapse" data-target=
 "menu-language-dropdown">Languages</a>
 <ul id="menu-language-dropdown" class="is-hidden">
 <li><a class="is-open is-active" href=
-"/eps/docs/eps-service">English</a></li>
+"/hyper/docs/hyper-service">English</a></li>
+<li><a class="" href=
+"/hyper/de/doku/hyper-service">Deutsch</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +186,8 @@ server, unpacking the settings archive we've provided you with and
 running</p>
 <div class="codehilite">
 <pre><code><span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>path/to/settings eps server run
+"o">=</span>path/to/settings<span class="w"> </span>eps<span class=
+"w"> </span>server<span class="w"> </span>run
 </code></pre></div>
 <p>This should open a local JSON-RPC server on port
 <code>5555</code> that you can connect to via TLS (you'll need to
@@ -192,21 +200,26 @@ provided by operator "ls-1", you'd simply post a JSON RPC message
 like this:</p>
 <div class="codehilite">
 <pre><code><span class="p">{</span>
-    <span class="nt">"method"</span><span class=
-"p">:</span> <span class="s2">"ls-1.add"</span><span class=
+<span class="w">    </span><span class=
+"nt">"method"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"ls-1.add"</span><span class=
 "p">,</span>
-    <span class="nt">"id"</span><span class=
-"p">:</span> <span class="s2">"1"</span><span class="p">,</span>
-    <span class="nt">"params"</span><span class=
-"p">:</span> <span class="p">{</span>
-        <span class="nt">"name"</span><span class=
-"p">:</span> <span class="s2">"Ginos"</span><span class=
-"p">,</span>
-        <span class="nt">"id"</span><span class=
-"p">:</span> <span class="s2">"af5ca4da5caa"</span>
-    <span class="p">},</span>
-    <span class="nt">"jsonrpc"</span><span class=
-"p">:</span> <span class="s2">"2.0"</span>
+<span class="w">    </span><span class="nt">"id"</span><span class=
+"p">:</span><span class="w"> </span><span class=
+"s2">"1"</span><span class="p">,</span>
+<span class="w">    </span><span class=
+"nt">"params"</span><span class="p">:</span><span class=
+"w"> </span><span class="p">{</span>
+<span class="w">        </span><span class=
+"nt">"name"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"Ginos"</span><span class="p">,</span>
+<span class="w">        </span><span class=
+"nt">"id"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"af5ca4da5caa"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class=
+"nt">"jsonrpc"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"2.0"</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>The gateway will take care of routing this message to the
@@ -252,11 +265,17 @@ services on different terminals:</p>
 <pre><code><span class=
 "c1"># run the `eps` server of the "locations" operator ls-1</span>
 <span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/ls-1 eps --level debug server run
+"o">=</span>settings/dev/roles/ls-1<span class=
+"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>debug<span class="w"> </span>server<span class=
+"w"> </span>run
 <span class=
 "c1"># run the `eps` server of the health department hd-1</span>
 <span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/hd-1 eps --level debug server run
+"o">=</span>settings/dev/roles/hd-1<span class=
+"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>debug<span class="w"> </span>server<span class=
+"w"> </span>run
 <span class="c1"># run the "locations" service</span>
 eps-ls
 </code></pre></div>
@@ -268,20 +287,30 @@ the database, and <code>lookup</code>, which will look up a
 location based on its <code>name</code>. For example, to add a
 location to the service:</p>
 <div class="codehilite">
-<pre><code>curl --cacert settings/dev/certs/root.crt --resolve hd-1:5555:127.0.0.1 https://hd-1:5555/jsonrpc --header <span class="s2">"Content-Type: application/json"</span> --data <span class="s1">'{"method": "ls-1.add", "id": "1", "params": {"name": "Ginos", "id": "af5ca4da5caa"}, "jsonrpc": "2.0"}'</span> <span class="m">2</span>&gt;/dev/null <span class="p">|</span> jq 
+<pre><code>curl<span class="w"> </span>--cacert<span class=
+"w"> </span>settings/dev/certs/root.crt<span class=
+"w"> </span>--resolve<span class=
+"w"> </span>hd-1:5555:127.0.0.1<span class=
+"w"> </span>https://hd-1:5555/jsonrpc<span class=
+"w"> </span>--header<span class="w"> </span><span class=
+"s2">"Content-Type: application/json"</span><span class=
+"w"> </span>--data<span class="w"> </span><span class=
+"s1">'{"method": "ls-1.add", "id": "1", "params": {"name": "Ginos", "id": "af5ca4da5caa"}, "jsonrpc": "2.0"}'</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>
 </code></pre></div>
 <p>This should return a simple JSON response:</p>
 <div class="codehilite">
 <pre><code><span class="p">{</span>
-  <span class="nt">"jsonrpc"</span><span class=
-"p">:</span> <span class="s2">"2.0"</span><span class="p">,</span>
-  <span class="nt">"result"</span><span class=
-"p">:</span> <span class="p">{</span>
-    <span class="nt">"_"</span><span class=
-"p">:</span> <span class="s2">"ok"</span>
-  <span class="p">},</span>
-  <span class="nt">"id"</span><span class="p">:</span> <span class=
-"s2">"1"</span>
+<span class="w">  </span><span class=
+"nt">"jsonrpc"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"2.0"</span><span class="p">,</span>
+<span class="w">  </span><span class=
+"nt">"result"</span><span class="p">:</span><span class=
+"w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"_"</span><span class=
+"p">:</span><span class="w"> </span><span class="s2">"ok"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"id"</span><span class=
+"p">:</span><span class="w"> </span><span class="s2">"1"</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>The request first went to the health department's
@@ -292,23 +321,34 @@ there. The result was then passsed back along the entire chain.</p>
 <p>You can also perform a lookup of the location you've just
 added:</p>
 <div class="codehilite">
-<pre><code>curl --cacert settings/dev/certs/root.crt --resolve hd-1:5555:127.0.0.1 https://hd-1:5555/jsonrpc --header <span class="s2">"Content-Type: application/json"</span> --data <span class="s1">'{"method": "ls-1.lookup", "id": "1", "params": {"name": "Ginos"}, "jsonrpc": "2.0"}'</span> <span class="m">2</span>&gt;/dev/null <span class="p">|</span> jq .
+<pre><code>curl<span class="w"> </span>--cacert<span class=
+"w"> </span>settings/dev/certs/root.crt<span class=
+"w"> </span>--resolve<span class=
+"w"> </span>hd-1:5555:127.0.0.1<span class=
+"w"> </span>https://hd-1:5555/jsonrpc<span class=
+"w"> </span>--header<span class="w"> </span><span class=
+"s2">"Content-Type: application/json"</span><span class=
+"w"> </span>--data<span class="w"> </span><span class=
+"s1">'{"method": "ls-1.lookup", "id": "1", "params": {"name": "Ginos"}, "jsonrpc": "2.0"}'</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
 <p>which should return</p>
 <div class="codehilite">
 <pre><code><span class="p">{</span>
-  <span class="nt">"jsonrpc"</span><span class=
-"p">:</span> <span class="s2">"2.0"</span><span class="p">,</span>
-  <span class="nt">"result"</span><span class=
-"p">:</span> <span class="p">{</span>
-    <span class="nt">"id"</span><span class=
-"p">:</span> <span class="s2">"af5ca4da5caa"</span><span class=
-"p">,</span>
-    <span class="nt">"name"</span><span class=
-"p">:</span> <span class="s2">"Ginos"</span>
-  <span class="p">},</span>
-  <span class="nt">"id"</span><span class="p">:</span> <span class=
-"s2">"1"</span>
+<span class="w">  </span><span class=
+"nt">"jsonrpc"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"2.0"</span><span class="p">,</span>
+<span class="w">  </span><span class=
+"nt">"result"</span><span class="p">:</span><span class=
+"w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"id"</span><span class=
+"p">:</span><span class="w"> </span><span class=
+"s2">"af5ca4da5caa"</span><span class="p">,</span>
+<span class="w">    </span><span class=
+"nt">"name"</span><span class="p">:</span><span class=
+"w"> </span><span class="s2">"Ginos"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"id"</span><span class=
+"p">:</span><span class="w"> </span><span class="s2">"1"</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>Hence, interacting with the remote "locations" service is just
@@ -321,6 +361,6 @@ instead of just calling <code>lookup</code>.</p>
 </div>
 </div>
 <script defer type="text/javascript" src=
-"/eps/docs/static/js/bulma.js"></script>
+"/hyper/docs/static/js/bulma.js"></script>
 </body>
 </html>

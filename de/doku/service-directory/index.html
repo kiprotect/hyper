@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta name="generator" content=
 "HTML Tidy for HTML5 for Linux version 5.6.0">
@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>EPS documentation | Service Directory - Overview</title>
+<title>EPS-Dokumentation | Service Directory - Übersicht</title>
 <link rel="stylesheet" type="text/css" href=
 "/hyper/docs/static/css/main.css">
 <script>
@@ -109,6 +109,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
+<div id="translation-notice">
+<div class="message is-info">
+<div class="message-body">
+<p>Diese Website wurde größtenteils automatisch von der <a href=
+"/hyper/docs/service-directory">englischen Version</a> übersetzt.
+Wir entschuldigen uns für eventuelle Übersetzungsfehler.</p>
+<span class="x" onclick=
+"localStorage.setItem('translation-notice', true);notice.style.display = 'none'">x</span></div>
+</div>
+</div>
 <script>
 var notice = document.getElementById("translation-notice")
 if (localStorage.getItem("translation-notice") === null && notice !== null){
@@ -125,47 +135,48 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 "is-active">
 <aside class="menu">
 <p class="menu-label" style="text-align:center"><a href=
-"/hyper/docs">EPS documentation</a></p>
+"/hyper/de/doku">EPS-Dokumentation</a></p>
 <ul class="menu-list">
-<li><a href="/hyper/docs">Start</a></li>
-<li><a href="/hyper/docs/getting-started">Getting Started</a></li>
+<li><a href="/hyper/de/doku">Start</a></li>
+<li><a href="/hyper/de/doku/getting-started">Erste
+Schritte</a></li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-hyper-nav">Hyper Service</a>
 <ul class="is-hidden" id="page-hyper-nav">
-<li><a href="/hyper/docs/hyper-service">Overview</a></li>
+<li><a href="/hyper/de/doku/hyper-service">Übersicht</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-proxy-nav">Proxy Service</a>
 <ul class="is-hidden" id="page-proxy-nav">
-<li><a href="/hyper/docs/proxy-service">Overview</a></li>
+<li><a href="/hyper/de/doku/proxy-service">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/installation">Installation</a></li>
+"/hyper/de/doku/proxy-service/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/configuration">Configuration</a></li>
-<li><a href="/hyper/docs/proxy-service/security">Security & Threat
-Model</a></li>
-<li><a href="/hyper/docs/proxy-service/p2p">Peer-To-Peer (P2P)
+"/hyper/de/doku/proxy-service/configuration">Konfiguration</a></li>
+<li><a href="/hyper/de/doku/proxy-service/security">Sicherheit &
+Bedrohungsmodell</a></li>
+<li><a href="/hyper/de/doku/proxy-service/p2p">Peer-To-Peer (P2P)
 Proxy</a></li>
 </ul>
 </li>
 <li><a class="is-active" href="#" data-toggle="collapse"
 data-target="page-sd-nav">Service Directory</a>
 <ul class="" id="page-sd-nav">
-<li><a href="/hyper/docs/service-directory">Overview</a></li>
+<li><a href="/hyper/de/doku/service-directory">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/service-directory/installation">Installation</a></li>
+"/hyper/de/doku/service-directory/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/service-directory/configuration">Configuration</a></li>
+"/hyper/de/doku/service-directory/configuration">Konfiguration</a></li>
 </ul>
 </li>
-<li><a href="/hyper/docs/contact">Contact</a></li>
+<li><a href="/hyper/de/doku/kontakt">Kontakt</a></li>
 <li><a href="#" data-toggle="collapse" data-target=
-"menu-language-dropdown">Languages</a>
+"menu-language-dropdown">Sprachen</a>
 <ul id="menu-language-dropdown" class="is-hidden">
-<li><a class="is-open is-active" href=
-"/hyper/docs/service-directory">English</a></li>
 <li><a class="" href=
+"/hyper/docs/service-directory">English</a></li>
+<li><a class="is-open is-active" href=
 "/hyper/de/doku/service-directory">Deutsch</a></li>
 </ul>
 </li>
@@ -177,56 +188,63 @@ data-target="page-sd-nav">Service Directory</a>
 <section class="section first">
 <div class="content">
 <div class="content markdown">
-<h1>Service Directory</h1>
-<p>The service directory is a central database that contains
-information about all operators in the IRIS ecosystem. It contains
-information about how operators can be reached and which services
-they provide.</p>
-<p>The directory allows EPS servers to determine whether and how
-they can connect to another operator. Operators that only have
-outgoing connectivity (e.g. <code>ga-leipzig</code> in the example
-above) can use the directory to learn that they might receive
-asynchronous responses from other operators (e.g.
-<code>ls-1</code>) and then open outgoing connections to these
-operators through which they can receive replies. EPS servers can
-also use the service directory to determine whether they should
-accept a message from a given operator.</p>
-<p>The service directory implements a group-based permissions
-mechanism. Currently, only <code>yes/no</code> permissions exist
-(i.e. a member of a given group either can or cannot call a given
-service method). More fine-grained permissions (e.g. a contact
-tracing provider can only edit its own entries in the "locations"
-service) need to be implemented by the services themselves. For
-that purpose, the EPS server makes information about the calling
-peer available to the services via a special parameter
-(<code>_caller</code>) that gets passed along with the other RPC
-method parameters. This structure also contains the current entry
-of the caller from the service directory, making it easy for the
-called service to identify and authorize the caller.</p>
-<h2>Service Directory API</h2>
-<p>The EPS server package also provides a <code>sd</code> API
-server command that opens a JSON-RPC server which distributes the
-service directory.</p>
+<h1>Service-Verzeichnis</h1>
+<p>Das Dienstverzeichnis ist eine zentrale Datenbank, die
+Informationen über alle Betreiber im IRIS-Ökosystem enthält. Es
+enthält Informationen darüber, wie die Betreiber erreicht werden
+können und welche Dienste sie anbieten.</p>
+<p>Mit Hilfe des Verzeichnisses können EPS-Server feststellen, ob
+und wie sie sich mit einem anderen Betreiber verbinden können.
+Betreiber, die nur über ausgehende Verbindungen verfügen (z. B.
+<code>ga-leipzig</code> im obigen Beispiel), können das Verzeichnis
+verwenden, um zu erfahren, dass sie möglicherweise asynchrone
+Antworten von anderen Betreibern (z. B. <code>ls-1</code>) erhalten
+und dann ausgehende Verbindungen zu diesen Betreibern öffnen, über
+die sie Antworten erhalten können. EPS-Server können das
+Dienstverzeichnis auch verwenden, um festzustellen, ob sie eine
+Nachricht von einem bestimmten Betreiber annehmen sollen.</p>
+<p>Das Dienstverzeichnis implementiert einen gruppenbasierten
+Berechtigungsmechanismus. Derzeit existieren nur
+<code>yes/no</code> Berechtigungen (d. h. ein Mitglied einer
+bestimmten Gruppe kann eine bestimmte Dienstmethode entweder
+aufrufen oder nicht). Feinkörnigere Berechtigungen (z. B. kann ein
+Anbieter von Kontaktverfolgungen nur seine eigenen Einträge im
+Dienst "Standorte" bearbeiten) müssen von den Diensten selbst
+implementiert werden. Zu diesem Zweck stellt der EPS-Server den
+Diensten Informationen über die aufrufende Gegenstelle über einen
+speziellen Parameter (<code>_caller</code>) zur Verfügung, der
+zusammen mit den anderen RPC-Methodenparametern übergeben wird.
+Diese Struktur enthält auch den aktuellen Eintrag des Aufrufers aus
+dem Dienstverzeichnis, was es dem aufgerufenen Dienst erleichtert,
+den Aufrufer zu identifizieren und zu autorisieren.</p>
+<h2>Dienstverzeichnis-API</h2>
+<p>Das EPS-Serverpaket bietet auch einen <code>sd</code>
+API-Server-Befehl, der einen JSON-RPC-Server öffnet, der das
+Dienstverzeichnis verteilt.</p>
 <div class="codehilite">
 <pre><code><span class="nv">SD_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/sd-1<span class=
 "w"> </span>sd<span class="w"> </span>run
 </code></pre></div>
-<p>By default, this will store and retrieve change records from a
-file located at <code>/tmp/service-directory.records</code>. To
-reset the service directory, simply delete this file.</p>
-<h2>Signature Schema</h2>
-<p>All changes in the service directory are cryptographically
-signed. For this, every actor in the EPS system has a pair of ECDSA
-keys and an accompanying certificate. The service directory is
-constructed from a series of <strong>change records</strong>. Each
-change record contains the name of an <strong>operator</strong>, a
-<strong>section</strong> and the actual data that should be
-changed.</p>
-<h3>Submitting Change records</h3>
-<p>Change records can be submitted to the service directory via the
-JSON-RPC API. The <code>eps</code> CLI provides a function for this
-via the <code>sd submit-records</code>:</p>
+<p>Standardmäßig werden damit Änderungsdatensätze in einer Datei
+gespeichert und abgerufen, die sich unter
+<code>/tmp/service-directory.records</code> befindet. Um das
+Dienstverzeichnis zurückzusetzen, löschen Sie einfach diese
+Datei.</p>
+<h2>Signatur-Schema</h2>
+<p>Alle Änderungen im Dienstverzeichnis werden kryptografisch
+signiert. Dazu besitzt jeder Akteur im EPS-System ein Paar
+ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das
+Serviceverzeichnis ist aus einer Reihe von
+<strong>Änderungsdatensätzen</strong> aufgebaut. Jeder
+Änderungssatz enthält den Namen eines <strong>Akteurs</strong>,
+einen <strong>Abschnitt</strong> und die eigentlichen Daten, die
+geändert werden sollen.</p>
+<h3>Einreichen von Änderungsdatensätzen</h3>
+<p>Änderungsdatensätze können über die JSON-RPC-API an das
+Dienstverzeichnis übermittelt werden. Die <code>eps</code> CLI
+bietet dafür eine Funktion über die <code>sd submit-records</code>
+:</p>
 <div class="codehilite">
 <pre><code><span class="nv">EPS_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
@@ -234,18 +252,18 @@ via the <code>sd submit-records</code>:</p>
 "w"> </span>submit-records<span class=
 "w"> </span>settings/dev/directory/001_base.json
 </code></pre></div>
-<p>You can also reset the service directory by specifying the
-<code>--reset</code> flag:</p>
+<p>Sie können das Dienstverzeichnis auch zurücksetzen, indem Sie
+das Flag <code>--reset</code> angeben:</p>
 <pre><code>EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records --reset settings/dev/directory/001_base.json
 </code></pre>
-<p><strong>Warning:</strong> This will erase all previous records
-from the service directory. Only operators with an
-<code>sd-admin</code> role can do this.</p>
-<h3>Retrieving entries and records</h3>
-<p>To retrieve change records and entries from the service
-directory API you can use the <code>getRecords(since)</code>,
-<code>getEntries()</code> and <code>getEntry(name)</code> RPC
-calls, e.g. like this:</p>
+<p><strong>Warnung:</strong> Dadurch werden alle vorherigen
+Datensätze aus dem Dienstverzeichnis gelöscht. Nur Bediener mit
+einer <code>sd-admin</code> Rolle können dies tun.</p>
+<h3>Abrufen von Einträgen und Datensätzen</h3>
+<p>Um Änderungsdatensätze und -einträge von der
+Dienstverzeichnis-API abzurufen, können Sie die RPC-Aufrufe
+<code>getRecords(since)</code>, <code>getEntries()</code> und
+<code>getEntry(name)</code> verwenden, z. B. wie folgt:</p>
 <div class="codehilite">
 <pre><code>curl<span class="w"> </span>--key<span class=
 "w"> </span>settings/dev/certs/hd-1.key<span class=
@@ -261,18 +279,19 @@ calls, e.g. like this:</p>
 "w"> </span>--data<span class="w"> </span><span class=
 "s1">'{"jsonrpc": "2.0", "method": "getRecords", "params": {"since": 0}}'</span>
 </code></pre></div>
-<h3>Signing Data</h3>
-<p>The <code>sdh</code> tool includes a <code>sign</code> command
-that allows us to sign arbitrary JSON data. It uses the signing
-signatures generated by the <code>make certs</code> Make command.
-For example, to sign a JSON file, simply use</p>
+<h3>Signierdaten</h3>
+<p>Das Tool <code>sdh</code> enthält einen Befehl
+<code>sign</code>, mit dem wir beliebige JSON-Daten signieren
+können. Er verwendet die Signaturen, die mit dem Befehl <code>make
+certs</code> Make erzeugt werden. Um zum Beispiel eine JSON-Datei
+zu signieren, verwenden Sie einfach</p>
 <pre><code># define the SD settings
 export SD_SETTINGS=settings/dev/roles/private-proxy-1/sdh
 
 #sign a service directory entry
 sdh sign settings/dev/roles/private-proxy-1/sdh/entry.json
 </code></pre>
-<p>The output should e.g. look like this:</p>
+<p>Die Ausgabe sollte z. B. so aussehen:</p>
 <div class="codehilite">
 <pre><code><span class="p">{</span>
 <span class="w">  </span><span class=
@@ -299,9 +318,9 @@ sdh sign settings/dev/roles/private-proxy-1/sdh/entry.json
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Before importing such data, we can check the signature using the
-<code>verify</code> command (you need to specify the expected
-<code>name</code> of the signer):</p>
+<p>Bevor wir solche Daten importieren, können wir die Signatur mit
+dem Befehl <code>verify</code> überprüfen (Sie müssen die erwartete
+<code>name</code> des Unterzeichners angeben):</p>
 <div class="codehilite">
 <pre><code><span class="nb">export</span><span class=
 "w"> </span><span class="nv">SD_SETTINGS</span><span class=
@@ -309,8 +328,8 @@ sdh sign settings/dev/roles/private-proxy-1/sdh/entry.json
 sdh<span class="w"> </span>verify<span class=
 "w"> </span>signed.json<span class="w"> </span>private-proxy-1
 </code></pre></div>
-<p>If the signature is valid the exit code will be <code>0</code>,
-otherwise <code>1</code>.</p>
+<p>Wenn die Signatur gültig ist, lautet der Exit-Code
+<code>0</code>, andernfalls <code>1</code>.</p>
 </div>
 </div>
 </section>
