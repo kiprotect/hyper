@@ -9,9 +9,6 @@ directory:
   settings:
     path: "/$DIR/directory.json"
 channels: # defines all the channels that we want to open when starting the server
-  - name: Stdout channel
-    type: stdout
-    settings: {}
   - name: main gRPC server # accepts incoming gRPC connections to deliver and receive messages
     type: grpc_server
     settings:
@@ -37,6 +34,7 @@ channels: # defines all the channels that we want to open when starting the serv
         ca_certificate_files: ["/$DIR/certs/root.crt"]
         certificate_file: "/$DIR/certs/$OP.crt"
         key_file: "/$DIR/certs/$OP.key"
+        verify_client: false
   - name: main JSON-RPC client # creates outgoing JSONRPC connections to deliver and receive messages
     type: jsonrpc_client
     settings:

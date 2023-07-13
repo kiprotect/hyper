@@ -60,6 +60,8 @@ func (c *JSONRPCClientChannel) Close() error {
 
 func (c *JSONRPCClientChannel) DeliverRequest(request *hyper.Request) (*hyper.Response, error) {
 
+	hyper.Log.Info("Delivering request via JSON-RPC...")
+
 	client := jsonrpc.MakeClient(c.Settings)
 	jsonrpcRequest := &jsonrpc.Request{}
 	jsonrpcRequest.FromHyperRequest(request)
@@ -76,6 +78,9 @@ func (c *JSONRPCClientChannel) DeliverRequest(request *hyper.Request) (*hyper.Re
 		hyper.Log.Error(err)
 		return nil, fmt.Errorf("error calling JSON-RPC server: %w", err)
 	}
+
+	hyper.Log.Info("Delivered request...")
+
 	return jsonrpcResponse.ToHyperResponse(), nil
 }
 

@@ -47,6 +47,7 @@ channels: # defines all the channels that we want to open when starting the serv
         ca_certificate_files: ["/$DIR/../../certs/root.crt"]
         certificate_file: "/$DIR/../../certs/hd-1.crt"
         key_file: "/$DIR/../../certs/hd-1.key"
+        verify_client: false
 signing:
   certificate_file: "/$DIR/../../certs/hd-1-sign.crt"
   key_file: "/$DIR/../../certs/hd-1-sign.key"

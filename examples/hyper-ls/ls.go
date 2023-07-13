@@ -30,6 +30,9 @@ import (
 var locationsDB = make(map[string]*Location)
 
 func handler(context *jsonrpc.Context) *jsonrpc.Response {
+
+	hyper.Log.Info("Got a request!")
+
 	switch context.Request.Method {
 	case "add":
 		if params, err := AddLocationForm.Validate(context.Request.Params); err != nil {
@@ -96,6 +99,7 @@ func main() {
 
 	settings := &jsonrpc.JSONRPCServerSettings{
 		BindAddress: "localhost:6666",
+		Path: "/jsonrpc",
 	}
 
 	if server, err := jsonrpc.MakeJSONRPCServer(settings, handler); err != nil {
