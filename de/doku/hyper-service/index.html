@@ -189,16 +189,17 @@ Proxy</a></li>
 <div class="content markdown">
 <h1>Integration</h1>
 <p>Die Integration in die IRIS-Infrastruktur ist einfach (hoffen
-wir). Zuerst müssen Sie den <code>eps</code> Server zusammen mit
-den Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung
-gestellt haben, bereitstellen. Dies ist so einfach wie das
-Herunterladen der neuesten <code>eps</code> Version von unserem
-Server, das Entpacken des Einstellungsarchivs, das wir Ihnen zur
-Verfügung gestellt haben, und das Ausführen von</p>
+wir). Zunächst müssen Sie den <code>hyper</code> Server zusammen
+mit den Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung
+gestellt haben, einrichten. Dazu laden Sie einfach die neueste
+Version von <code>hyper</code> von unserem Server herunter,
+entpacken das Archiv mit den Einstellungen, das wir Ihnen zur
+Verfügung gestellt haben, und führen</p>
 <div class="codehilite">
-<pre><code><span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>path/to/settings<span class="w"> </span>eps<span class=
-"w"> </span>server<span class="w"> </span>run
+<pre><code><span class="nv">HYPER_SETTINGS</span><span class=
+"o">=</span>path/to/settings<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
+"w"> </span>run
 </code></pre></div>
 <p>Dies sollte einen lokalen JSON-RPC-Server auf Port
 <code>5555</code> öffnen, mit dem Sie sich über TLS verbinden
@@ -243,34 +244,34 @@ eingehende Anfragen mit der gleichen Syntax wie oben zugestellt
 werden sollen.</p>
 <p>Das war's!</p>
 <h2>Asynchrone Anrufe</h2>
-<p>Die Anrufe, die wir oben gesehen haben, waren alle synchron, d.
-h. ein Anruf führte zu einer direkten Antwort. Manchmal müssen
-Aufrufe jedoch asynchron sein, z. B. weil die Beantwortung Zeit
-benötigt. Wenn Sie einen asynchronen Aufruf an einen anderen Dienst
-tätigen, erhalten Sie zunächst eine Bestätigung zurück. Sobald der
-von Ihnen aufgerufene Dienst eine Antwort bereit hat, sendet er
-diese über das Netzwerk <code>eps</code> an Sie zurück, wobei er
-dieselbe <code>id</code> verwendet, die Sie angegeben haben
-(wodurch Sie die Antwort mit Ihrer Anfrage abgleichen können).
-Ebenso können Sie auf Aufrufe von anderen Diensten asynchron
-reagieren, indem Sie die Antwort einfach mit dem Methodennamen
-<code>respond</code> (ohne Dienstnamen) an Ihren lokalen
-JSON-RPC-Server schieben. Vergessen Sie nicht, dieselbe
-<code>id</code> anzugeben, die Sie mit der ursprünglichen Anfrage
-erhalten haben, da diese die "Rücksendeadresse" der Anfrage
-enthält.</p>
+<p>Die Anrufe, die wir oben gesehen haben, waren alle synchron,
+d.h. ein Anruf führte zu einer direkten Antwort. Manchmal sind
+jedoch asynchrone Anrufe erforderlich, z.B. weil die Beantwortung
+der Anrufe Zeit in Anspruch nimmt. Wenn Sie einen asynchronen
+Aufruf an einen anderen Dienst tätigen, erhalten Sie zunächst eine
+Bestätigung zurück. Sobald der von Ihnen aufgerufene Dienst eine
+Antwort bereit hat, sendet er diese über das Netzwerk
+<code>hyper</code> an Sie zurück, wobei er dieselbe <code>id</code>
+verwendet, die Sie angegeben haben (wodurch Sie die Antwort Ihrer
+Anfrage zuordnen können). Ebenso können Sie auf Aufrufe von anderen
+Diensten asynchron reagieren, indem Sie die Antwort einfach an
+Ihren lokalen JSON-RPC-Server mit dem Methodennamen
+<code>respond</code> (ohne den Namen des Dienstes) weiterleiten.
+Vergessen Sie nicht, dieselbe <code>id</code> anzugeben, die Sie
+mit der ursprünglichen Anfrage erhalten haben, da diese die
+"Rücksendeadresse" der Anfrage enthält.</p>
 <h2>Integration Beispiel</h2>
 <p>Um eine konkrete Vorstellung von der Integration mit der
-IRIS-Infrastruktur unter Verwendung des EPS-Servers zu bekommen,
+IRIS-Infrastruktur unter Verwendung des Hyper-Servers zu erhalten,
 haben wir ein einfaches Demo-Setup erstellt, das alle Komponenten
 veranschaulicht. Die Demo besteht aus drei Komponenten:</p>
 <ul>
-<li>Ein <code>eps</code> Server, der einen <code>health
+<li>Ein <code>hyper</code> Server, der eine <code>health
 department</code> simuliert, namens <code>hd-1</code></li>
-<li>Eine <code>eps</code> Server-Simulation eines Betreibers, der
+<li>Eine <code>hyper</code> Server-Simulation eines Betreibers, der
 einen "Standort"-Dienst anbietet, namens <code>ls-1</code></li>
 <li>Der tatsächliche vom Betreiber angebotene Ortungsdienst
-<code>eps-ls</code> <code>ls-1</code></li>
+<code>hyper-ls</code> <code>ls-1</code></li>
 </ul>
 <h2>Aufstehen und loslegen</h2>
 <p>Lesen Sie bitte zuerst in der README nach, wie Sie alle
@@ -279,21 +280,21 @@ Starten Sie dann die einzelnen Dienste auf verschiedenen
 Terminals:</p>
 <div class="codehilite">
 <pre><code><span class=
-"c1"># run the `eps` server of the "locations" operator ls-1</span>
-<span class="nv">EPS_SETTINGS</span><span class=
+"c1"># run the `hyper` server of the "locations" operator ls-1</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/ls-1<span class=
-"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>hyper<span class="w"> </span>--level<span class=
 "w"> </span>debug<span class="w"> </span>server<span class=
 "w"> </span>run
 <span class=
-"c1"># run the `eps` server of the health department hd-1</span>
-<span class="nv">EPS_SETTINGS</span><span class=
+"c1"># run the `hyper` server of the health department hd-1</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
-"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>hyper<span class="w"> </span>--level<span class=
 "w"> </span>debug<span class="w"> </span>server<span class=
 "w"> </span>run
 <span class="c1"># run the "locations" service</span>
-eps-ls
+hyper-ls
 </code></pre></div>
 <h2>Testen</h2>
 <p>Jetzt sollte Ihr System einsatzbereit sein. Der Demo-Dienst
@@ -329,12 +330,12 @@ Beispiel, um dem Dienst einen Ort hinzuzufügen:</p>
 "p">:</span><span class="w"> </span><span class="s2">"1"</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Die Anfrage ging zunächst an den <code>eps</code> Server des
-Gesundheitsamtes, wurde über gRPC zunächst an den <code>ls-1</code>
-'s <code>eps</code> Server weitergeleitet und wurde dann an die
-JSON-RPC API des dort laufenden lokalen <code>eps-ls</code>
-Dienstes übergeben. Das Ergebnis wurde dann entlang der gesamten
-Kette zurückgereicht.</p>
+<p>Die Anfrage ging zunächst an den <code>hyper</code> Server des
+Gesundheitsamtes, wurde zunächst über gRPC an den
+<code>hyper</code> Server von <code>ls-1</code> weitergeleitet und
+dann an die JSON-RPC API des dort laufenden lokalen
+<code>hyper-ls</code> Dienstes übergeben. Das Ergebnis wurde dann
+über die gesamte Kette zurückgereicht.</p>
 <p>Sie können auch eine Suche nach dem Ort durchführen, den Sie
 gerade hinzugefügt haben:</p>
 <div class="codehilite">

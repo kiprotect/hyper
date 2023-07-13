@@ -182,13 +182,13 @@ data-target="page-sd-nav">Service Directory</a>
 information about all operators in the IRIS ecosystem. It contains
 information about how operators can be reached and which services
 they provide.</p>
-<p>The directory allows EPS servers to determine whether and how
+<p>The directory allows Hyper servers to determine whether and how
 they can connect to another operator. Operators that only have
 outgoing connectivity (e.g. <code>ga-leipzig</code> in the example
 above) can use the directory to learn that they might receive
 asynchronous responses from other operators (e.g.
 <code>ls-1</code>) and then open outgoing connections to these
-operators through which they can receive replies. EPS servers can
+operators through which they can receive replies. Hyper servers can
 also use the service directory to determine whether they should
 accept a message from a given operator.</p>
 <p>The service directory implements a group-based permissions
@@ -197,14 +197,14 @@ mechanism. Currently, only <code>yes/no</code> permissions exist
 service method). More fine-grained permissions (e.g. a contact
 tracing provider can only edit its own entries in the "locations"
 service) need to be implemented by the services themselves. For
-that purpose, the EPS server makes information about the calling
+that purpose, the Hyper server makes information about the calling
 peer available to the services via a special parameter
 (<code>_caller</code>) that gets passed along with the other RPC
 method parameters. This structure also contains the current entry
 of the caller from the service directory, making it easy for the
 called service to identify and authorize the caller.</p>
 <h2>Service Directory API</h2>
-<p>The EPS server package also provides a <code>sd</code> API
+<p>The Hyper server package also provides a <code>sd</code> API
 server command that opens a JSON-RPC server which distributes the
 service directory.</p>
 <div class="codehilite">
@@ -217,26 +217,26 @@ file located at <code>/tmp/service-directory.records</code>. To
 reset the service directory, simply delete this file.</p>
 <h2>Signature Schema</h2>
 <p>All changes in the service directory are cryptographically
-signed. For this, every actor in the EPS system has a pair of ECDSA
-keys and an accompanying certificate. The service directory is
-constructed from a series of <strong>change records</strong>. Each
-change record contains the name of an <strong>operator</strong>, a
-<strong>section</strong> and the actual data that should be
-changed.</p>
+signed. For this, every actor in the Hyper system has a pair of
+ECDSA keys and an accompanying certificate. The service directory
+is constructed from a series of <strong>change records</strong>.
+Each change record contains the name of an
+<strong>operator</strong>, a <strong>section</strong> and the
+actual data that should be changed.</p>
 <h3>Submitting Change records</h3>
 <p>Change records can be submitted to the service directory via the
-JSON-RPC API. The <code>eps</code> CLI provides a function for this
-via the <code>sd submit-records</code>:</p>
+JSON-RPC API. The <code>hyper</code> CLI provides a function for
+this via the <code>sd submit-records</code>:</p>
 <div class="codehilite">
-<pre><code><span class="nv">EPS_SETTINGS</span><span class=
+<pre><code><span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
-"w"> </span>eps<span class="w"> </span>sd<span class=
+"w"> </span>hyper<span class="w"> </span>sd<span class=
 "w"> </span>submit-records<span class=
 "w"> </span>settings/dev/directory/001_base.json
 </code></pre></div>
 <p>You can also reset the service directory by specifying the
 <code>--reset</code> flag:</p>
-<pre><code>EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records --reset settings/dev/directory/001_base.json
+<pre><code>HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records --reset settings/dev/directory/001_base.json
 </code></pre>
 <p><strong>Warning:</strong> This will erase all previous records
 from the service directory. Only operators with an

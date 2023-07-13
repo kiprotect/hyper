@@ -193,32 +193,32 @@ data-target="page-sd-nav">Service Directory</a>
 Informationen über alle Betreiber im IRIS-Ökosystem enthält. Es
 enthält Informationen darüber, wie die Betreiber erreicht werden
 können und welche Dienste sie anbieten.</p>
-<p>Mit Hilfe des Verzeichnisses können EPS-Server feststellen, ob
+<p>Mit Hilfe des Verzeichnisses können Hyper-Server feststellen, ob
 und wie sie sich mit einem anderen Betreiber verbinden können.
-Betreiber, die nur über ausgehende Verbindungen verfügen (z. B.
+Betreiber, die nur über ausgehende Verbindungen verfügen (z.B.
 <code>ga-leipzig</code> im obigen Beispiel), können das Verzeichnis
-verwenden, um zu erfahren, dass sie möglicherweise asynchrone
-Antworten von anderen Betreibern (z. B. <code>ls-1</code>) erhalten
+nutzen, um zu erfahren, dass sie möglicherweise asynchrone
+Antworten von anderen Betreibern erhalten (z.B. <code>ls-1</code>)
 und dann ausgehende Verbindungen zu diesen Betreibern öffnen, über
-die sie Antworten erhalten können. EPS-Server können das
+die sie Antworten erhalten können. Hyper-Server können das
 Dienstverzeichnis auch verwenden, um festzustellen, ob sie eine
 Nachricht von einem bestimmten Betreiber annehmen sollen.</p>
 <p>Das Dienstverzeichnis implementiert einen gruppenbasierten
-Berechtigungsmechanismus. Derzeit existieren nur
-<code>yes/no</code> Berechtigungen (d. h. ein Mitglied einer
-bestimmten Gruppe kann eine bestimmte Dienstmethode entweder
-aufrufen oder nicht). Feinkörnigere Berechtigungen (z. B. kann ein
-Anbieter von Kontaktverfolgungen nur seine eigenen Einträge im
-Dienst "Standorte" bearbeiten) müssen von den Diensten selbst
-implementiert werden. Zu diesem Zweck stellt der EPS-Server den
+Berechtigungsmechanismus. Derzeit gibt es nur <code>yes/no</code>
+Berechtigungen (d.h. ein Mitglied einer bestimmten Gruppe kann eine
+bestimmte Dienstmethode entweder aufrufen oder nicht). Feiner
+abgestufte Berechtigungen (z.B. kann ein Anbieter von
+Kontaktverfolgungen nur seine eigenen Einträge im Dienst
+"Standorte" bearbeiten) müssen von den Diensten selbst
+implementiert werden. Zu diesem Zweck stellt der Hyper-Server den
 Diensten Informationen über die aufrufende Gegenstelle über einen
 speziellen Parameter (<code>_caller</code>) zur Verfügung, der
 zusammen mit den anderen RPC-Methodenparametern übergeben wird.
 Diese Struktur enthält auch den aktuellen Eintrag des Aufrufers aus
-dem Dienstverzeichnis, was es dem aufgerufenen Dienst erleichtert,
-den Aufrufer zu identifizieren und zu autorisieren.</p>
+dem Dienstverzeichnis, so dass der aufgerufene Dienst den Aufrufer
+leicht identifizieren und autorisieren kann.</p>
 <h2>Dienstverzeichnis-API</h2>
-<p>Das EPS-Serverpaket bietet auch einen <code>sd</code>
+<p>Das Hyper-Server-Paket bietet auch einen <code>sd</code>
 API-Server-Befehl, der einen JSON-RPC-Server öffnet, der das
 Dienstverzeichnis verteilt.</p>
 <div class="codehilite">
@@ -233,28 +233,28 @@ Dienstverzeichnis zurückzusetzen, löschen Sie einfach diese
 Datei.</p>
 <h2>Signatur-Schema</h2>
 <p>Alle Änderungen im Dienstverzeichnis werden kryptografisch
-signiert. Dazu besitzt jeder Akteur im EPS-System ein Paar
+signiert. Dazu verfügt jeder Akteur im Hyper-System über ein Paar
 ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das
-Serviceverzeichnis ist aus einer Reihe von
+Dienstverzeichnis ist aus einer Reihe von
 <strong>Änderungsdatensätzen</strong> aufgebaut. Jeder
 Änderungssatz enthält den Namen eines <strong>Akteurs</strong>,
 einen <strong>Abschnitt</strong> und die eigentlichen Daten, die
 geändert werden sollen.</p>
 <h3>Einreichen von Änderungsdatensätzen</h3>
 <p>Änderungsdatensätze können über die JSON-RPC-API an das
-Dienstverzeichnis übermittelt werden. Die <code>eps</code> CLI
-bietet dafür eine Funktion über die <code>sd submit-records</code>
-:</p>
+Dienstverzeichnis übermittelt werden. Die <code>hyper</code> CLI
+bietet dafür eine Funktion über die <code>sd
+submit-records</code>:</p>
 <div class="codehilite">
-<pre><code><span class="nv">EPS_SETTINGS</span><span class=
+<pre><code><span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
-"w"> </span>eps<span class="w"> </span>sd<span class=
+"w"> </span>hyper<span class="w"> </span>sd<span class=
 "w"> </span>submit-records<span class=
 "w"> </span>settings/dev/directory/001_base.json
 </code></pre></div>
 <p>Sie können das Dienstverzeichnis auch zurücksetzen, indem Sie
 das Flag <code>--reset</code> angeben:</p>
-<pre><code>EPS_SETTINGS=settings/dev/roles/hd-1 eps sd submit-records --reset settings/dev/directory/001_base.json
+<pre><code>HYPER_SETTINGS=settings/dev/roles/hd-1 hyper sd submit-records --reset settings/dev/directory/001_base.json
 </code></pre>
 <p><strong>Warnung:</strong> Dadurch werden alle vorherigen
 Datensätze aus dem Dienstverzeichnis gelöscht. Nur Bediener mit

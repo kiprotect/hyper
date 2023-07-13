@@ -178,16 +178,17 @@ Proxy</a></li>
 <div class="content">
 <div class="content markdown">
 <h1>Getting Started</h1>
-<p>Integrating with the IRIS infrastructure using the EPS server is
-easy (we hope). First, you need to deploy the <code>eps</code>
+<p>Integrating with the IRIS infrastructure using the Hyper server
+is easy (we hope). First, you need to deploy the <code>hyper</code>
 server together with the settings and certificates we've provided
-to you. This is as easy as downloading the latest <code>eps</code>
-version from our server, unpacking the settings archive we've
-provided you with and running</p>
+to you. This is as easy as downloading the latest
+<code>hyper</code> version from our server, unpacking the settings
+archive we've provided you with and running</p>
 <div class="codehilite">
-<pre><code><span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>path/to/settings<span class="w"> </span>eps<span class=
-"w"> </span>server<span class="w"> </span>run
+<pre><code><span class="nv">HYPER_SETTINGS</span><span class=
+"o">=</span>path/to/settings<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
+"w"> </span>run
 </code></pre></div>
 <p>This should open a local JSON-RPC server on port
 <code>5555</code> that you can connect to via TLS (you'll need to
@@ -236,7 +237,7 @@ asynchronous though, e.g. because replying to them takes time. If
 you make an asynchronous call to another service, you'll get back
 an acknowledgment first. As soon as the service you've called has a
 response ready, it will send it back to your via the
-<code>eps</code> network, using the same <code>id</code> you
+<code>hyper</code> network, using the same <code>id</code> you
 provided (which enables you to match the response to your request).
 Likewise, you can respond to calls from other services in an
 asynchronous way, simply pushing the response to your local
@@ -246,16 +247,16 @@ that you received with the original request, as this will contain
 the "return address" of the request.</p>
 <h2>Integration Example</h2>
 <p>To get a concrete idea of how to integrate with the IRIS
-infrastructure using the EPS server we have created a simple demo
+infrastructure using the Hyper server we have created a simple demo
 setup that illustrates all components. The demo consists of three
 components:</p>
 <ul>
-<li>An <code>eps</code> server simulating a <code>health
+<li>An <code>hyper</code> server simulating a <code>health
 department</code>, named <code>hd-1</code></li>
-<li>An <code>eps</code> server simulation an operator offering a
+<li>An <code>hyper</code> server simulation an operator offering a
 "locations" service, named <code>ls-1</code></li>
-<li>The actual location service <code>eps-ls</code> offered by the
-operator <code>ls-1</code></li>
+<li>The actual location service <code>hyper-ls</code> offered by
+the operator <code>ls-1</code></li>
 </ul>
 <h2>Getting Up And Running</h2>
 <p>First, please check the README on how to create all necessary
@@ -263,21 +264,21 @@ TLS certificates and build the software. Then, start the individual
 services on different terminals:</p>
 <div class="codehilite">
 <pre><code><span class=
-"c1"># run the `eps` server of the "locations" operator ls-1</span>
-<span class="nv">EPS_SETTINGS</span><span class=
+"c1"># run the `hyper` server of the "locations" operator ls-1</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/ls-1<span class=
-"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>hyper<span class="w"> </span>--level<span class=
 "w"> </span>debug<span class="w"> </span>server<span class=
 "w"> </span>run
 <span class=
-"c1"># run the `eps` server of the health department hd-1</span>
-<span class="nv">EPS_SETTINGS</span><span class=
+"c1"># run the `hyper` server of the health department hd-1</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
-"w"> </span>eps<span class="w"> </span>--level<span class=
+"w"> </span>hyper<span class="w"> </span>--level<span class=
 "w"> </span>debug<span class="w"> </span>server<span class=
 "w"> </span>run
 <span class="c1"># run the "locations" service</span>
-eps-ls
+hyper-ls
 </code></pre></div>
 <h2>Testing</h2>
 <p>Now your system should be up and running. The demo "locations"
@@ -314,9 +315,9 @@ location to the service:</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>The request first went to the health department's
-<code>eps</code> server, was first routed to <code>ls-1</code>'s
-<code>eps</code> server via gRPC and was then passed to the
-JSON-RPC API of the local <code>eps-ls</code> service running
+<code>hyper</code> server, was first routed to <code>ls-1</code>'s
+<code>hyper</code> server via gRPC and was then passed to the
+JSON-RPC API of the local <code>hyper-ls</code> service running
 there. The result was then passsed back along the entire chain.</p>
 <p>You can also perform a lookup of the location you've just
 added:</p>

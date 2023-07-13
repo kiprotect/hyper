@@ -177,11 +177,11 @@ Proxy</a></li>
 <section class="section first">
 <div class="content">
 <div class="content markdown">
-<h1>The EPS TLS-Passthrough Proxy</h1>
-<p>The EPS server provides a TLS-passthrough proxy service that can
-forward incoming TLS connections from public clients to an internal
-server without terminating the TLS connection. The service consists
-of two servers:</p>
+<h1>The Hyper TLS-Passthrough Proxy</h1>
+<p>The Hyper server provides a TLS-passthrough proxy service that
+can forward incoming TLS connections from public clients to an
+internal server without terminating the TLS connection. The service
+consists of two servers:</p>
 <ul>
 <li>A <strong>public proxy</strong> that listens on a publicly
 available TCP port for incoming TLS connections, and on another TCP
@@ -192,14 +192,14 @@ when a connection is available for it. It forwards that connection
 (again without terminating TLS) to an internal server that then
 handles it.</li>
 </ul>
-<p>Both the private and the public proxies have accompanying EPS
+<p>Both the private and the public proxies have accompanying Hyper
 servers through which they communicate with each other.</p>
 <p>The private proxy can <strong>announce</strong> incoming
 connections to the public proxy. Whenever a new connection reaches
 that proxy, it compares it to the announcements it received. If a
 match is found, it notifies the private proxy of an incoming
-connection via the EPS network, also sending it a random token. The
-private proxy opens a connection to the public proxy, sends the
+connection via the Hyper network, also sending it a random token.
+The private proxy opens a connection to the public proxy, sends the
 token and takes over the TCP stream. It forwards it to an internal
 server.</p>
 <h2>Demo</h2>
@@ -224,15 +224,17 @@ internal-server<span class="w"> </span><span class=
 "o">=</span>settings/dev/roles/private-proxy-1<span class=
 "w"> </span>proxy<span class="w"> </span>run<span class=
 "w"> </span>private
-<span class="c1"># fourth terminal (public proxy EPS server)</span>
-<span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-eps-1<span class=
-"w"> </span>eps<span class="w"> </span>server<span class=
+<span class=
+"c1"># fourth terminal (public proxy Hyper server)</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-hyper-1<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
-<span class="c1"># fifth terminal (private proxy EPS server)</span>
-<span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/private-proxy-eps-1<span class=
-"w"> </span>eps<span class="w"> </span>server<span class=
+<span class=
+"c1"># fifth terminal (private proxy Hyper server)</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/private-proxy-hyper-1<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
 </code></pre></div>
 <p>When all services are up and running you should be able to send
@@ -253,7 +255,7 @@ a request to the proxy via</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>The request you've sent reached the local TLS server on port
-8888 via the two proxies, which communicated through the EPS
+8888 via the two proxies, which communicated through the Hyper
 network to broker the connection. Neat, isn't it?</p>
 <h2>Stress Testing</h2>
 <p>You can also stress-test the server with parallel requests using

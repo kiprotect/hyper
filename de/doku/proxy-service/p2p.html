@@ -191,20 +191,20 @@ Proxy</a></li>
 <div class="content markdown">
 <h1>Peer-to-Peer (P2P) Proxy</h1>
 <p>Der Proxy unterstützt auch einen Peer-to-Peer (P2P) Modus, der
-es zwei EPS-Servern ermöglicht, eine sichere Verbindung über den
+es zwei Hyper-Servern ermöglicht, eine sichere Verbindung über den
 Proxy herzustellen.</p>
 <h2>Vermittlung von Verbindungen</h2>
 <p>Der Vermittlungsprozess für eine P2P-Verbindung läuft wie folgt
 ab:</p>
 <ul>
-<li>EPS-Server A möchte eine Verbindung zu EPS-Server B
+<li>Hyper-Server A möchte eine Verbindung zu Hyper-Server B
 herstellen.</li>
 <li>A erkennt anhand des Verzeichniseintrags von B, dass er nur
 über den Proxy P erreichbar ist.</li>
-<li>A sendet eine <code>connectionRequest</code> Nachricht über das
-EPS-System an P und gibt dabei den gRPC-Serverkanal von B als
+<li>A sendet eine Nachricht <code>connectionRequest</code> über das
+Hyper-System an P und gibt dabei den gRPC-Serverkanal von B als
 Empfänger an.</li>
-<li>P erstellt ein Token und sendet über das EPS-System eine
+<li>P erstellt ein Token und sendet über das Hyper-System eine
 Nachricht an B, in der er die Anfrage von A weiterleitet und einen
 Proxy-Endpunkt angibt, mit dem er sich verbinden soll.</li>
 <li>B empfängt die Nachricht und leitet sie an den entsprechenden
@@ -233,18 +233,18 @@ verschiedenen Shells):</p>
 "w"> </span>proxy<span class="w"> </span>run<span class=
 "w"> </span>public
 
-<span class="c1"># run all EPS servers</span>
-<span class="nv">EPS_SETTINGS</span><span class=
+<span class="c1"># run all Hyper servers</span>
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-1<span class=
-"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
-<span class="nv">EPS_SETTINGS</span><span class=
+<span class="nv">HYPER_SETTINGS</span><span class=
 "o">=</span>settings/dev/roles/hd-2<span class=
-"w"> </span>eps<span class="w"> </span>server<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
-<span class="nv">EPS_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-eps-1<span class=
-"w"> </span>eps<span class="w"> </span>server<span class=
+<span class="nv">HYPER_SETTINGS</span><span class=
+"o">=</span>settings/dev/roles/public-proxy-hyper-1<span class=
+"w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
 </code></pre></div>
 <p>Stellen Sie sicher, dass Sie <code>make sd-setup</code>
