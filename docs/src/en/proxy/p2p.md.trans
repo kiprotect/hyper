@@ -1,0 +1,105 @@
+1f46de845af36fdd:
+  de: >-
+    * A erkennt anhand des Verzeichniseintrags von B, dass er
+    nur über den Proxy P erreichbar ist.
+  en: >-
+    * A recognizes through the directory entry of B that it can
+    only be reached through proxy P.
+20c730dc9d5a18a1:
+  de: >-
+    * EPS-Server A möchte eine Verbindung zu EPS-Server B herstellen.
+  en: '* EPS server A wants to connect to EPS server B.'
+2383bc03abd3bb58:
+  de: >-
+    * P nimmt die Verbindung von A an, ruft die passende Verbindung
+    von B ab und vermittelt den Datenverkehr zwischen ihnen.
+  en: >-
+    * P accepts A's connection, retrieves B's matching connection
+    and proxies traffic between them.
+3880b300aba74873:
+  de: >-
+    Um eine Testinfrastruktur einzurichten, führen Sie einfach
+    (in verschiedenen Shells):
+  en: >-
+    To set up a test infrastructure, simply run (in different
+    shells):
+38e672152ff0ddca:
+  de: >-
+    * A sendet eine `connectionRequest` Nachricht über das EPS-System
+    an P und gibt dabei den gRPC-Serverkanal von B als Empfänger
+    an.
+  en: >-
+    * A sends a `connectionRequest` message to P over the EPS
+    system, specifying B's gRPC server channel as the recipient.
+58c0e45301d54500:
+  de: '## Testen Sie'
+  en: '## Testing'
+688ad15f6b4dd4b3:
+  de: '## Vermittlung von Verbindungen'
+  en: '## Connection Brokering'
+6acf910466b6af32:
+  de: >-
+    Der Proxy unterstützt auch einen Peer-to-Peer (P2P) Modus,
+    der es zwei EPS-Servern ermöglicht, eine sichere Verbindung
+    über den Proxy herzustellen.
+  en: >-
+    The proxy also supports a peer-to-peer (P2P) mode, which enables
+    two EPS servers to establish a secure connection through the
+    proxy.
+6df9df692a97328a:
+  de: '# Peer-to-Peer (P2P) Proxy'
+  en: '# Peer To Peer (P2P) Proxy'
+7c9e88a6fed01c0d:
+  de: >-
+    * P sendet eine Bestätigung an A, die den Token und denselben
+    Endpunkt enthält.
+  en: >-
+    * P returns a confirmation to A containing the token and same
+    endpoint.
+91ae5b0ad90e09c7:
+  de: >-
+    * A verbindet sich mit dem Endpunkt von P und sendet ebenfalls
+    das Token.
+  en: '* A connects to P''s endpoint and also sends the token.'
+a98160fd77ea0c0e:
+  de: '* P empfängt die Verbindung von B und speichert sie.'
+  en: '* P receives the connection from B and stores it.'
+af95cd2fc8489f61:
+  de: >-
+    * B empfängt die Nachricht und leitet sie an den entsprechenden
+    Kanal weiter, der sie verarbeitet und eine Verbindung zum
+    Endpunkt von P herstellt, wobei der Token als Routing-Schlüssel
+    gesendet wird.
+  en: >-
+    * B receives the message and forwards it to the appropriate
+    channel, which handles it and connects to P's endpoint, sending
+    the token as the routing key.
+b45a7685a744388e:
+  de: >-
+    * P erstellt ein Token und sendet über das EPS-System eine
+    Nachricht an B, in der er die Anfrage von A weiterleitet und
+    einen Proxy-Endpunkt angibt, mit dem er sich verbinden soll.
+  en: >-
+    * P creates a token and send a message to B over the EPS system,
+    forwarding A's request and specifying a proxy endpoint to
+    connect to.
+dedb276f651a90e7:
+  de: >-
+    Der Vermittlungsprozess für eine P2P-Verbindung läuft wie
+    folgt ab:
+  en: 'The brokering process for a P2P connection is as follows:'
+e3b0c44298fc1c14:
+  de: ''
+  en: ''
+e73747a519bd9785:
+  de: >-
+    Stellen Sie sicher, dass Sie `make sd-setup` ausführen, um
+    das Dienstverzeichnis mit den erforderlichen Einträgen zu
+    aktualisieren. Anschließend sollten Sie in der Lage sein,
+    über den Proxy einen Ping vom HD-2 Server über den HD-1 JSON-RPC
+    Server anzufordern:
+  en: >-
+    Make sure you run `make sd-setup` to update the service directory
+    with the necessary entries. Then you should be able to request
+    a ping from the HD-2 server through the proxy via the HD-1
+    JSON-RPC server:

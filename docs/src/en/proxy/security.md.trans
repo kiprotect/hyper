@@ -1,0 +1,168 @@
+06e8266a7613ed56:
+  de: >-
+    [^2] : [RFC-6066](https://datatracker.ietf.org/doc/html/rfc6066#section-3)
+  en: >-
+    [^2]: [RFC-6066](https://datatracker.ietf.org/doc/html/rfc6066#section-3)
+443331fa8e64931d:
+  de: >-
+    [^3] : [RFC-8555](https://datatracker.ietf.org/doc/html/rfc8555)
+  en: >-
+    [^3]: [RFC-8555](https://datatracker.ietf.org/doc/html/rfc8555)
+5263b86ae9df11b0:
+  de: >-
+    Um dieses Risiko zu minimieren, sollte die Ausstellung von
+    Zertifikaten über ACME für alle Hostnamen, die über den öffentlichen
+    Proxy vermittelt werden, eingeschränkt werden. Darüber hinaus
+    sollten [Mechanismen zur Transparenz von Zertifikaten (CT)](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency)
+    eingesetzt werden, die es dem Client ermöglichen, die Falschausstellung
+    eines Zertifikats durch einen MITM-Angreifer zu erkennen.
+  en: >-
+    In order to mitigate this risk, certificate issuance via ACME
+    should be restricted for all hostnames that are mediated through
+    the public proxy. In addition, [certificate transparency (CT)
+    mechanisms](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency)
+    should be used to enable the client to discover the misissuance
+    of a certificate by a MITM adversary.
+83aa121126f250bc:
+  de: >-
+    Schließlich können die Angreifer aus den Szenarien 1 und 2
+    auch den Dienst für den Client und den Server verweigern,
+    indem sie die Kommunikation zwischen ihnen unterbrechen. Dieses
+    Risiko lässt sich in diesen Szenarien aufgrund der privilegierten
+    Position der Angreifer nicht ohne weiteres eindämmen. Denial-of-Service
+    (DoS)-Angriffe durch externe Angreifer können mit gängigen
+    Techniken abgewehrt werden, die hier nicht näher erläutert
+    werden.
+  en: >-
+    Finally, the adversaries from scenarios 1 & 2 can also deny
+    service to the client and server by disrupting the communication
+    between them. This risk cannot be easily mitigated in these
+    scenarios, given the privileged position of the adversaries.
+    Denial-of-Service (DoS) attacks by external adversaries can
+    be mitigated using common techniques that won't be discussed
+    here.
+935f81ffab18f6ea:
+  de: '## Bedrohungsmodell'
+  en: '## Threat Model'
+9c070cfcab79ed0e:
+  de: >-
+    Der öffentliche Proxy wurde entwickelt, um die Kommunikation
+    zwischen einem Client und einem privaten Proxy-Endpunkt zu
+    vermitteln, ohne die TLS-Verschlüsselung zwischen diesen beiden
+    aufzubrechen. Er erreicht dies, indem er den TLS-Handshake
+    instrumentiert, insbesondere durch das Parsen des `ClientHello`
+    Pakets, das vom Client gesendet wird, um die Verbindung zum
+    privaten Proxy zu initiieren. Dieses Paket ist in RFC-5246
+    [^1] beschrieben und enthält normalerweise eine `ServerNameList`
+    -Erweiterung, wie in RFC-6066 [^2] beschrieben, die den Servernamen
+    angibt, zu dem der Client eine Verbindung herstellen möchte.
+    HTTPs-Server verwenden diese Informationen in der Regel, um
+    das passende Zertifikat auszuwählen, da ein einziger Server
+    oft Inhalte für viele Domänen hostet. Ebenso kann der öffentliche
+    Proxy diese Informationen verwenden, um festzustellen, welcher
+    private Proxy (falls vorhanden) die Verbindung des Clients
+    bearbeiten kann. Er kann dann eine TCP-Verbindung zu diesem
+    privaten Proxy öffnen und den gesamten TCP-Stream (einschließlich
+    des Pakets `HelloClient` ) an ihn weiterleiten. Auf diese
+    Weise fungiert der öffentliche Proxy als nicht vertrauenswürdiger
+    Mann in der Mitte zwischen dem Client und dem privaten Proxy
+    und leitet verschlüsselte Daten zwischen ihnen weiter.
+  en: >-
+    The public proxy is designed to mediate communication between
+    a client and a private proxy endpoint without breaking up
+    the TLS encryption between these two. It achieves this by
+    instrumenting the TLS handshake, notably by parsing the `ClientHello`
+    packet sent by the client to initiate the connection to the
+    private proxy. This packet is described in RFC-5246 [^1] and
+    normally contains a `ServerNameList` extension as described
+    in RFC-6066 [^2] which indicates the server name that the
+    client wants to establish a connection to. HTTPs servers typcially
+    use this information to select the appropriate certificate,
+    as often a single server hosts content for many domains. Likewise,
+    the public proxy can use this information to determine which
+    private proxy (if any) can handle the connection from the
+    client. It can then open a TCP connection to this private
+    proxy and forward the entire TCP stream (including the `HelloClient`
+    packet) to it. In doing so the public proxy acts as an untrusted
+    man in the middle between the client and the private proxy,
+    passing encrypted data between them.
+a0b1095d19f569a1:
+  de: >-
+    Unser Bedrohungsmodell geht davon aus, dass der öffentliche
+    Proxy vollständig kompromittiert werden kann. In Szenario
+    1 erlangt ein Angreifer die vollständige Kontrolle über den
+    öffentlichen Proxy-Server und ist in der Lage, den Servercode
+    durch seinen eigenen Code zu ersetzen, der z.B. darauf abzielt,
+    die zwischen dem Client und dem privaten Proxy ausgetauschten
+    Daten zu exfiltrieren. In Szenario 2 gelingt es einem Angreifer,
+    den für den öffentlichen Proxy bestimmten Datenverkehr auf
+    seinen eigenen Server umzuleiten, wo er wie in Szenario 1
+    beliebigen Code ausführen kann, um z.B. Daten zu exfiltrieren.
+  en: >-
+    Our threat model assumes that the public proxy can become
+    fully compromised. In scenario 1, an adversary gains full
+    control of the public proxy server and is able to replace
+    the server code with his own code that aims to e.g. exfiltrate
+    the data exchanged between the client and the private proxy.
+    In scenario 2, an adversary succeeds in redirecting traffic
+    destined for the public proxy to his own server, where like
+    in scenario 1 he can run arbitrary code to e.g. exfiltrate
+    data.
+e051c0bdf87615b2:
+  de: '# Proxy Sicherheit & Bedrohungsmodell'
+  en: '# Proxy Security & Threat Model'
+e1a94b85885b2b34:
+  de: >-
+    Ein unabhängiges Risiko in den Szenarien 1 und 2 ist die Fähigkeit
+    des Gegners, die Metadaten der verschlüsselten Verbindung
+    aufzuzeichnen, was ebenfalls sensible Informationen offenbaren
+    kann. Um dieses Risiko zu verringern, sollten Techniken zur
+    Verschleierung von Metadaten auf die Client-Server-Kommunikation
+    angewendet werden.
+  en: >-
+    An independent risk inherent in scenarios 1 & 2 is the ability
+    of the adversary to record the meta-data of the encrypted
+    connection, which can also reveal sensitive information. To
+    reduce this risk, meta-data obfuscation techniques should
+    be applied to the client-server communication.
+e3b0c44298fc1c14:
+  de: ''
+  en: ''
+e4a32f409997be2f:
+  de: >-
+    Beide Szenarien stellen einen Man-in-the-Middle-Angriff (MITM)
+    dar. Systeme, die TLS implementieren, sind so konzipiert,
+    dass sie solche Angriffe mit Hilfe einer Vertrauenskette,
+    die durch eine Public-Key-Infrastruktur bereitgestellt wird,
+    abwehren. Unter idealen Umständen ist es für einen MITM-Angreifer
+    unmöglich, dem Client ein gültiges TLS-Zertifikat vorzulegen,
+    so dass dieser sich weigert, eine Verbindung mit dem Server
+    herzustellen. Mit der Einführung des ACME-Protokolls [^3]
+    ist es für einen Angreifer jedoch möglich geworden, auf einfache
+    Weise ein gültiges TLS-Zertifikat für einen Hostnamen zu generieren,
+    dessen Server-Endpunkt er kontrolliert. In beiden oben genannten
+    Szenarien würde dies den Angreifer in die Lage versetzen,
+    einen ACME-Anbieter wie LetsEncrypt zu verwenden, um ein gültiges
+    TLS-Zertifikat zu generieren und dann die Client-Server-TLS-Verbindung
+    ohne Wissen des Clients oder des Servers zu beenden und zu
+    vermitteln.
+  en: >-
+    Both scenarios represent a man in the middle (MITM) attack.
+    Systems implementing TLS are designed to mitigate such attacks
+    using a chain of trust provided by a public-key infrastructure.
+    Under ideal circumstances, this will make it impossible for
+    a MITM adversary to provide a valid TLS certificate to the
+    client, who will then refuse to establish a connection with
+    the server. However, with the introduction of the ACME protocol
+    [^3] it has become possible for an adversary to easily generate
+    a valid TLS certificate for a hostname whose server endpoint
+    he controls. In both scenarios above this would enable the
+    adversary to use an ACME provider like LetsEncrypt in order
+    to generate a valid TLS certificate and then terminate and
+    proxy the client-server TLS connection without knowledge of
+    either the client or the server.
+fcda2ef0ebcd3eb5:
+  de: >-
+    [^1] : [RFC-5264](https://datatracker.ietf.org/doc/html/rfc5246)
+  en: >-
+    [^1]: [RFC-5264](https://datatracker.ietf.org/doc/html/rfc5246)

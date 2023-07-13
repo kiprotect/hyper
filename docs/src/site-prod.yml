@@ -1,9 +1,9 @@
 $include:
   - site.yml
   - site-i18n.yml
-path: /eps/
+path: /hyper/
 static-path: docs/static
-url: https://iris-connect.github.io/eps/docs
+url: https://kiprotect.github.io/hyper/docs
 # we generate links without extensions as nginx rewrites those URLs automatically
 hide-href-extensions: ['/index.html', 'index.html', '.html']
 context:

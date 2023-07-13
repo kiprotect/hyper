@@ -28,9 +28,6 @@ translate-config:
 	@if [ ! -n "$(TOKEN)" ]; then echo "Please set the translation token as the TOKEN variable." && exit 1; fi;
 	venv/bin/beam i18n translate-config $(TOKEN) src $(TA)
 
-downloads:
-	curl $(RELEASE_HOST)zilpzalp/master/apps/releases.yml > src/en/releases.yml
-
 optimize: optimize-images optimize-html
 
 optimize-images:

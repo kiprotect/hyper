@@ -36,6 +36,14 @@
     client components that manage and secure the communication
     in the IRIS ecosystem. Notably, the EPS provides two core
     components:
+31ac0b260c8a780d:
+  de: >-
+    Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/eps)
+    bitte [ein Issue auf Github](https://github.com/iris-connect/eps),
+    wo unsere Community Ihnen helfen kann.
+  en: >-
+    If you encounter a problem please [open an issue on Github](https://github.com/iris-connect/eps)
+    where our community can help you.
 38040ad7581c97df:
   de: >-
     Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/eps)

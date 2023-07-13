@@ -1,4 +1,4 @@
-name: eps-docs
+name: hyper-docs
 url: http://localhost:8111
 path: /
 static-path: docs/static

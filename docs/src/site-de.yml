@@ -15,12 +15,12 @@ pages:
   title: System
 - children:
   - name: index
-    src: de/eps/index.md
+    src: de/hyper/index.md
     title: Übersicht
-  name: eps
-  navtitle: EPS Service
-  slug: eps-service
-  title: EPS Service
+  name: hyper
+  navtitle: Hyper Service
+  slug: hyper-service
+  title: Hyper Service
 - children:
   - name: index
     src: de/proxy/index.md
@@ -31,6 +31,12 @@ pages:
   - name: configuration
     src: de/proxy/configuration.md
     title: Konfiguration
+  - name: security
+    src: de/proxy/security.md
+    title: Sicherheit & Bedrohungsmodell
+  - name: p2p
+    src: de/proxy/p2p.md
+    title: Peer-To-Peer (P2P) Proxy
   name: proxy
   navtitle: Proxy Service
   slug: proxy-service
@@ -53,4 +59,4 @@ pages:
   slug: kontakt
   src: de/imprint.md
   title: Kontakt
-title: IRIS EPS (Endpoint System)
+title: Hyper

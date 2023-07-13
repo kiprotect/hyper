@@ -1,6 +1,6 @@
 ## Kontakt
 
-Wenn Sie Fragen zu EPS haben, [kontaktieren Sie uns](mailto:iris@inoeg.de), wir unterstützen und beraten Sie gerne! Sie können auch ein Issue für unsere freundliche [Github-Community](https://github.com/iris-connect/eps) posten.
+Wenn Sie Fragen zu EPS haben, [wenden Sie sich](mailto:iris@inoeg.de) bitte [an uns](mailto:iris@inoeg.de), wir unterstützen und beraten Sie gerne! Sie können auch ein Problem für unsere freundliche [Github-Community](https://github.com/iris-connect/eps) melden.
 
 ## Impressum
 

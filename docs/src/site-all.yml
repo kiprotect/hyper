@@ -1,4 +1,4 @@
-title: IRIS EPS (Endpoint System)
+title: Hyper
 pages:
   - src|f|exists?: "{target_language}/index.md"
     title|t: Willkommen
@@ -16,12 +16,12 @@ pages:
       src|f|exists?: "{target_language}/system/index.md" 
       name: ''
       slug||slugify: overview
-  - name: eps
-    title: EPS Service
-    navtitle: EPS Service
-    slug||slugify: eps
+  - name: hyper
+    title: Hyper Service
+    navtitle: Hyper Service
+    slug||slugify: hyper
     children:
-      - src|f|exists?: "{target_language}/eps/index.md"
+      - src|f|exists?: "{target_language}/hyper/index.md"
         title|t: Overview
         name: index
   - name: proxy
