@@ -1,13 +1,12 @@
 095107091962c821:
   de: >-
     Das **Hyper** bietet mehrere Server- und Client-Komponenten,
-    die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
+    die die Kommunikation im Hyper-Ökosystem verwalten und sichern.
     Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Hyper** provides several server and
-    client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the Hyper provides two core
-    components:
+    The **Hyper** provides several server and client components
+    that manage and secure the communication in the Hyper ecosystem.
+    Notably, the Hyper provides two core components:
 0b998041a417dd00:
   de: >-
     * Ein **Message-Broker / Mesh-Router-Dienst**, der Anfragen
@@ -44,13 +43,21 @@
 23759139dcda749e:
   de: >-
     Das **Hyper** bietet mehrere Server- und Client-Komponenten,
-    die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
+    die die Kommunikation im Hyper-Ökosystem verwalten und sichern.
     Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Hyper**  provides several server and
-    client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the Hyper provides two core
-    components:
+    The **Hyper**  provides several server and client components
+    that manage and secure the communication in the Hyper ecosystem.
+    Notably, the Hyper provides two core components:
+284d9414bf4b5e9c:
+  de: >-
+    **Hyper** bietet mehrere Server- und Client-Komponenten, die
+    die Kommunikation im Hyper-Ökosystem verwalten und sichern.
+    Hyper bietet vor allem zwei Kernkomponenten:
+  en: >-
+    The **Hyper** provides several server and client components
+    that manage and secure the communication in the Hyper ecosystem.
+    Notably, the Hyper provides two core components:
 31ac0b260c8a780d:
   de: >-
     Wenn Sie auf ein Problem stoßen, [öffnen Sie](https://github.com/iris-connect/hyper)
@@ -88,11 +95,11 @@
 af06b7af979b1ab9:
   de: >-
     **Hyper** bietet mehrere Server- und Client-Komponenten, die
-    die Kommunikation im IRIS-Ökosystem verwalten und sichern.
+    die Kommunikation im Hyper-Ökosystem verwalten und sichern.
     Hyper bietet vor allem zwei Kernkomponenten:
   en: >-
     The **Hyper** provides several server and client components
-    that manage and secure the communication in the IRIS ecosystem.
+    that manage and secure the communication in the Hyper ecosystem.
     Notably, the Hyper provides two core components:
 c27e8e74cb8cd379:
   de: >-

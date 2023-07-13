@@ -1,6 +1,6 @@
 # Welcome!
 
-The **Hyper** provides several server and client components that manage and secure the communication in the IRIS ecosystem. Notably, the Hyper provides two core components:
+The **Hyper** provides several server and client components that manage and secure the communication in the Hyper ecosystem. Notably, the Hyper provides two core components:
 
 * A **message broker / mesh router** services that transmits requests between different actors in the system and ensures mutual authorization and authentication.
 * A **distributed service directory** that stores cryptographically signed information about actors in the system, and is used by the message broker for authentication, service discovery and connection establishment.

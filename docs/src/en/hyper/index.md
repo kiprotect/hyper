@@ -1,12 +1,12 @@
 # Integration
 
-Integrating with the IRIS infrastructure is easy (we hope). First, you need to deploy the `hyper` server together with the settings and certificates we've provided to you. This is as easy as downloading the latest `hyper` version from our server, unpacking the settings archive we've provided you with and running
+Integrating with the Hyper infrastructure is easy (we hope). First, you need to deploy the `hyper` server together with the settings and certificates we've provided to you. This is as easy as downloading the latest `hyper` version from our server, unpacking the settings archive we've provided you with and running
 
 ```bash
 HYPER_SETTINGS=path/to/settings hyper server run
 ```
 
-This should open a local JSON-RPC server on port `5555` that you can connect to via TLS (you'll need to add the root CA certificate to your certificate chain for this). This server is your gateway to all IRIS services. Simply look up the services that a specific operator provides and send a request that contains the name of the operator and the service method you want to call. For example, to interact with a "locations" service provided by operator "ls-1", you'd simply post a JSON RPC message like this:
+This should open a local JSON-RPC server on port `5555` that you can connect to via TLS (you'll need to add the root CA certificate to your certificate chain for this). This server is your gateway to all Hyper services. Simply look up the services that a specific operator provides and send a request that contains the name of the operator and the service method you want to call. For example, to interact with a "locations" service provided by operator "ls-1", you'd simply post a JSON RPC message like this:
 
 ```json
 {
@@ -22,7 +22,7 @@ This should open a local JSON-RPC server on port `5555` that you can connect to 
 
 The gateway will take care of routing this message to the correct service and returning a response to you.
 
-If you want to accept requests from other services in the IRIS ecosystem you can use the `jsonrpc_client`, simply specifying an API endpoint that incoming requests will be delivered to using the same syntax as above.
+If you want to accept requests from other services in the Hyper ecosystem you can use the `jsonrpc_client`, simply specifying an API endpoint that incoming requests will be delivered to using the same syntax as above.
 
 That's it!
 
@@ -32,7 +32,7 @@ The calls we've seen above were all synchronous, i.e. making a call resulted in 
 
 ## Integration Example
 
-To get a concrete idea of how to integrate with the IRIS infrastructure using the Hyper server we have created a simple demo setup that illustrates all components. The demo consists of three components:
+To get a concrete idea of how to integrate with the Hyper infrastructure using the Hyper server we have created a simple demo setup that illustrates all components. The demo consists of three components:
 
 * An `hyper` server simulating a `health department`, named `hd-1`
 * An `hyper` server simulation an operator offering a "locations" service, named `ls-1`

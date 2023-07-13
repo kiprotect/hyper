@@ -3,14 +3,14 @@
   en: '{'
 095107091962c821:
   de: >-
-    Das *Endpoint *System (Hyper)** bietet mehrere Server- und Client-Komponenten,
-    die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
-    Insbesondere bietet das Hyper zwei Kernkomponenten:
+    Das *Endpoint *System (Hyper)** bietet mehrere Server- und
+    Client-Komponenten, die die Kommunikation im Hyper-Ökosystem
+    verwalten und sichern. Insbesondere bietet das Hyper zwei
+    Kernkomponenten:
   en: >-
-    The **Hyper** provides several server and
-    client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the Hyper provides two core
-    components:
+    The **Hyper** provides several server and client components
+    that manage and secure the communication in the Hyper ecosystem.
+    Notably, the Hyper provides two core components:
 0b4f7d68383fa529:
   de: "\t\"Methode\": \"ls-1.add\","
   en: "\t\"method\": \"ls-1.add\","
@@ -49,13 +49,12 @@
 23759139dcda749e:
   de: >-
     Das **Hyper** bietet mehrere Server- und Client-Komponenten,
-    die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
+    die die Kommunikation im Hyper-Ökosystem verwalten und sichern.
     Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Hyper**  provides several server and
-    client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the Hyper provides two core
-    components:
+    The **Hyper**  provides several server and client components
+    that manage and secure the communication in the Hyper ecosystem.
+    Notably, the Hyper provides two core components:
 2584834aed9d8408:
   de: "\t\"jsonrpc\": \"2.0\""
   en: "\t\"jsonrpc\": \"2.0\""
@@ -82,6 +81,28 @@
 4908d7bb9a072dc3:
   de: '# Willkommen!'
   en: '# Welcome!'
+4ff5f89bff6b2d21:
+  de: >-
+    Dies sollte einen lokalen JSON-RPC-Server auf Port `5555`
+    öffnen, mit dem Sie sich über TLS verbinden können (dazu müssen
+    Sie das Root-CA-Zertifikat zu Ihrer Zertifikatskette hinzufügen).
+    Dieser Server ist Ihr Tor zu allen Hyper-Diensten. Suchen
+    Sie einfach nach den Diensten, die ein bestimmter Betreiber
+    anbietet, und senden Sie eine Anfrage, die den Namen des Betreibers
+    und die Dienstmethode enthält, die Sie aufrufen möchten. Um
+    zum Beispiel mit dem Dienst "Standorte" des Betreibers "ls-1"
+    zu interagieren, senden Sie einfach eine JSON RPC-Nachricht
+    wie diese:
+  en: >-
+    This should open a local JSON-RPC server on port `5555` that
+    you can connect to via TLS (you'll need to add the root CA
+    certificate to your certificate chain for this). This server
+    is your gateway to all Hyper services. Simply look up the
+    services that a specific operator provides and send a request
+    that contains the name of the operator and the service method
+    you want to call. For example, to interact with a "locations"
+    service provided by operator "ls-1", you'd simply post a JSON
+    RPC message like this:
 58c0e45301d54500:
   de: '## Testen'
   en: '## Testing'
@@ -181,7 +202,7 @@
   en: '# Integration'
 84aadf0737161a88:
   de: >-
-    Die Integration mit der IRIS-Infrastruktur unter Verwendung
+    Die Integration mit der Hyper-Infrastruktur unter Verwendung
     des Hyper-Servers ist einfach (hoffen wir). Zunächst müssen
     Sie den `hyper` Server zusammen mit den Einstellungen und
     Zertifikaten, die wir Ihnen zur Verfügung gestellt haben,
@@ -190,9 +211,9 @@
     des Einstellungsarchivs, das wir Ihnen zur Verfügung gestellt
     haben, und das Ausführen von
   en: >-
-    Integrating with the IRIS infrastructure using the Hyper server
-    is easy (we hope). First, you need to deploy the `hyper` server
-    together with the settings and certificates we've provided
+    Integrating with the Hyper infrastructure using the Hyper
+    server is easy (we hope). First, you need to deploy the `hyper`
+    server together with the settings and certificates we've provided
     to you. This is as easy as downloading the latest `hyper`
     version from our server, unpacking the settings archive we've
     provided you with and running
@@ -203,6 +224,21 @@
   en: >-
     * The actual location service `hyper-ls` offered by the operator
     `ls-1`
+8d71209eef37e992:
+  de: >-
+    Die Integration mit dem Hyper-Server ist einfach (hoffen wir).
+    Zunächst müssen Sie den `hyper` Server zusammen mit den Einstellungen
+    und Zertifikaten, die wir Ihnen zur Verfügung gestellt haben,
+    einrichten. Dazu laden Sie einfach die neueste Version von
+    `hyper` von unserem Server herunter, entpacken das Archiv
+    mit den Einstellungen, das wir Ihnen zur Verfügung gestellt
+    haben, und führen Folgendes aus
+  en: >-
+    Integrating with the Hyper server is easy (we hope). First,
+    you need to deploy the `hyper` server together with the settings
+    and certificates we've provided to you. This is as easy as
+    downloading the latest `hyper` version from our server, unpacking
+    the settings archive we've provided you with and running
 96627637c668e59c:
   de: >-
     Sie können auch eine Suche nach dem Ort durchführen, den Sie
@@ -219,7 +255,7 @@
     `ls-1`
 9e4de4a404f24f30:
   de: >-
-    Die Integration in die IRIS-Infrastruktur ist einfach (hoffen
+    Die Integration in die Hyper-Infrastruktur ist einfach (hoffen
     wir). Zuerst müssen Sie den `hyper` Server zusammen mit den
     Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung
     gestellt haben, bereitstellen. Dies ist so einfach wie das
@@ -227,7 +263,7 @@
     das Entpacken des Einstellungsarchivs, das wir Ihnen zur Verfügung
     gestellt haben, und das Ausführen von
   en: >-
-    Integrating with the IRIS infrastructure is easy (we hope).
+    Integrating with the Hyper infrastructure is easy (we hope).
     First, you need to deploy the `hyper` server together with
     the settings and certificates we've provided to you. This
     is as easy as downloading the latest `hyper` version from
@@ -270,7 +306,7 @@ ad332335cfaa348c:
   en: '```bash'
 b45ff24ce12545e3:
   de: >-
-    Die Integration in die IRIS-Infrastruktur mit Hilfe des Hyper-Servers
+    Die Integration in die Hyper-Infrastruktur mit Hilfe des Hyper-Servers
     ist einfach (hoffen wir). Zunächst müssen Sie den `hyper`
     Server zusammen mit den Einstellungen und Zertifikaten, die
     wir Ihnen zur Verfügung gestellt haben, einrichten. Dazu laden
@@ -279,9 +315,9 @@ b45ff24ce12545e3:
     wir Ihnen zur Verfügung gestellt haben, und führen Folgendes
     aus
   en: >-
-    Integrating with the IRIS infrastructure using the Hyper server
-    is easy (we hope). First, you need to deploy the `hyper` server
-    together with the settings and certificates we've provided
+    Integrating with the Hyper infrastructure using the Hyper
+    server is easy (we hope). First, you need to deploy the `hyper`
+    server together with the settings and certificates we've provided
     to you. This is as easy as downloading the latest `hyper`
     version from our server, unpacking the settings archive we've
     provided you with and running
@@ -290,7 +326,7 @@ bb03df39382c6d69:
     Dies sollte einen lokalen JSON-RPC-Server auf Port `5555`
     öffnen, mit dem Sie sich über TLS verbinden können (dazu müssen
     Sie das Root-CA-Zertifikat zu Ihrer Zertifikatskette hinzufügen).
-    Dieser Server ist Ihr Gateway zu allen IRIS-Diensten. Schauen
+    Dieser Server ist Ihr Gateway zu allen Hyper-Diensten. Schauen
     Sie einfach nach den Diensten, die ein bestimmter Betreiber
     anbietet, und senden Sie eine Anfrage, die den Namen des Betreibers
     und die Dienstmethode enthält, die Sie aufrufen möchten. Um
@@ -301,10 +337,10 @@ bb03df39382c6d69:
     This should open a local JSON-RPC server on port `5555` that
     you can connect to via TLS (you'll need to add the root CA
     certificate to your certificate chain for this). This server
-    is your gateway to all IRIS services. Simply look up the services
-    that a specific operator provides and send a request that
-    contains the name of the operator and the service method you
-    want to call. For example, to interact with a "locations"
+    is your gateway to all Hyper services. Simply look up the
+    services that a specific operator provides and send a request
+    that contains the name of the operator and the service method
+    you want to call. For example, to interact with a "locations"
     service provided by operator "ls-1", you'd simply post a JSON
     RPC message like this:
 bbc6744b2f3fabc4:
@@ -312,14 +348,15 @@ bbc6744b2f3fabc4:
   en: '  "result": {'
 bc855a3ce7fa73ee:
   de: >-
-    Um eine konkrete Vorstellung von der Integration mit der IRIS-Infrastruktur
-    unter Verwendung des Hyper-Servers zu bekommen, haben wir ein
-    einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
+    Um eine konkrete Vorstellung von der Integration mit der Hyper-Infrastruktur
+    unter Verwendung des Hyper-Servers zu bekommen, haben wir
+    ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
     Die Demo besteht aus drei Komponenten:
   en: >-
-    To get a concrete idea of how to integrate with the IRIS infrastructure
-    using the Hyper server we have created a simple demo setup that
-    illustrates all components. The demo consists of three components:
+    To get a concrete idea of how to integrate with the Hyper
+    infrastructure using the Hyper server we have created a simple
+    demo setup that illustrates all components. The demo consists
+    of three components:
 bd00183b6db04208:
   de: 'Dies sollte eine einfache JSON-Antwort zurückgeben:'
   en: 'This should return a simple JSON response:'
@@ -347,27 +384,39 @@ c689b33c60cf1f6c:
   en: '    "id": "af5ca4da5caa",'
 c7b62b98689be9bd:
   de: >-
-    Wenn Sie Anfragen von anderen Diensten im IRIS-Ökosystem akzeptieren
-    möchten, können Sie die `jsonrpc_client` verwenden. Dabei
-    geben Sie einfach einen API-Endpunkt an, an den eingehende
+    Wenn Sie Anfragen von anderen Diensten im Hyper-Ökosystem
+    akzeptieren möchten, können Sie die `jsonrpc_client` verwenden.
+    Dabei geben Sie einfach einen API-Endpunkt an, an den eingehende
     Anfragen mit der gleichen Syntax wie oben zugestellt werden
     sollen.
   en: >-
     If you want to accept requests from other services in the
-    IRIS ecosystem you can use the `jsonrpc_client`, simply specifying
+    Hyper ecosystem you can use the `jsonrpc_client`, simply specifying
+    an API endpoint that incoming requests will be delivered to
+    using the same syntax as above.
+c7bc6d77224346aa:
+  de: >-
+    Wenn Sie Anfragen von anderen Diensten im Hyper-Ökosystem
+    akzeptieren möchten, können Sie `jsonrpc_client` verwenden.
+    Dabei geben Sie einfach einen API-Endpunkt an, an den eingehende
+    Anfragen mit der gleichen Syntax wie oben zugestellt werden
+    sollen.
+  en: >-
+    If you want to accept requests from other services in the
+    Hyper ecosystem you can use the `jsonrpc_client`, simply specifying
     an API endpoint that incoming requests will be delivered to
     using the same syntax as above.
 c8f2ffdddaf8b5ba:
   de: >-
-    Um eine konkrete Vorstellung von der Integration mit der IRIS-Infrastruktur
+    Um eine konkrete Vorstellung von der Integration mit der Hyper-Infrastruktur
     unter Verwendung des Hyper-Servers zu erhalten, haben wir
     ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
     Die Demo besteht aus drei Komponenten:
   en: >-
-    To get a concrete idea of how to integrate with the IRIS infrastructure
-    using the Hyper server we have created a simple demo setup
-    that illustrates all components. The demo consists of three
-    components:
+    To get a concrete idea of how to integrate with the Hyper
+    infrastructure using the Hyper server we have created a simple
+    demo setup that illustrates all components. The demo consists
+    of three components:
 cfd61106fd63f32e:
   de: >-
     # führen Sie den `hyper` Server des "Standorte"-Operators
@@ -457,6 +506,17 @@ e50defcec6c5beb3:
     name). Do not forget to include the same `id` that you received
     with the original request, as this will contain the "return
     address" of the request.
+ebab372853f70300:
+  de: >-
+    Um eine konkrete Vorstellung von der Integration mit der Hyper-Infrastruktur
+    unter Verwendung des Hyper-Servers zu erhalten, haben wir
+    ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
+    Die Demo besteht aus drei Komponenten:
+  en: >-
+    To get a concrete idea of how to integrate with the Hyper
+    infrastructure using the Hyper server we have created a simple
+    demo setup that illustrates all components. The demo consists
+    of three components:
 ed0dbdf6e65ff948:
   de: "\t},"
   en: "\t},"

@@ -1,6 +1,6 @@
 # Service Directory
 
-The service directory is a central database that contains information about all operators in the IRIS ecosystem. It contains information about how operators can be reached and which services they provide.
+The service directory is a central database that contains information about all operators in the Hyper ecosystem. It contains information about how operators can be reached and which services they provide.
 
 The directory allows Hyper servers to determine whether and how they can connect to another operator. Operators that only have outgoing connectivity (e.g. `ga-leipzig` in the example above) can use the directory to learn that they might receive asynchronous responses from other operators (e.g. `ls-1`) and then open outgoing connections to these operators through which they can receive replies. Hyper servers can also use the service directory to determine whether they should accept a message from a given operator.
 

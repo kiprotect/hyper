@@ -1,12 +1,12 @@
 # Integration
 
-Die Integration in die IRIS-Infrastruktur ist einfach (hoffen wir). Zunächst müssen Sie den `hyper` Server zusammen mit den Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung gestellt haben, einrichten. Dazu laden Sie einfach die neueste Version von `hyper` von unserem Server herunter, entpacken das Archiv mit den Einstellungen, das wir Ihnen zur Verfügung gestellt haben, und führen
+Die Integration in die Hyper-Infrastruktur ist einfach (hoffen wir). Zunächst müssen Sie den `hyper` Server zusammen mit den Einstellungen und Zertifikaten, die wir Ihnen zur Verfügung gestellt haben, einrichten. Dazu laden Sie einfach die neueste Version von `hyper` von unserem Server herunter, entpacken das Archiv mit den Einstellungen, das wir Ihnen zur Verfügung gestellt haben, und führen
 
 ```bash
 HYPER_SETTINGS=path/to/settings hyper server run
 ```
 
-Dies sollte einen lokalen JSON-RPC-Server auf Port `5555` öffnen, mit dem Sie sich über TLS verbinden können (dazu müssen Sie das Root-CA-Zertifikat zu Ihrer Zertifikatskette hinzufügen). Dieser Server ist Ihr Gateway zu allen IRIS-Diensten. Schauen Sie einfach nach den Diensten, die ein bestimmter Betreiber anbietet, und senden Sie eine Anfrage, die den Namen des Betreibers und die Dienstmethode enthält, die Sie aufrufen möchten. Um z. B. mit dem Dienst "locations" zu interagieren, der vom Betreiber "ls-1" bereitgestellt wird, würden Sie einfach eine JSON-RPC-Nachricht wie diese senden:
+Dies sollte einen lokalen JSON-RPC-Server auf Port `5555` öffnen, mit dem Sie sich über TLS verbinden können (dazu müssen Sie das Root-CA-Zertifikat zu Ihrer Zertifikatskette hinzufügen). Dieser Server ist Ihr Tor zu allen Hyper-Diensten. Suchen Sie einfach nach den Diensten, die ein bestimmter Betreiber anbietet, und senden Sie eine Anfrage, die den Namen des Betreibers und die Dienstmethode enthält, die Sie aufrufen möchten. Um zum Beispiel mit dem Dienst "Standorte" des Betreibers "ls-1" zu interagieren, senden Sie einfach eine JSON RPC-Nachricht wie diese:
 
 ```json
 {
@@ -22,7 +22,7 @@ Dies sollte einen lokalen JSON-RPC-Server auf Port `5555` öffnen, mit dem Sie s
 
 Das Gateway kümmert sich darum, diese Nachricht an den richtigen Dienst weiterzuleiten und eine Antwort an Sie zurückzuschicken.
 
-Wenn Sie Anfragen von anderen Diensten im IRIS-Ökosystem akzeptieren möchten, können Sie die `jsonrpc_client` verwenden. Dabei geben Sie einfach einen API-Endpunkt an, an den eingehende Anfragen mit der gleichen Syntax wie oben zugestellt werden sollen.
+Wenn Sie Anfragen von anderen Diensten im Hyper-Ökosystem akzeptieren möchten, können Sie `jsonrpc_client` verwenden. Dabei geben Sie einfach einen API-Endpunkt an, an den eingehende Anfragen mit der gleichen Syntax wie oben zugestellt werden sollen.
 
 Das war's!
 
@@ -32,7 +32,7 @@ Die Anrufe, die wir oben gesehen haben, waren alle synchron, d.h. ein Anruf füh
 
 ## Integration Beispiel
 
-Um eine konkrete Vorstellung von der Integration mit der IRIS-Infrastruktur unter Verwendung des Hyper-Servers zu erhalten, haben wir ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht. Die Demo besteht aus drei Komponenten:
+Um eine konkrete Vorstellung von der Integration mit der Hyper-Infrastruktur unter Verwendung des Hyper-Servers zu erhalten, haben wir ein einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht. Die Demo besteht aus drei Komponenten:
 
 * Ein `hyper` Server, der eine `health department` simuliert, namens `hd-1`
 * Eine `hyper` Server-Simulation eines Betreibers, der einen "Standort"-Dienst anbietet, namens `ls-1`

@@ -1,6 +1,6 @@
 # Service-Verzeichnis
 
-Das Dienstverzeichnis ist eine zentrale Datenbank, die Informationen über alle Betreiber im IRIS-Ökosystem enthält. Es enthält Informationen darüber, wie die Betreiber erreicht werden können und welche Dienste sie anbieten.
+Das Dienstverzeichnis ist eine zentrale Datenbank, die Informationen über alle Betreiber im Hyper-Ökosystem enthält. Es enthält Informationen darüber, wie die Betreiber erreicht werden können und welche Dienste sie anbieten.
 
 Mit Hilfe des Verzeichnisses können Hyper-Server feststellen, ob und wie sie sich mit einem anderen Betreiber verbinden können. Betreiber, die nur über ausgehende Verbindungen verfügen (z.B. `ga-leipzig` im obigen Beispiel), können das Verzeichnis nutzen, um zu erfahren, dass sie möglicherweise asynchrone Antworten von anderen Betreibern erhalten (z.B. `ls-1`) und dann ausgehende Verbindungen zu diesen Betreibern öffnen, über die sie Antworten erhalten können. Hyper-Server können das Dienstverzeichnis auch verwenden, um festzustellen, ob sie eine Nachricht von einem bestimmten Betreiber annehmen sollen.
 

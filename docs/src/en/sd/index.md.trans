@@ -91,8 +91,8 @@
     service method). More fine-grained permissions (e.g. a contact
     tracing provider can only edit its own entries in the "locations"
     service) need to be implemented by the services themselves.
-    For that purpose, the Hyper server makes information about the
-    calling peer available to the services via a special parameter
+    For that purpose, the Hyper server makes information about
+    the calling peer available to the services via a special parameter
     (`_caller`) that gets passed along with the other RPC method
     parameters. This structure also contains the current entry
     of the caller from the service directory, making it easy for
@@ -117,9 +117,20 @@
     above) can use the directory to learn that they might receive
     asynchronous responses from other operators (e.g. `ls-1`)
     and then open outgoing connections to these operators through
-    which they can receive replies. Hyper servers can also use the
-    service directory to determine whether they should accept
+    which they can receive replies. Hyper servers can also use
+    the service directory to determine whether they should accept
     a message from a given operator.
+319db75aa5f4d796:
+  de: >-
+    Das Dienstverzeichnis ist eine zentrale Datenbank, die Informationen
+    über alle Betreiber im Hyper-Ökosystem enthält. Es enthält
+    Informationen darüber, wie die Betreiber erreicht werden können
+    und welche Dienste sie anbieten.
+  en: >-
+    The service directory is a central database that contains
+    information about all operators in the Hyper ecosystem. It
+    contains information about how operators can be reached and
+    which services they provide.
 3288a136ca3e7c85:
   de: '  },'
   en: '  },'
@@ -138,12 +149,12 @@
 3669f761668a4539:
   de: >-
     Das Dienstverzeichnis ist eine zentrale Datenbank, die Informationen
-    über alle Betreiber im IRIS-Ökosystem enthält. Es enthält
+    über alle Betreiber im Hyper-Ökosystem enthält. Es enthält
     Informationen darüber, wie die Betreiber erreicht werden können
     und welche Dienste sie anbieten.
   en: >-
     The service directory is a central database that contains
-    information about all operators in the IRIS ecosystem. It
+    information about all operators in the Hyper ecosystem. It
     contains information about how operators can be reached and
     which services they provide.
 370ba8f42421daab:

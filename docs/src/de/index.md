@@ -1,6 +1,6 @@
 # Willkommen!
 
-**Hyper** bietet mehrere Server- und Client-Komponenten, die die Kommunikation im IRIS-Ökosystem verwalten und sichern. Hyper bietet vor allem zwei Kernkomponenten:
+**Hyper** bietet mehrere Server- und Client-Komponenten, die die Kommunikation im Hyper-Ökosystem verwalten und sichern. Hyper bietet vor allem zwei Kernkomponenten:
 
 * Ein **Message-Broker / Mesh-Router-Dienst**, der Anfragen zwischen verschiedenen Akteuren im System weiterleitet und die gegenseitige Autorisierung und Authentifizierung sicherstellt.
 * Ein **verteiltes Dienstverzeichnis**, das kryptografisch signierte Informationen über Akteure im System speichert und vom Message Broker für die Authentifizierung, die Dienstsuche und den Verbindungsaufbau verwendet wird.
