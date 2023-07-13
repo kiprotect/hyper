@@ -7,8 +7,8 @@
     only be reached through proxy P.
 20c730dc9d5a18a1:
   de: >-
-    * EPS-Server A möchte eine Verbindung zu EPS-Server B herstellen.
-  en: '* EPS server A wants to connect to EPS server B.'
+    * Hyper-Server A möchte eine Verbindung zu Hyper-Server B herstellen.
+  en: '* Hyper server A wants to connect to Hyper server B.'
 2383bc03abd3bb58:
   de: >-
     * P nimmt die Verbindung von A an, ruft die passende Verbindung
@@ -42,11 +42,11 @@
     shells):
 38e672152ff0ddca:
   de: >-
-    * A sendet eine `connectionRequest` Nachricht über das EPS-System
+    * A sendet eine `connectionRequest` Nachricht über das Hyper-System
     an P und gibt dabei den gRPC-Serverkanal von B als Empfänger
     an.
   en: >-
-    * A sends a `connectionRequest` message to P over the EPS
+    * A sends a `connectionRequest` message to P over the Hyper
     system, specifying B's gRPC server channel as the recipient.
 58c0e45301d54500:
   de: '## Testen Sie'
@@ -57,11 +57,11 @@
 6acf910466b6af32:
   de: >-
     Der Proxy unterstützt auch einen Peer-to-Peer (P2P) Modus,
-    der es zwei EPS-Servern ermöglicht, eine sichere Verbindung
+    der es zwei Hyper-Servern ermöglicht, eine sichere Verbindung
     über den Proxy herzustellen.
   en: >-
     The proxy also supports a peer-to-peer (P2P) mode, which enables
-    two EPS servers to establish a secure connection through the
+    two Hyper servers to establish a secure connection through the
     proxy.
 6df9df692a97328a:
   de: '# Peer-to-Peer (P2P) Proxy'
@@ -93,11 +93,11 @@ af95cd2fc8489f61:
     the token as the routing key.
 b45a7685a744388e:
   de: >-
-    * P erstellt ein Token und sendet über das EPS-System eine
+    * P erstellt ein Token und sendet über das Hyper-System eine
     Nachricht an B, in der er die Anfrage von A weiterleitet und
     einen Proxy-Endpunkt angibt, mit dem er sich verbinden soll.
   en: >-
-    * P creates a token and send a message to B over the EPS system,
+    * P creates a token and send a message to B over the Hyper system,
     forwarding A's request and specifying a proxy endpoint to
     connect to.
 dedb276f651a90e7:

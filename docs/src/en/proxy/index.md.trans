@@ -27,7 +27,7 @@
     Proxy erreicht, vergleicht er sie mit den Ankündigungen, die
     er erhalten hat. Wenn eine Übereinstimmung gefunden wird,
     benachrichtigt er den privaten Proxy über eine eingehende
-    Verbindung über das EPS-Netzwerk und sendet ihm außerdem ein
+    Verbindung über das Hyper-Netzwerk und sendet ihm außerdem ein
     zufälliges Token. Der private Proxy öffnet eine Verbindung
     zum öffentlichen Proxy, sendet das Token und übernimmt den
     TCP-Stream. Er leitet ihn an einen internen Server weiter.
@@ -36,7 +36,7 @@
     the public proxy. Whenever a new connection reaches that proxy,
     it compares it to the announcements it received. If a match
     is found, it notifies the private proxy of an incoming connection
-    via the EPS network, also sending it a random token. The private
+    via the Hyper network, also sending it a random token. The private
     proxy opens a connection to the public proxy, sends the token
     and takes over the TCP stream. It forwards it to an internal
     server.
@@ -90,8 +90,8 @@
     PROXY_SETTINGS=settings/dev/roles/private-proxy-1 proxy run
     private
 441720f43ebb9801:
-  de: '# fünftes Terminal (privater Proxy-EPS-Server)'
-  en: '# fifth terminal (private proxy EPS server)'
+  de: '# fünftes Terminal (privater Proxy-Hyper-Server)'
+  en: '# fifth terminal (private proxy Hyper server)'
 4ae4e4ec750a1e22:
   de: "\t\tPROXY_SETTINGS=settings/dev/roles/private-proxy-1 proxy\
     \ run private"
@@ -101,8 +101,8 @@
   de: "\t\t# zweites Terminal (öffentlicher Proxy)"
   en: "\t\t# second terminal (public proxy)"
 4d006a66baa44f69:
-  de: "\t\tFünftes Terminal (privater Proxy-EPS-Server)"
-  en: "\t\t# fifth terminal (private proxy EPS server)"
+  de: "\t\tFünftes Terminal (privater Proxy-Hyper-Server)"
+  en: "\t\t# fifth terminal (private proxy Hyper server)"
 507fcc8fc0b82a9c:
   de: >-
     Wenn alle Dienste eingerichtet sind und laufen, sollten Sie
@@ -114,11 +114,11 @@
   de: >-
     Die Anfrage, die Sie gesendet haben, erreichte den lokalen
     TLS-Server auf Port 8888 über die beiden Proxys, die über
-    das EPS-Netzwerk kommunizierten, um die Verbindung zu vermitteln.
+    das Hyper-Netzwerk kommunizierten, um die Verbindung zu vermitteln.
     Toll, nicht wahr?
   en: >-
     The request you've sent reached the local TLS server on port
-    8888 via the two proxies, which communicated through the EPS
+    8888 via the two proxies, which communicated through the Hyper
     network to broker the connection. Neat, isn't it?
 55005f650fd8bc13:
   de: "\t\t# drittes Terminal (privater Proxy)"
@@ -164,16 +164,16 @@
   en: "\t\tHYPER_SETTINGS=settings/dev/roles/public-proxy-hyper-1\
     \ hyper server run"
 78161fc388dcd3b6:
-  de: '# viertes Terminal (öffentlicher Proxy-EPS-Server)'
-  en: '# fourth terminal (public proxy EPS server)'
+  de: '# viertes Terminal (öffentlicher Proxy-Hyper-Server)'
+  en: '# fourth terminal (public proxy Hyper server)'
 79a8b05c034a6bc7:
   de: >-
-    Der EPS-Server bietet einen TLS-Passthrough-Proxy-Dienst,
+    Der Hyper-Server bietet einen TLS-Passthrough-Proxy-Dienst,
     der eingehende TLS-Verbindungen von öffentlichen Clients an
     einen internen Server weiterleiten kann, ohne die TLS-Verbindung
     zu beenden. Der Dienst besteht aus zwei Servern:
   en: >-
-    The EPS server provides a TLS-passthrough proxy service that
+    The Hyper server provides a TLS-passthrough proxy service that
     can forward incoming TLS connections from public clients to
     an internal server without terminating the TLS connection.
     The service consists of two servers:
@@ -183,8 +183,8 @@
   en: "Both the private and the public proxies have accompanying\
     \ Hyper servers through which they communicate with each other. "
 80ac1e1a3d9fc977:
-  de: "\t\tViertes Terminal (öffentlicher Proxy-EPS-Server)"
-  en: "\t\t# fourth terminal (public proxy EPS server)"
+  de: "\t\tViertes Terminal (öffentlicher Proxy-Hyper-Server)"
+  en: "\t\t# fourth terminal (public proxy Hyper server)"
 83b568220689652f:
   de: "\t\tPROXY_SETTINGS=settings/dev/roles/public-proxy-1 proxy\
     \ run public"
@@ -194,8 +194,8 @@
   de: '## Demo'
   en: '## Demo'
 91c6c89ef01df1e4:
-  de: '# Der EPS TLS-Passthrough-Proxy'
-  en: '# The EPS TLS-Passthrough Proxy'
+  de: '# Der Hyper TLS-Passthrough-Proxy'
+  en: '# The Hyper TLS-Passthrough Proxy'
 93a5145727da9511:
   de: make && make Beispiele
   en: make && make examples
@@ -265,9 +265,9 @@ d10b36aa74a59bcf:
   en: '}'
 d5739c54f228a918:
   de: "Sowohl die privaten als auch die öffentlichen Proxys haben\
-    \ zugehörige EPS-Server, über die sie miteinander kommunizieren. "
+    \ zugehörige Hyper-Server, über die sie miteinander kommunizieren. "
   en: "Both the private and the public proxies have accompanying\
-    \ EPS servers through which they communicate with each other. "
+    \ Hyper servers through which they communicate with each other. "
 d8c89525c32753fc:
   de: >-
     Die von Ihnen gesendete Anfrage hat den lokalen TLS-Server

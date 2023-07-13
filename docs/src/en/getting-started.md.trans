@@ -3,13 +3,13 @@
   en: '{'
 095107091962c821:
   de: >-
-    Das *Endpoint *System (EPS)** bietet mehrere Server- und Client-Komponenten,
+    Das *Endpoint *System (Hyper)** bietet mehrere Server- und Client-Komponenten,
     die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
-    Insbesondere bietet das EPS zwei Kernkomponenten:
+    Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Endpoint System (EPS)** provides several server and
+    The **Hyper** provides several server and
     client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the EPS provides two core
+    in the IRIS ecosystem. Notably, the Hyper provides two core
     components:
 0b4f7d68383fa529:
   de: "\t\"Methode\": \"ls-1.add\","
@@ -48,13 +48,13 @@
     client endpoints and health departments.
 23759139dcda749e:
   de: >-
-    Das **Endpoint System (EPS)** bietet mehrere Server- und Client-Komponenten,
+    Das **Hyper** bietet mehrere Server- und Client-Komponenten,
     die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
-    Insbesondere bietet das EPS zwei Kernkomponenten:
+    Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Endpoint System (EPS)**  provides several server and
+    The **Hyper**  provides several server and
     client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the EPS provides two core
+    in the IRIS ecosystem. Notably, the Hyper provides two core
     components:
 2584834aed9d8408:
   de: "\t\"jsonrpc\": \"2.0\""
@@ -182,7 +182,7 @@
 84aadf0737161a88:
   de: >-
     Die Integration mit der IRIS-Infrastruktur unter Verwendung
-    des EPS-Servers ist einfach (hoffen wir). Zunächst müssen
+    des Hyper-Servers ist einfach (hoffen wir). Zunächst müssen
     Sie den `hyper` Server zusammen mit den Einstellungen und
     Zertifikaten, die wir Ihnen zur Verfügung gestellt haben,
     bereitstellen. Dies ist so einfach wie das Herunterladen der
@@ -190,7 +190,7 @@
     des Einstellungsarchivs, das wir Ihnen zur Verfügung gestellt
     haben, und das Ausführen von
   en: >-
-    Integrating with the IRIS infrastructure using the EPS server
+    Integrating with the IRIS infrastructure using the Hyper server
     is easy (we hope). First, you need to deploy the `hyper` server
     together with the settings and certificates we've provided
     to you. This is as easy as downloading the latest `hyper`
@@ -313,12 +313,12 @@ bbc6744b2f3fabc4:
 bc855a3ce7fa73ee:
   de: >-
     Um eine konkrete Vorstellung von der Integration mit der IRIS-Infrastruktur
-    unter Verwendung des EPS-Servers zu bekommen, haben wir ein
+    unter Verwendung des Hyper-Servers zu bekommen, haben wir ein
     einfaches Demo-Setup erstellt, das alle Komponenten veranschaulicht.
     Die Demo besteht aus drei Komponenten:
   en: >-
     To get a concrete idea of how to integrate with the IRIS infrastructure
-    using the EPS server we have created a simple demo setup that
+    using the Hyper server we have created a simple demo setup that
     illustrates all components. The demo consists of three components:
 bd00183b6db04208:
   de: 'Dies sollte eine einfache JSON-Antwort zurückgeben:'

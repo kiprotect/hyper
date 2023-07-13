@@ -1,12 +1,12 @@
 095107091962c821:
   de: >-
-    Das **Endpoint System (EPS)** bietet mehrere Server- und Client-Komponenten,
+    Das **Hyper** bietet mehrere Server- und Client-Komponenten,
     die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
-    Insbesondere bietet das EPS zwei Kernkomponenten:
+    Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Endpoint System (EPS)** provides several server and
+    The **Hyper** provides several server and
     client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the EPS provides two core
+    in the IRIS ecosystem. Notably, the Hyper provides two core
     components:
 0b998041a417dd00:
   de: >-
@@ -21,14 +21,14 @@
   de: >-
     Für die ersten Schritte lesen Sie bitte das [Handbuch Erste
     Schritte]({{'getting-started'|href}}). Danach können Sie sich
-    die [ausführliche EPS-Dokumentation]({{'hyper.index'|href}})
+    die [ausführliche Hyper-Dokumentation]({{'hyper.index'|href}})
     ansehen. Wenn Sie den Proxy oder das Dienstverzeichnis ausführen
     möchten, können Sie sich die entsprechende [Proxy-Dokumentation]({{'proxy.index'|href}})
     sowie die [Dienstverzeichnis-Dokumentation]({{'sd.index'|href}})
     ansehen.
   en: >-
     To get started please read the [Getting Started Guide]({{'getting-started'|href}}).
-    After that you can check out the [detailed EPS documentation]({{'hyper.index'|href}}).
+    After that you can check out the [detailed Hyper documentation]({{'hyper.index'|href}}).
     If you want to run the proxy or service directory you can
     check out the respective [proxy documentation]({{'proxy.index'|href}})
     as well as [service directory documentation]({{'sd.index'|href}}).
@@ -43,13 +43,13 @@
     client endpoints and health departments.
 23759139dcda749e:
   de: >-
-    Das **Endpoint System (EPS)** bietet mehrere Server- und Client-Komponenten,
+    Das **Hyper** bietet mehrere Server- und Client-Komponenten,
     die die Kommunikation im IRIS-Ökosystem verwalten und sichern.
-    Insbesondere bietet das EPS zwei Kernkomponenten:
+    Insbesondere bietet das Hyper zwei Kernkomponenten:
   en: >-
-    The **Endpoint System (EPS)**  provides several server and
+    The **Hyper**  provides several server and
     client components that manage and secure the communication
-    in the IRIS ecosystem. Notably, the EPS provides two core
+    in the IRIS ecosystem. Notably, the Hyper provides two core
     components:
 31ac0b260c8a780d:
   de: >-
@@ -98,14 +98,14 @@ c27e8e74cb8cd379:
   de: >-
     Für die ersten Schritte lesen Sie bitte die Anleitung " [Erste
     Schritte"]({{'getting-started'|href}}). Danach können Sie
-    sich die [detaillierte EPS-Dokumentation]({{'hyper.index'|href}})
+    sich die [detaillierte Hyper-Dokumentation]({{'hyper.index'|href}})
     ansehen. Wenn Sie den Proxy oder das Dienstverzeichnis ausführen
     möchten, können Sie sich die jeweilige [Proxy-Dokumentation]({{'proxy.index'|href}})
     sowie die [Dienstverzeichnis-Dokumentation]({{'sd.index'|href}})
     ansehen.
   en: >-
     To get started please read the [Getting Started Guide]({{'getting-started'|href}}).
-    After that you can check out the [detailed EPS documentation]({{'hyper.index'|href}}).
+    After that you can check out the [detailed Hyper documentation]({{'hyper.index'|href}}).
     If you want to run the proxy or service directory you can
     check out the respective [proxy documentation]({{'proxy.index'|href}})
     as well as [service directory documentation]({{'sd.index'|href}}).

@@ -20,7 +20,7 @@
 0eebf0b7343a3032:
   de: >-
     Alle Änderungen im Dienstverzeichnis werden kryptografisch
-    signiert. Dazu besitzt jeder Akteur im EPS-System ein Paar
+    signiert. Dazu besitzt jeder Akteur im Hyper-System ein Paar
     ECDSA-Schlüssel und ein dazugehöriges Zertifikat. Das Serviceverzeichnis
     ist aus einer Reihe von **Änderungsdatensätzen** aufgebaut.
     Jeder Änderungssatz enthält den Namen eines **Akteurs**, einen
@@ -28,7 +28,7 @@
     sollen.
   en: >-
     All changes in the service directory are cryptographically
-    signed. For this, every actor in the EPS system has a pair
+    signed. For this, every actor in the Hyper system has a pair
     of ECDSA keys and an accompanying certificate. The service
     directory is constructed from a series of **change records**.
     Each change record contains the name of an **operator**, a
@@ -77,7 +77,7 @@
     Feinkörnigere Berechtigungen (z. B. kann ein Anbieter von
     Kontaktverfolgungen nur seine eigenen Einträge im Dienst "Standorte"
     bearbeiten) müssen von den Diensten selbst implementiert werden.
-    Zu diesem Zweck stellt der EPS-Server den Diensten Informationen
+    Zu diesem Zweck stellt der Hyper-Server den Diensten Informationen
     über die aufrufende Gegenstelle über einen speziellen Parameter
     (`_caller`) zur Verfügung, der zusammen mit den anderen RPC-Methodenparametern
     übergeben wird. Diese Struktur enthält auch den aktuellen
@@ -91,7 +91,7 @@
     service method). More fine-grained permissions (e.g. a contact
     tracing provider can only edit its own entries in the "locations"
     service) need to be implemented by the services themselves.
-    For that purpose, the EPS server makes information about the
+    For that purpose, the Hyper server makes information about the
     calling peer available to the services via a special parameter
     (`_caller`) that gets passed along with the other RPC method
     parameters. This structure also contains the current entry
@@ -99,25 +99,25 @@
     the called service to identify and authorize the caller.
 2f2335f928febfe6:
   de: >-
-    Mit Hilfe des Verzeichnisses können EPS-Server feststellen,
+    Mit Hilfe des Verzeichnisses können Hyper-Server feststellen,
     ob und wie sie sich mit einem anderen Betreiber verbinden
     können. Betreiber, die nur über ausgehende Verbindungen verfügen
     (z. B. `ga-leipzig` im obigen Beispiel), können das Verzeichnis
     verwenden, um zu erfahren, dass sie möglicherweise asynchrone
     Antworten von anderen Betreibern (z. B. `ls-1`) erhalten und
     dann ausgehende Verbindungen zu diesen Betreibern öffnen,
-    über die sie Antworten erhalten können. EPS-Server können
+    über die sie Antworten erhalten können. Hyper-Server können
     das Dienstverzeichnis auch verwenden, um festzustellen, ob
     sie eine Nachricht von einem bestimmten Betreiber annehmen
     sollen.
   en: >-
-    The directory allows EPS servers to determine whether and
+    The directory allows Hyper servers to determine whether and
     how they can connect to another operator. Operators that only
     have outgoing connectivity (e.g. `ga-leipzig` in the example
     above) can use the directory to learn that they might receive
     asynchronous responses from other operators (e.g. `ls-1`)
     and then open outgoing connections to these operators through
-    which they can receive replies. EPS servers can also use the
+    which they can receive replies. Hyper servers can also use the
     service directory to determine whether they should accept
     a message from a given operator.
 3288a136ca3e7c85:
@@ -205,11 +205,11 @@
   en: SD_SETTINGS=settings/dev/roles/sd-1 sd run
 6b912c25e36b4747:
   de: >-
-    Das EPS-Serverpaket bietet auch einen `sd` API-Server-Befehl,
+    Das Hyper-Serverpaket bietet auch einen `sd` API-Server-Befehl,
     der einen JSON-RPC-Server öffnet, der das Dienstverzeichnis
     verteilt.
   en: >-
-    The EPS server package also provides a `sd` API server command
+    The Hyper server package also provides a `sd` API server command
     that opens a JSON-RPC server which distributes the service
     directory.
 737db166c79ae98e:
