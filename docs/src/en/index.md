@@ -4,6 +4,7 @@ The **Hyper** provides several server and client components that manage and secu
 
 * A **message broker / mesh router** services that transmits requests between different actors in the system and ensures mutual authorization and authentication.
 * A **distributed service directory** that stores cryptographically signed information about actors in the system, and is used by the message broker for authentication, service discovery and connection establishment.
+* An **overlay network** that enables you to connect arbitrary TCP & UDP services over end-to-end encrypted channels (work in progress).
 
 In addition it provides a **TLS passthrough proxy service** that enables direct, end-to-end encrypted communication between client endpoints and health departments.
 

@@ -4,6 +4,7 @@
 
 * Ein **Message-Broker / Mesh-Router-Dienst**, der Anfragen zwischen verschiedenen Akteuren im System weiterleitet und die gegenseitige Autorisierung und Authentifizierung sicherstellt.
 * Ein **verteiltes Dienstverzeichnis**, das kryptografisch signierte Informationen über Akteure im System speichert und vom Message Broker für die Authentifizierung, die Dienstsuche und den Verbindungsaufbau verwendet wird.
+* Ein **Overlay-Netzwerk**, mit dem Sie beliebige TCP- und UDP-Dienste über Ende-zu-Ende-verschlüsselte Kanäle verbinden können (in Arbeit).
 
 Zusätzlich bietet es einen **TLS-Passthrough-Proxy-Dienst, der** eine direkte, Ende-zu-Ende-verschlüsselte Kommunikation zwischen Client-Endpunkten und Gesundheitsämtern ermöglicht.
 

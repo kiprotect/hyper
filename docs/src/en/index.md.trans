@@ -92,6 +92,15 @@
     If you want to run the proxy or service directory you can
     check out the respective [proxy documentation]({{'proxy.index'|href}})
     as well as [service directory documentation]({{'sd.index'|href}}).
+8b7066fccc733540:
+  de: >-
+    * Ein **Overlay-Netzwerk**, mit dem Sie beliebige TCP- und
+    UDP-Dienste über Ende-zu-Ende-verschlüsselte Kanäle verbinden
+    können (in Arbeit).
+  en: >-
+    * An **overlay network** that enables you to connect arbitrary
+    TCP & UDP services over end-to-end encrypted channels (work
+    in progress).
 af06b7af979b1ab9:
   de: >-
     **Hyper** bietet mehrere Server- und Client-Komponenten, die
