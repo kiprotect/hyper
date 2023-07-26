@@ -61,7 +61,6 @@ func RealSettingsPaths(envSettingsName string) ([]string, error) {
 }
 
 func Settings(settingsPaths []string, fs fs.FS, definitions *hyper.Definitions) (*hyper.Settings, error) {
-	hyper.Log.Info(settingsPaths)
 	if rawSettings, err := settings.MakeSettings(settingsPaths, fs); err != nil {
 		return nil, err
 	} else if params, err := hyperForms.SettingsForm.ValidateWithContext(rawSettings.Values, map[string]interface{}{"definitions": definitions}); err != nil {

@@ -401,7 +401,7 @@ func (c *GRPCClientChannel) DeliverRequest(request *hyper.Request) (*hyper.Respo
 		return nil, fmt.Errorf("error parsing address: %w", err)
 	}
 
-	entry, err := c.DirectoryEntry(address, "grpc_server")
+	entry, err := c.DirectoryEntry(address.Operator, "grpc_server")
 
 	if err != nil {
 		return nil, err
@@ -523,7 +523,7 @@ func (c *GRPCClientChannel) CanDeliverTo(address *hyper.Address) bool {
 	}
 
 	// we check if the requested service offers a gRPC server
-	if entry, err := c.DirectoryEntry(address, "grpc_server"); entry != nil {
+	if entry, err := c.DirectoryEntry(address.Operator, "grpc_server"); entry != nil {
 		if settings, err := getEntrySettings(entry.Channel("grpc_server").Settings); err != nil {
 			hyper.Log.Error(err)
 			return false

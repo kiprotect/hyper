@@ -3,6 +3,7 @@
 
 SHELL := /bin/bash
 VERSION ?= development
+SD ?= default
 
 GOFLAGS ?= $(GOFLAGS:) -ldflags "-X 'github.com/iris-connect/hyper.Version=$(VERSION)'"
 
@@ -48,7 +49,10 @@ certs:
 	(cd settings/test/certs; ../../../.scripts/make_certs.sh)
 
 sd-setup:
-	.scripts/sd_setup.sh settings/dev/directory
+	# we always reset the directory and load the certs
+	.scripts/sd_setup.sh settings/dev/directory --reset
+	# then we load additional entries
+	.scripts/sd_setup.sh settings/dev/directory/$(SD)
 
 sd-test-setup:
 	.scripts/sd_setup.sh settings/test/directory

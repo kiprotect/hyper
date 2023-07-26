@@ -1,11 +1,17 @@
-name: quic-1
+vars:
+  OP:
+    source: env
+    variable: HYPER_OP
+    default: quic-1
+    type: string
+name: $OP
 directory:
   type: api
   settings:
     jsonrpc_client:
       tls:
-        certificate_file: "/$DIR/../../certs/quic-1.crt"
-        key_file: "/$DIR/../../certs/quic-1.key"
+        certificate_file: "/$DIR/../../certs/$OP.crt"
+        key_file: "/$DIR/../../certs/$OP.key"
         ca_certificate_files: ["/$DIR/../../certs/root.crt"]
     ca_certificate_files: ["/$DIR/../../certs/root.crt"]
     ca_intermediate_certificate_files: ["/$DIR/../../certs/intermediate.crt"]
@@ -15,7 +21,14 @@ channels: # defines all the channels that we want to open when starting the serv
   - name: main QUIC client/server # forwards TCP streams and UDP packets via QUIC
     type: quic
     settings:
+      bindAddress: localhost:7771
+      channels:
+        - remote:
+            host: quic-2
+            port: 4444
+          local:
+            port: 5555
       tls:
         ca_certificate_files: ["/$DIR/../../certs/root.crt"]
-        certificate_file: "/$DIR/../../certs/quic-1.crt"
-        key_file: "/$DIR/../../certs/quic-1.key"
+        certificate_file: "/$DIR/../../certs/$OP.crt"
+        key_file: "/$DIR/../../certs/$OP.key"
