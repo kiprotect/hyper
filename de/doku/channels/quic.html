@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta name="generator" content=
 "HTML Tidy for HTML5 for Linux version 5.6.0">
@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>Hyper documentation | Proxy Service - Overview</title>
+<title>Hyper-Dokumentation | Channels - QUIC</title>
 <link rel="stylesheet" type="text/css" href=
 "/hyper/docs/static/css/main.css">
 <script>
@@ -109,6 +109,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
+<div id="translation-notice">
+<div class="message is-info">
+<div class="message-body">
+<p>Diese Website wurde größtenteils automatisch von der <a href=
+"/hyper/docs/channels/quic">englischen Version</a> übersetzt. Wir
+entschuldigen uns für eventuelle Übersetzungsfehler.</p>
+<span class="x" onclick=
+"localStorage.setItem('translation-notice', true);notice.style.display = 'none'">x</span></div>
+</div>
+</div>
 <script>
 var notice = document.getElementById("translation-notice")
 if (localStorage.getItem("translation-notice") === null && notice !== null){
@@ -125,54 +135,54 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 "is-active">
 <aside class="menu">
 <p class="menu-label" style="text-align:center"><a href=
-"/hyper/docs">Hyper documentation</a></p>
+"/hyper/de/doku">Hyper-Dokumentation</a></p>
 <ul class="menu-list">
-<li><a href="/hyper/docs">Start</a></li>
-<li><a href="/hyper/docs/getting-started">Getting Started</a></li>
+<li><a href="/hyper/de/doku">Start</a></li>
+<li><a href="/hyper/de/doku/getting-started">Erste
+Schritte</a></li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-hyper-nav">Hyper Service</a>
 <ul class="is-hidden" id="page-hyper-nav">
-<li><a href="/hyper/docs/hyper-service">Overview</a></li>
-</ul>
-</li>
-<li><a class="" href="#" data-toggle="collapse" data-target=
-"page-channels-nav">Channels</a>
-<ul class="is-hidden" id="page-channels-nav">
-<li><a href="/hyper/docs/channels/quic">QUIC</a></li>
+<li><a href="/hyper/de/doku/hyper-service">Übersicht</a></li>
 </ul>
 </li>
 <li><a class="is-active" href="#" data-toggle="collapse"
-data-target="page-proxy-nav">Proxy Service</a>
-<ul class="" id="page-proxy-nav">
-<li><a href="/hyper/docs/proxy-service">Overview</a></li>
+data-target="page-channels-nav">Channels</a>
+<ul class="" id="page-channels-nav">
+<li><a href="/hyper/de/doku/channels/quic">QUIC</a></li>
+</ul>
+</li>
+<li><a class="" href="#" data-toggle="collapse" data-target=
+"page-proxy-nav">Proxy Service</a>
+<ul class="is-hidden" id="page-proxy-nav">
+<li><a href="/hyper/de/doku/proxy-service">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/installation">Installation</a></li>
+"/hyper/de/doku/proxy-service/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/proxy-service/configuration">Configuration</a></li>
-<li><a href="/hyper/docs/proxy-service/security">Security & Threat
-Model</a></li>
-<li><a href="/hyper/docs/proxy-service/p2p">Peer-To-Peer (P2P)
+"/hyper/de/doku/proxy-service/configuration">Konfiguration</a></li>
+<li><a href="/hyper/de/doku/proxy-service/security">Sicherheit &
+Bedrohungsmodell</a></li>
+<li><a href="/hyper/de/doku/proxy-service/p2p">Peer-To-Peer (P2P)
 Proxy</a></li>
 </ul>
 </li>
 <li><a class="" href="#" data-toggle="collapse" data-target=
 "page-sd-nav">Service Directory</a>
 <ul class="is-hidden" id="page-sd-nav">
-<li><a href="/hyper/docs/service-directory">Overview</a></li>
+<li><a href="/hyper/de/doku/service-directory">Übersicht</a></li>
 <li><a href=
-"/hyper/docs/service-directory/installation">Installation</a></li>
+"/hyper/de/doku/service-directory/installation">Installation</a></li>
 <li><a href=
-"/hyper/docs/service-directory/configuration">Configuration</a></li>
+"/hyper/de/doku/service-directory/configuration">Konfiguration</a></li>
 </ul>
 </li>
-<li><a href="/hyper/docs/contact">Contact</a></li>
+<li><a href="/hyper/de/doku/kontakt">Kontakt</a></li>
 <li><a href="#" data-toggle="collapse" data-target=
-"menu-language-dropdown">Languages</a>
+"menu-language-dropdown">Sprachen</a>
 <ul id="menu-language-dropdown" class="is-hidden">
+<li><a class="" href="/hyper/docs/channels/quic">English</a></li>
 <li><a class="is-open is-active" href=
-"/hyper/docs/proxy-service">English</a></li>
-<li><a class="" href=
-"/hyper/de/doku/proxy-service">Deutsch</a></li>
+"/hyper/de/doku/channels/quic">Deutsch</a></li>
 </ul>
 </li>
 </ul>
@@ -183,103 +193,67 @@ Proxy</a></li>
 <section class="section first">
 <div class="content">
 <div class="content markdown">
-<h1>The Hyper TLS-Passthrough Proxy</h1>
-<p>The Hyper server provides a TLS-passthrough proxy service that
-can forward incoming TLS connections from public clients to an
-internal server without terminating the TLS connection. The service
-consists of two servers:</p>
-<ul>
-<li>A <strong>public proxy</strong> that listens on a publicly
-available TCP port for incoming TLS connections, and on another TCP
-port for connections from private proxy servers.</li>
-<li>A <strong>private proxy</strong> that does not listen on any
-TCP port and instead actively connects to the public proxy server
-when a connection is available for it. It forwards that connection
-(again without terminating TLS) to an internal server that then
-handles it.</li>
-</ul>
-<p>Both the private and the public proxies have accompanying Hyper
-servers through which they communicate with each other.</p>
-<p>The private proxy can <strong>announce</strong> incoming
-connections to the public proxy. Whenever a new connection reaches
-that proxy, it compares it to the announcements it received. If a
-match is found, it notifies the private proxy of an incoming
-connection via the Hyper network, also sending it a random token.
-The private proxy opens a connection to the public proxy, sends the
-token and takes over the TCP stream. It forwards it to an internal
-server.</p>
-<h2>Demo</h2>
-<p>To demonstrate this mechanism we have prepared an example
-configuration. Simply run the following snippets in different
-terminals (from the main directory in the repository):</p>
+<h1>QUIC-Kanal</h1>
+<p><strong>Bitte beachten Sie, dass sich der QUIC-Kanal noch in der
+Entwicklung befindet.</strong></p>
+<p>Der QUIC-Kanal ermöglicht die Übertragung beliebiger TCP-Streams
+zwischen zwei Hosts.</p>
+<h2>Konfiguration</h2>
+<p>Die beiden Beispieleinstellungen für QUIC befinden sich in den
+Einstellungsordnern <code>quic-1</code> und <code>quic-2</code>
+(<code>settings/dev/roles/...</code>). Der <code>quic-1</code>
+Server ist so konfiguriert, dass er einen einzelnen lokalen
+TCP-Port (4444) an einen Port des entfernten Servers (5555)
+weiterleitet.</p>
+<p>Die entsprechenden Einträge im Dienstverzeichnis können wie
+folgt geladen werden (denken Sie daran, das Dienstverzeichnis
+zuerst über <code>SD_SETTINGS=settings/dev/roles/sd-1 sd run</code>
+zu starten):</p>
 <div class="codehilite">
-<pre><code><span class="c1"># prepare the binaries</span>
-make<span class="w"> </span><span class=
-"o">&amp;&</span><span class="w"> </span>make<span class=
-"w"> </span>examples
-<span class="c1"># first terminal</span>
-internal-server<span class="w"> </span><span class=
-"c1">#will open a JSON-RPC server on port 8888</span>
-<span class="c1"># second terminal (public proxy)</span>
-<span class="nv">PROXY_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-1<span class=
-"w"> </span>proxy<span class="w"> </span>run<span class=
-"w"> </span>public
-<span class="c1"># third terminal (private proxy)</span>
-<span class="nv">PROXY_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/private-proxy-1<span class=
-"w"> </span>proxy<span class="w"> </span>run<span class=
-"w"> </span>private
-<span class=
-"c1"># fourth terminal (public proxy Hyper server)</span>
+<pre><code>make<span class="w"> </span>sd-setup<span class=
+"w"> </span><span class="nv">SD</span><span class="o">=</span>quic
+</code></pre></div>
+<p>Dann können Sie die beiden QUIC-Server einfach wie folgt
+starten:</p>
+<div class="codehilite">
+<pre><code><span class="c1"># quic-1</span>
 <span class="nv">HYPER_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-hyper-1<span class=
+"o">=</span>settings/dev/roles/quic-1<span class=
 "w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
-<span class=
-"c1"># fifth terminal (private proxy Hyper server)</span>
+<span class="c1"># quic-2 (in a different terminal)</span>
 <span class="nv">HYPER_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/private-proxy-hyper-1<span class=
+"o">=</span>settings/dev/roles/quic-2<span class=
 "w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
 </code></pre></div>
-<p>When all services are up and running you should be able to send
-a request to the proxy via</p>
+<p>Um einen lokalen TCP-Server zu simulieren, können Sie z.B.
+<code>ncat</code> wie folgt verwenden:</p>
 <div class="codehilite">
-<pre><code>curl<span class="w"> </span>--cacert<span class=
-"w"> </span>settings/dev/certs/root.crt<span class=
-"w"> </span>--resolve<span class=
-"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
-"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<pre><code>ncat<span class="w"> </span>-l<span class=
+"w"> </span><span class="m">4444</span><span class=
+"w"> </span>--keep-open<span class="w"> </span>--exec<span class=
+"w"> </span><span class="s2">"/bin/cat"</span>
 </code></pre></div>
-<p>This should return the following JSON data:</p>
+<p>Jetzt sollten Sie in der Lage sein, sich mit dem lokalen Port
+<code>5555</code> zu verbinden und alle Daten vom ncat-Server über
+die beiden QUIC-Server wiedergeben zu lassen:</p>
 <div class="codehilite">
-<pre><code><span class="p">{</span>
-<span class="w">  </span><span class=
-"nt">"message"</span><span class="p">:</span><span class=
-"w"> </span><span class="s2">"success"</span>
-<span class="p">}</span>
+<pre><code>&gt;<span class="w"> </span>telnet<span class=
+"w"> </span>localhost<span class="w"> </span><span class=
+"m">5555</span>
+Trying<span class="w"> </span><span class="m">127</span>.0.0.1...
+Connected<span class="w"> </span>to<span class=
+"w"> </span>localhost.
+Escape<span class="w"> </span>character<span class=
+"w"> </span>is<span class="w"> </span><span class="s1">'^]'</span>.
+Hi
+Hi
 </code></pre></div>
-<p>The request you've sent reached the local TLS server on port
-8888 via the two proxies, which communicated through the Hyper
-network to broker the connection. Neat, isn't it?</p>
-<h2>Stress Testing</h2>
-<p>You can also stress-test the server with parallel requests using
-the <code>parallel</code> util:</p>
-<div class="codehilite">
-<pre><code>eq<span class="w"> </span><span class=
-"m">1</span><span class="w"> </span><span class=
-"m">2000000</span><span class="w"> </span><span class=
-"p">|</span><span class="w"> </span>parallel<span class=
-"w"> </span>-j<span class="w"> </span><span class=
-"m">25</span><span class="w"> </span>curl<span class=
-"w"> </span>--cacert<span class=
-"w"> </span>settings/dev/certs/root.crt<span class=
-"w"> </span>--resolve<span class=
-"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
-"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span>--data<span class="w"> </span><span class="s2">"{}"</span>
-</code></pre></div>
-<p>This will try to send 25 requests in parallel to the server.</p>
+<p>Herzlichen Glückwunsch! Sie haben soeben den einfachsten
+möglichen QUIC-Kanal zwischen zwei Hosts eingerichtet. Sie können
+in den Einstellungen des <code>quic-1</code> Servers
+Channel-Einträge hinzufügen, um weitere Ports zuzuordnen.</p>
 </div>
 </div>
 </section>

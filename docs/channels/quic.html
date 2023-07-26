@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content=
 "width=device-width, initial-scale=1">
-<title>Hyper documentation | Proxy Service - Overview</title>
+<title>Hyper documentation | Channels - QUIC</title>
 <link rel="stylesheet" type="text/css" href=
 "/hyper/docs/static/css/main.css">
 <script>
@@ -135,15 +135,15 @@ data-target="side-menu" data-toggle="collapse"><span>&nbsp;</span>
 <li><a href="/hyper/docs/hyper-service">Overview</a></li>
 </ul>
 </li>
-<li><a class="" href="#" data-toggle="collapse" data-target=
-"page-channels-nav">Channels</a>
-<ul class="is-hidden" id="page-channels-nav">
+<li><a class="is-active" href="#" data-toggle="collapse"
+data-target="page-channels-nav">Channels</a>
+<ul class="" id="page-channels-nav">
 <li><a href="/hyper/docs/channels/quic">QUIC</a></li>
 </ul>
 </li>
-<li><a class="is-active" href="#" data-toggle="collapse"
-data-target="page-proxy-nav">Proxy Service</a>
-<ul class="" id="page-proxy-nav">
+<li><a class="" href="#" data-toggle="collapse" data-target=
+"page-proxy-nav">Proxy Service</a>
+<ul class="is-hidden" id="page-proxy-nav">
 <li><a href="/hyper/docs/proxy-service">Overview</a></li>
 <li><a href=
 "/hyper/docs/proxy-service/installation">Installation</a></li>
@@ -170,9 +170,9 @@ Proxy</a></li>
 "menu-language-dropdown">Languages</a>
 <ul id="menu-language-dropdown" class="is-hidden">
 <li><a class="is-open is-active" href=
-"/hyper/docs/proxy-service">English</a></li>
+"/hyper/docs/channels/quic">English</a></li>
 <li><a class="" href=
-"/hyper/de/doku/proxy-service">Deutsch</a></li>
+"/hyper/de/doku/channels/quic">Deutsch</a></li>
 </ul>
 </li>
 </ul>
@@ -183,103 +183,63 @@ Proxy</a></li>
 <section class="section first">
 <div class="content">
 <div class="content markdown">
-<h1>The Hyper TLS-Passthrough Proxy</h1>
-<p>The Hyper server provides a TLS-passthrough proxy service that
-can forward incoming TLS connections from public clients to an
-internal server without terminating the TLS connection. The service
-consists of two servers:</p>
-<ul>
-<li>A <strong>public proxy</strong> that listens on a publicly
-available TCP port for incoming TLS connections, and on another TCP
-port for connections from private proxy servers.</li>
-<li>A <strong>private proxy</strong> that does not listen on any
-TCP port and instead actively connects to the public proxy server
-when a connection is available for it. It forwards that connection
-(again without terminating TLS) to an internal server that then
-handles it.</li>
-</ul>
-<p>Both the private and the public proxies have accompanying Hyper
-servers through which they communicate with each other.</p>
-<p>The private proxy can <strong>announce</strong> incoming
-connections to the public proxy. Whenever a new connection reaches
-that proxy, it compares it to the announcements it received. If a
-match is found, it notifies the private proxy of an incoming
-connection via the Hyper network, also sending it a random token.
-The private proxy opens a connection to the public proxy, sends the
-token and takes over the TCP stream. It forwards it to an internal
-server.</p>
-<h2>Demo</h2>
-<p>To demonstrate this mechanism we have prepared an example
-configuration. Simply run the following snippets in different
-terminals (from the main directory in the repository):</p>
+<h1>QUIC Channel</h1>
+<p><strong>Please note the QUIC channel is still a work in
+progress.</strong></p>
+<p>The QUIC channel allows transmission of arbitrary TCP streams
+between two hosts.</p>
+<h2>Configuration</h2>
+<p>The two example settings for QUIC are in the <code>quic-1</code>
+and <code>quic-2</code> settings folders
+(<code>settings/dev/roles/...</code>). The <code>quic-1</code>
+server is configured to forward a single local TCP port (4444) to a
+port of the remote server (5555).</p>
+<p>The corresponding service directory entries can be loaded as
+follows (remember to start the service directory first via
+<code>SD_SETTINGS=settings/dev/roles/sd-1 sd run</code>):</p>
 <div class="codehilite">
-<pre><code><span class="c1"># prepare the binaries</span>
-make<span class="w"> </span><span class=
-"o">&amp;&</span><span class="w"> </span>make<span class=
-"w"> </span>examples
-<span class="c1"># first terminal</span>
-internal-server<span class="w"> </span><span class=
-"c1">#will open a JSON-RPC server on port 8888</span>
-<span class="c1"># second terminal (public proxy)</span>
-<span class="nv">PROXY_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-1<span class=
-"w"> </span>proxy<span class="w"> </span>run<span class=
-"w"> </span>public
-<span class="c1"># third terminal (private proxy)</span>
-<span class="nv">PROXY_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/private-proxy-1<span class=
-"w"> </span>proxy<span class="w"> </span>run<span class=
-"w"> </span>private
-<span class=
-"c1"># fourth terminal (public proxy Hyper server)</span>
+<pre><code>make<span class="w"> </span>sd-setup<span class=
+"w"> </span><span class="nv">SD</span><span class="o">=</span>quic
+</code></pre></div>
+<p>Then, you can simply start the two QUIC servers as follows:</p>
+<div class="codehilite">
+<pre><code><span class="c1"># quic-1</span>
 <span class="nv">HYPER_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/public-proxy-hyper-1<span class=
+"o">=</span>settings/dev/roles/quic-1<span class=
 "w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
-<span class=
-"c1"># fifth terminal (private proxy Hyper server)</span>
+<span class="c1"># quic-2 (in a different terminal)</span>
 <span class="nv">HYPER_SETTINGS</span><span class=
-"o">=</span>settings/dev/roles/private-proxy-hyper-1<span class=
+"o">=</span>settings/dev/roles/quic-2<span class=
 "w"> </span>hyper<span class="w"> </span>server<span class=
 "w"> </span>run
 </code></pre></div>
-<p>When all services are up and running you should be able to send
-a request to the proxy via</p>
+<p>To simulate a local TCP server, you can e.g. use
+<code>ncat</code> as follows:</p>
 <div class="codehilite">
-<pre><code>curl<span class="w"> </span>--cacert<span class=
-"w"> </span>settings/dev/certs/root.crt<span class=
-"w"> </span>--resolve<span class=
-"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
-"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<pre><code>ncat<span class="w"> </span>-l<span class=
+"w"> </span><span class="m">4444</span><span class=
+"w"> </span>--keep-open<span class="w"> </span>--exec<span class=
+"w"> </span><span class="s2">"/bin/cat"</span>
 </code></pre></div>
-<p>This should return the following JSON data:</p>
+<p>Now, you should be able to connect to local port
+<code>5555</code> and have all data echoed by the ncat server
+through the two QUIC servers:</p>
 <div class="codehilite">
-<pre><code><span class="p">{</span>
-<span class="w">  </span><span class=
-"nt">"message"</span><span class="p">:</span><span class=
-"w"> </span><span class="s2">"success"</span>
-<span class="p">}</span>
+<pre><code>&gt;<span class="w"> </span>telnet<span class=
+"w"> </span>localhost<span class="w"> </span><span class=
+"m">5555</span>
+Trying<span class="w"> </span><span class="m">127</span>.0.0.1...
+Connected<span class="w"> </span>to<span class=
+"w"> </span>localhost.
+Escape<span class="w"> </span>character<span class=
+"w"> </span>is<span class="w"> </span><span class="s1">'^]'</span>.
+Hi
+Hi
 </code></pre></div>
-<p>The request you've sent reached the local TLS server on port
-8888 via the two proxies, which communicated through the Hyper
-network to broker the connection. Neat, isn't it?</p>
-<h2>Stress Testing</h2>
-<p>You can also stress-test the server with parallel requests using
-the <code>parallel</code> util:</p>
-<div class="codehilite">
-<pre><code>eq<span class="w"> </span><span class=
-"m">1</span><span class="w"> </span><span class=
-"m">2000000</span><span class="w"> </span><span class=
-"p">|</span><span class="w"> </span>parallel<span class=
-"w"> </span>-j<span class="w"> </span><span class=
-"m">25</span><span class="w"> </span>curl<span class=
-"w"> </span>--cacert<span class=
-"w"> </span>settings/dev/certs/root.crt<span class=
-"w"> </span>--resolve<span class=
-"w"> </span>test.internal-server.local:4433:127.0.0.1<span class=
-"w"> </span>https://test.internal-server.local:4433/jsonrpc<span class="w"> </span>--data<span class="w"> </span><span class="s2">"{}"</span>
-</code></pre></div>
-<p>This will try to send 25 requests in parallel to the server.</p>
+<p>Congrats! You just set up the simplest possible QUIC channel
+between two hosts. You can add channel entries to the settings of
+the <code>quic-1</code> server to map additional ports.</p>
 </div>
 </div>
 </section>
