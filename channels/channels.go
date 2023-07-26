@@ -51,4 +51,10 @@ var Channels = hyper.ChannelDefinitions{
 		Maker:             MakeGRPCServerChannel,
 		SettingsValidator: GRPCServerSettingsValidator,
 	},
+	"quic": hyper.ChannelDefinition{
+		Name:              "QUIC Channel",
+		Description:       "Uses QUIC to forward traffic between peers",
+		Maker:             MakeQUICChannel,
+		SettingsValidator: QUICSettingsValidator,
+	},
 }
