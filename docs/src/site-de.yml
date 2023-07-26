@@ -22,6 +22,14 @@ pages:
   slug: hyper-service
   title: Hyper Service
 - children:
+  - name: quic
+    src: de/channels/quic.md
+    title: QUIC
+  name: channels
+  navtitle: Channels
+  slug: channels
+  title: Channels
+- children:
   - name: index
     src: de/proxy/index.md
     title: Übersicht

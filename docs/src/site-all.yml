@@ -24,6 +24,14 @@ pages:
       - src|f|exists?: "{target_language}/hyper/index.md"
         title|t: Overview
         name: index
+  - name: channels
+    title: Channels
+    navtitle: Channels
+    slug||slugify: channels
+    children:
+      - src|f|exists?: "{target_language}/channels/quic.md"
+        title|t: QUIC
+        name: quic
   - name: proxy
     title: Proxy Service
     navtitle: Proxy Service

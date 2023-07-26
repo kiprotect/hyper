@@ -1,0 +1,77 @@
+0d72f881ef2748b2:
+  de: '# QUIC-Kanal'
+  en: '# QUIC Channel'
+182c5d93ad0981e8:
+  de: >-
+    Die beiden Beispieleinstellungen für QUIC befinden sich in
+    den Einstellungsordnern `quic-1` und `quic-2` (`settings/dev/roles/...`).
+  en: >-
+    The two example settings for QUIC are in the `quic-1` and
+    `quic-2` settings folders (`settings/dev/roles/...`).
+2435691716fdd698:
+  de: >-
+    Dann können Sie die beiden QUIC-Server einfach wie folgt starten:
+  en: 'Then, you can simply start the two QUIC servers as follows:'
+2fb3dd3d8063d445:
+  de: >-
+    **Bitte beachten Sie, dass sich der QUIC-Kanal noch in der
+    Entwicklung befindet.**
+  en: >-
+    **Please note the QUIC channel is still a work in progress.**
+37f210b46aa90130:
+  de: '## Konfiguration'
+  en: '## Configuration'
+50a15f8306d23726:
+  de: >-
+    Der `quic-1` Server ist so konfiguriert, dass er einen einzelnen
+    lokalen TCP-Port (4444) an einen Port des entfernten Servers
+    (5555) weiterleitet.
+  en: >-
+    The `quic-1` server is configured to forward a single local
+    TCP port (4444) to a port of the remote server (5555).
+51bf8ba2b710e288:
+  de: >-
+    Herzlichen Glückwunsch! Sie haben soeben den einfachsten möglichen
+    QUIC-Kanal zwischen zwei Hosts eingerichtet. Sie können in
+    den Einstellungen des `quic-1` Servers Channel-Einträge hinzufügen,
+    um weitere Ports zuzuordnen.
+  en: >-
+    Congrats! You just set up the simplest possible QUIC channel
+    between two hosts. You can add channel entries to the settings
+    of the `quic-1` server to map additional ports.
+bc614bda57d057cc:
+  de: >-
+    Um einen lokalen TCP-Server zu simulieren, können Sie z.B.
+    `ncat` wie folgt verwenden:
+  en: >-
+    To simulate a local TCP server, you can e.g. use `ncat` as
+    follows:
+bda905bf46e34a1b:
+  de: >-
+    Jetzt sollten Sie in der Lage sein, sich mit dem lokalen Port
+    `5555` zu verbinden und alle Daten vom ncat-Server über die
+    beiden QUIC-Server wiedergeben zu lassen:
+  en: >-
+    Now, you should be able to connect to local port `5555` and
+    have all data echoed by the ncat server through the two QUIC
+    servers:
+e3b0c44298fc1c14:
+  de: ''
+  en: ''
+f4c8038daea042c3:
+  de: >-
+    Der QUIC-Kanal ermöglicht die Übertragung beliebiger TCP-Streams
+    zwischen zwei Hosts.
+  en: >-
+    The QUIC channel allows transmission of arbitrary TCP streams
+    between two hosts.
+ff3367a7df71a74f:
+  de: >-
+    Die entsprechenden Einträge im Dienstverzeichnis können wie
+    folgt geladen werden (denken Sie daran, das Dienstverzeichnis
+    zuerst über `SD_SETTINGS=settings/dev/roles/sd-1 sd run` zu
+    starten):
+  en: >-
+    The corresponding service directory entries can be loaded
+    as follows (remember to start the service directory first
+    via `SD_SETTINGS=settings/dev/roles/sd-1 sd run`):
