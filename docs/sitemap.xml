@@ -3,28 +3,7 @@
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" 
   xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/configuration</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory/installation</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory/configuration</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/security</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/installation</loc>
-  </url>
-  <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/getting-started</loc>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/channels/quic</loc>
   </url>
   <url>
     <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service</loc>
@@ -33,10 +12,31 @@
     <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/hyper-service</loc>
   </url>
   <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/security</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/getting-started</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory/configuration</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/configuration</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/installation</loc>
+  </url>
+  <url>
     <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/contact</loc>
   </url>
   <url>
-    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/channels/quic</loc>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs</loc>
+  </url>
+  <url>
+    <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/service-directory/installation</loc>
   </url>
   <url>
     <loc>https://kiprotect.github.io/hyper/docs/hyper/docs/proxy-service/p2p</loc>
