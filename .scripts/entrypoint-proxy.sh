@@ -21,7 +21,7 @@ do
     fi
 
     echo "chown is made for \"${point}\""
-    chown -R iris:iris ${point}
+    chown -R hyper:hyper ${point}
     
     echo "chmod u+r is made for \"${point}\""
     chmod -R u+r ${point}
@@ -38,6 +38,6 @@ do
     chmod -R u+w ${point}
 done
 
-echo "Execute proxy with user iris"
+echo "Execute proxy with user hyper"
 
-exec su iris -c "./proxy $*"
+exec su hyper -c "./proxy $*"

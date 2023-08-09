@@ -1,4 +1,4 @@
-FROM golang:1.16.3-alpine3.13 as builder
+FROM golang:1.20.7-alpine3.18 as builder
 RUN apk add --update make && apk add --update openssl
 RUN apk add --update bash
 RUN bash --version
@@ -16,7 +16,7 @@ RUN make
 FROM alpine:latest
 
 # Create a group and user
-RUN addgroup --gid 9999 iris && adduser --disabled-password --gecos '' --uid 9999 -G iris -s /bin/ash iris
+RUN addgroup --gid 9999 hyper && adduser --disabled-password --gecos '' --uid 9999 -G hyper -s /bin/ash hyper
 
 WORKDIR /app
 COPY --from=builder /go/bin/proxy /app/.scripts/entrypoint-proxy.sh /app/
