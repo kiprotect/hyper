@@ -38,7 +38,6 @@ jobs:
           file: ./docker/Eps.dockerfile
           tags: ${{ steps.meta_hyper.outputs.tags }}
           push: true
-          load: true
           labels: |
             kiprotect.hyper.image.revision=${{ github.sha }}
       - name: Create sd image tag
@@ -53,7 +52,6 @@ jobs:
           file: ./docker/Sd.dockerfile
           tags: ${{ steps.meta_sd.outputs.tags }}
           push: true
-          load: true
           labels: |
             kiprotect.hyper-sd.image.revision=${{ github.sha }}
       - name: Create proxy image tag
@@ -68,6 +66,5 @@ jobs:
           file: ./docker/Proxy.dockerfile
           tags: ${{ steps.meta_proxy.outputs.tags }}
           push: true
-          load: true
           labels: |
             kiprotect.hyper-proxy.image.revision=${{ github.sha }}
