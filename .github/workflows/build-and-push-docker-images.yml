@@ -37,25 +37,10 @@ jobs:
           build-args: VERSION=${{ env.VERSION }}
           file: ./docker/Eps.dockerfile
           tags: ${{ steps.meta_hyper.outputs.tags }}
-          push: false
+          push: true
           load: true
           labels: |
             kiprotect.hyper.image.revision=${{ github.sha }}
-      - name: Sign and push versioned Hyper image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_hyper.outputs.json).tags[0]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
-      - name: Sign and push latest Hyper image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_hyper.outputs.json).tags[1]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
-
       - name: Create sd image tag
         id: meta_sd
         uses: docker/metadata-action@v3
@@ -67,25 +52,10 @@ jobs:
           build-args: VERSION=${{ env.VERSION }}
           file: ./docker/Sd.dockerfile
           tags: ${{ steps.meta_sd.outputs.tags }}
-          push: false
+          push: true
           load: true
           labels: |
             kiprotect.hyper-sd.image.revision=${{ github.sha }}
-      - name: Sign and push sd versioned image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_sd.outputs.json).tags[0]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
-      - name: Sign and push sd latest image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_sd.outputs.json).tags[1]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
-
       - name: Create proxy image tag
         id: meta_proxy
         uses: docker/metadata-action@v3
@@ -97,21 +67,7 @@ jobs:
           build-args: VERSION=${{ env.VERSION }}
           file: ./docker/Proxy.dockerfile
           tags: ${{ steps.meta_proxy.outputs.tags }}
-          push: false
+          push: true
           load: true
           labels: |
             kiprotect.hyper-proxy.image.revision=${{ github.sha }}
-      - name: Sign and push proxy versioned image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_proxy.outputs.json).tags[0]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
-      - name: Sign and push proxy latest image
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: ${{fromJSON(steps.meta_proxy.outputs.json).tags[1]}}
-          private-key-id: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY_IDENTIFIER }}
-          private-key: ${{ secrets.DOCKER_HUB_DCT_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_HUB_DCT_PASSPHRASE }}
