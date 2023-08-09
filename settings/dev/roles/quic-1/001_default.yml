@@ -25,7 +25,7 @@ channels: # defines all the channels that we want to open when starting the serv
       channels:
         - remote:
             host: quic-2
-            port: 4444
+            port: 6379
           local:
             port: 5555
       tls:

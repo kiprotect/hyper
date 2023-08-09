@@ -209,7 +209,8 @@ func (q *QUICChannel) server(listener *quic.Listener) {
 				conn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", port))
 
 				if err != nil {
-					hyper.Log.Error("Cannot connect to local port %d", port)
+					hyper.Log.Errorf("Cannot connect to local port %d", port)
+					stream.Close()
 					return
 				}
 
