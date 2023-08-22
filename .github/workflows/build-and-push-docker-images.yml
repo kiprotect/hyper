@@ -31,6 +31,11 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: kiprotect/hyper
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build Hyper
         uses: docker/build-push-action@v2.9.0
         with:
@@ -45,6 +50,11 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: kiprotect/hyper-sd
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build sd
         uses: docker/build-push-action@v2.9.0
         with:
@@ -59,6 +69,11 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: kiprotect/hyper-proxy
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build proxy
         uses: docker/build-push-action@v2.9.0
         with:
