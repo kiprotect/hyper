@@ -21,4 +21,4 @@ RUN addgroup --gid 9999 hyper && adduser --disabled-password --gecos '' --uid 99
 WORKDIR /app
 COPY --from=builder /go/bin/sd /app/.scripts/entrypoint-sd.sh /app/
 
-ENTRYPOINT ["/bin/sh", "./entrypoint-sd.sh"]
+ENTRYPOINT ["/app/sd"]
