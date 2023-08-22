@@ -40,7 +40,7 @@ jobs:
         uses: docker/build-push-action@v2.9.0
         with:
           build-args: VERSION=${{ env.VERSION }}
-          file: ./docker/Eps.dockerfile
+          file: ./docker/Hyper.dockerfile
           tags: ${{ steps.meta_hyper.outputs.tags }}
           push: true
           labels: |
