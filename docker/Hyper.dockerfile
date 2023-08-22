@@ -11,13 +11,9 @@ ENV VERSION=$VERSION
 RUN echo $VERSION 
 WORKDIR /app
 COPY . .
-RUN make
+RUN make install
 
 FROM alpine:latest
-
-# Create a group and user
-RUN addgroup --gid 9999 hyper && adduser --disabled-password --gecos '' --uid 9999 -G hyper -s /bin/ash hyper
-
 WORKDIR /app
-
+COPY --from=builder /go/bin/hyper /app
 ENTRYPOINT ["/app/hyper"]

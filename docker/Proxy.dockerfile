@@ -15,9 +15,6 @@ RUN make
 
 FROM alpine:latest
 
-# Create a group and user
-RUN addgroup --gid 9999 hyper && adduser --disabled-password --gecos '' --uid 9999 -G hyper -s /bin/ash hyper
-
 WORKDIR /app
-
+COPY --from=builder /go/bin/proxy /app
 ENTRYPOINT ["/app/proxy"]
