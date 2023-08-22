@@ -1,0 +1,22 @@
+jsonrpc_server: # the JSON-RPC server that the EPS server uses for communication
+  bind_address: "0.0.0.0:3322"
+  tcp_rate_limits:
+    - type: second
+      limit: 10
+    - type: minute
+      limit: 1000
+  tls:
+    ca_certificate_files: ["/certs/root.crt"]
+    certificate_file: "/certs/sd-1.crt"
+    key_file: "/certs/sd-1.key"
+directory:
+  datastore:
+    type: redis
+    settings:
+      addresses:
+        - redis-1:6379
+      database: 0
+      password: ""
+      key: sd-entries
+  ca_certificate_files: ["/certs/root.crt"]
+  ca_intermediate_certificate_files: ["/certs/intermediate.crt"]

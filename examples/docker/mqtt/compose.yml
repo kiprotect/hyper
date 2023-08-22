@@ -1,0 +1,64 @@
+name: mqtt-demo
+services:
+  # provides a RabbitMQ test server
+  mqtt-1:
+    image: rabbitmq:3.12-management
+  # provides the Redis server for the service directory
+  redis-1:
+    image: redis:7.2.0
+  # loads the service directory entries
+  sd-setup:
+    depends_on:
+      - sd-1
+    environment:
+      - HYPER_SETTINGS=/app/settings
+    volumes:
+      # we mount the HD-1 settings
+      - ./hd-1:/app/settings:ro
+      # we mount the 
+      - ../../../settings/dev/directory:/directory:ro
+      # we mount the certificates from the regular directory
+      - ../../../settings/dev/certs:/certs:ro
+      # we overwrite the QUIC config service directory
+      - ./directory:/directory/quic:ro
+    image: kiprotect/hyper:0.3.16
+    # we load the directory entries
+    entrypoint: "/app/settings/setup.sh"
+  # runs the service directory
+  sd-1:
+    command: run
+    depends_on:
+      - redis-1
+    environment:
+      - SD_SETTINGS=/app/settings
+    volumes:
+      - ./sd-1:/app/settings:ro
+      - ../../../settings/dev/certs:/certs:ro
+    image: kiprotect/hyper-sd:0.3.16
+  # runs the QUIC-1 service (used to run TCP sessions through the QUIC-2 service)
+  quic-1:
+    command: server run
+    ports:
+      - 5555:5555
+      - 6666:6666
+    depends_on:
+      - sd-1
+      - mqtt-1
+    environment:
+      - HYPER_SETTINGS=/app/settings
+    volumes:
+      - ./quic-1:/app/settings:ro
+      - ../../../settings/dev/certs:/certs:ro
+    image: kiprotect/hyper:0.3.16
+  # runs the QUIC-2 service (used to connect to the RabbitMQ service)
+  quic-2:
+    command: server run
+    depends_on:
+      - sd-1
+      - mqtt-1
+    environment:
+      - HYPER_SETTINGS=/app/settings
+    volumes:
+      - ./quic-2:/app/settings:ro
+      - ../../../settings/dev/certs:/certs:ro
+    image: kiprotect/hyper:0.3.16

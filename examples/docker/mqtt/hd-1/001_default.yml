@@ -1,0 +1,19 @@
+name: hd-1
+directory:
+  type: api
+  settings:
+    jsonrpc_client:
+      tls:
+        certificate_file: "/certs/hd-1.crt"
+        key_file: "/certs/hd-1.key"
+        ca_certificate_files: ["/certs/root.crt"]
+    ca_certificate_files: ["/certs/root.crt"]
+    ca_intermediate_certificate_files: ["/certs/intermediate.crt"]
+    endpoints: ["https://sd-1:3322/jsonrpc"]
+    server_names: ["sd-1"]
+channels: []
+signing:
+  certificate_file: "/certs/hd-1-sign.crt"
+  key_file: "/certs/hd-1-sign.key"
+  ca_certificate_file: "/certs/root.crt"
+  ca_intermediate_certificate_files: ["/certs/intermediate.crt"]

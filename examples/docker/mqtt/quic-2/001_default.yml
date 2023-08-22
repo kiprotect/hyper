@@ -1,0 +1,23 @@
+name: quic-2
+directory:
+  type: api
+  settings:
+    jsonrpc_client:
+      tls:
+        certificate_file: "/certs/quic-2.crt"
+        key_file: "/certs/quic-2.key"
+        ca_certificate_files: ["/certs/root.crt"]
+    ca_certificate_files: ["/certs/root.crt"]
+    ca_intermediate_certificate_files: ["/certs/intermediate.crt"]
+    endpoints: ["https://sd-1:3322/jsonrpc"]
+    server_names: ["sd-1"]
+channels: # defines all the channels that we want to open when starting the server
+  - name: main QUIC client/server # forwards TCP streams and UDP packets via QUIC
+    type: quic
+    settings:
+      bindAddress: 0.0.0.0:7772
+      channels: []
+      tls:
+        ca_certificate_files: ["/certs/root.crt"]
+        certificate_file: "/certs/quic-2.crt"
+        key_file: "/certs/quic-2.key"
