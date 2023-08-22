@@ -19,6 +19,5 @@ FROM alpine:latest
 RUN addgroup --gid 9999 hyper && adduser --disabled-password --gecos '' --uid 9999 -G hyper -s /bin/ash hyper
 
 WORKDIR /app
-COPY --from=builder /go/bin/sd /app/.scripts/entrypoint-sd.sh /app/
 
 ENTRYPOINT ["/app/sd"]
