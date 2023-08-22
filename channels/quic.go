@@ -201,7 +201,7 @@ func (q *QUICChannel) server(listener *quic.Listener) {
 					return
 				}
 
-				hyper.Log.Info("Connecting to target '%s'...", string(target))
+				hyper.Log.Infof("Connecting to target '%s'...", string(target))
 
 				conn, err := net.Dial("tcp", string(target))
 
@@ -338,7 +338,7 @@ func (q *QUICChannel) pipe(conn net.Conn, addr, serverName string, target string
 	quicConn, err := quic.DialAddr(context.Background(), addr, config, nil)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("Cannot connect to peer QUIC channel: %v", err)
 	}
 
 	stream, err := quicConn.OpenStreamSync(context.Background())
