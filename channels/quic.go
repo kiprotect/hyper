@@ -36,7 +36,7 @@ type QUICLocalChannel struct {
 }
 
 type QUICRemoteChannel struct {
-	Port int64  `json:"port"`
+	Target string  `json:"target"`
 	Host string `json:"host"`
 }
 
@@ -48,20 +48,15 @@ type QUICChannel struct {
 var QUICRemoteForm = forms.Form{
 	Fields: []forms.Field{
 		{
-			Name: "host",
+			Name: "target",
 			Validators: []forms.Validator{
 				forms.IsString{},
 			},
 		},
 		{
-			Name: "port",
+			Name: "host",
 			Validators: []forms.Validator{
-				forms.IsInteger{
-					HasMin: true,
-					Min:    1,
-					HasMax: true,
-					Max:    65535,
-				},
+				forms.IsString{},
 			},
 		},
 	},
@@ -78,13 +73,6 @@ var QUICLocalForm = forms.Form{
 					HasMax: true,
 					Max:    65535,
 				},
-			},
-		},
-		{
-			Name: "host",
-			Validators: []forms.Validator{
-				forms.IsOptional{Default: "0.0.0.0"},
-				forms.IsString{},
 			},
 		},
 	},
@@ -200,16 +188,25 @@ func (q *QUICChannel) server(listener *quic.Listener) {
 				bs2 := make([]byte, 2)
 
 				if _, err := io.ReadFull(stream, bs2); err != nil {
-					hyper.Log.Error("Cannot read port")
+					hyper.Log.Error("Cannot read string length")
 					return
 				}
 
-				port := binary.LittleEndian.Uint16(bs2)
+				len := binary.LittleEndian.Uint16(bs2)
 
-				conn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", port))
+				target := make([]byte, len)
+
+				if _, err := io.ReadFull(stream, target); err != nil {
+					hyper.Log.Error("Cannot read hostame")
+					return
+				}
+
+				hyper.Log.Info("Connecting to target '%s'...", string(target))
+
+				conn, err := net.Dial("tcp", string(target))
 
 				if err != nil {
-					hyper.Log.Errorf("Cannot connect to local port %d", port)
+					hyper.Log.Errorf("Cannot connect to target '%s'", target)
 					stream.Close()
 					return
 				}
@@ -263,7 +260,7 @@ func (q *QUICChannel) handle(conn net.Conn, channel *QUICChannelConfig) {
 			hyper.Log.Error(err)
 			return
 		} else {
-			if err := q.pipe(conn, settings.Address, channel.Remote.Host, channel.Remote.Port); err != nil {
+			if err := q.pipe(conn, settings.Address, channel.Remote.Host, channel.Remote.Target); err != nil {
 				hyper.Log.Errorf("Cannot connect: %v", err)
 				return
 			}
@@ -326,7 +323,7 @@ func pipe(left, right io.ReadWriteCloser, close func()) {
 	}
 }
 
-func (q *QUICChannel) pipe(conn net.Conn, addr, serverName string, port int64) error {
+func (q *QUICChannel) pipe(conn net.Conn, addr, serverName string, target string) error {
 
 	config, err := tls.TLSClientConfig(q.Settings.TLS)
 
@@ -357,9 +354,15 @@ func (q *QUICChannel) pipe(conn net.Conn, addr, serverName string, port int64) e
 
 	bs2 := make([]byte, 2)
 
-	binary.LittleEndian.PutUint16(bs2, uint16(port))
+	binary.LittleEndian.PutUint16(bs2, uint16(len(target)))
 
+	// we write the target length
 	if _, err := stream.Write(bs2); err != nil {
+		return err
+	}
+
+	// we write the target
+	if _, err := stream.Write([]byte(target)); err != nil {
 		return err
 	}
 
